@@ -13,6 +13,9 @@
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 <style>
+/* ══════════════════════════════════════════
+   THEME VARIABLES
+   ══════════════════════════════════════════ */
 :root,[data-theme="dark"]{
 --bg:#0A0A0F;--bg2:#12121A;--surface:#1A1A25;--surface2:#22222F;--surface3:#2A2A38;
 --border:#2F2F40;--border2:#3A3A4F;
@@ -49,7 +52,9 @@
 body{background:var(--bg);color:var(--text);font-family:'Inter',-apple-system,sans-serif;min-height:100vh;min-height:100dvh;overflow-x:hidden;transition:background .3s,color .3s}
 ::-webkit-scrollbar{width:0;height:0}
 
-/* LOGIN SCREEN */
+/* ══════════════════════════════════════════
+   LOGIN
+   ══════════════════════════════════════════ */
 .login-screen{position:fixed;inset:0;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;transition:opacity .3s}
 .login-screen.hide{opacity:0;pointer-events:none}
 .login-logo{font-size:48px;font-weight:900;margin-bottom:8px;background:linear-gradient(135deg,var(--green),var(--green2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
@@ -64,7 +69,9 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',-apple-system,sa
 .login-spinner{width:30px;height:30px;border:3px solid var(--border);border-top-color:var(--green);border-radius:50%;animation:spin .7s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 
-/* TOPBAR */
+/* ══════════════════════════════════════════
+   TOPBAR
+   ══════════════════════════════════════════ */
 .topbar{position:sticky;top:0;z-index:100;padding:12px 20px;padding-top:calc(12px + env(safe-area-inset-top));background:var(--nav-bg);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
 .topbar-brand{font-size:22px;font-weight:900;background:linear-gradient(135deg,var(--green),var(--green2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 .topbar-brand span{-webkit-text-fill-color:var(--purple)}
@@ -74,7 +81,9 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',-apple-system,sa
 .top-btn{width:36px;height:36px;border-radius:10px;background:var(--surface2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer}
 .user-avatar{width:32px;height:32px;border-radius:50%;border:2px solid var(--green);cursor:pointer}
 
-/* BOTTOM NAV */
+/* ══════════════════════════════════════════
+   BOTTOM NAV
+   ══════════════════════════════════════════ */
 .bottom-nav{position:fixed;bottom:0;left:0;right:0;padding-bottom:env(safe-area-inset-bottom);background:var(--nav-bg);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid var(--border);display:flex;z-index:100}
 .nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 0;cursor:pointer;color:var(--text3);font-size:10px;font-weight:600;transition:color .2s}
 .nav-item .nav-icon{font-size:22px;height:26px;line-height:26px}
@@ -86,7 +95,9 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',-apple-system,sa
 .app-container{display:none}
 .app-container.show{display:block}
 
-/* HERO */
+/* ══════════════════════════════════════════
+   HERO / BALANCE
+   ══════════════════════════════════════════ */
 .balance-hero{margin:16px 20px;border-radius:24px;padding:28px 24px;position:relative;overflow:hidden;background:var(--gradient1);border:1px solid rgba(255,255,255,.08)}
 [data-theme="light"] .balance-hero{border:1px solid rgba(0,0,0,.05)}
 .balance-hero::before{content:'';position:absolute;top:-60px;right:-30px;width:150px;height:150px;border-radius:50%;background:rgba(0,200,83,.15)}
@@ -101,9 +112,14 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',-apple-system,sa
 .hero-stat-label{font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text3);margin-bottom:4px}
 .hero-stat-val{font-family:'Space Mono',monospace;font-size:14px;font-weight:700}
 .hero-stat-val.in{color:var(--green)}.hero-stat-val.out{color:var(--red)}.hero-stat-val.proj{color:var(--purple)}
+
+/* ══════════════════════════════════════════
+   ALERTS / GOALS / STREAK
+   ══════════════════════════════════════════ */
 .alert-card{margin:0 20px 10px;padding:14px 16px;border-radius:14px;display:flex;gap:12px;align-items:flex-start;font-size:13px;font-weight:500;line-height:1.4}
 .alert-card.danger{background:var(--red-bg);border:1px solid rgba(255,82,82,.2);color:var(--red)}
 .alert-card.warning{background:var(--yellow-bg);border:1px solid rgba(255,215,64,.2);color:var(--yellow)}
+.alert-card.info{background:var(--purple-bg);border:1px solid rgba(124,77,255,.2);color:var(--purple2)}
 .goal-card{margin:0 20px 10px;padding:16px;background:var(--surface);border:1px solid var(--border);border-radius:16px}
 .goal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
 .goal-title{font-size:14px;font-weight:700}
@@ -117,6 +133,7 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',-apple-system,sa
 .streak-fire{font-size:36px}
 .streak-days{font-size:22px;font-weight:900;background:linear-gradient(135deg,var(--orange),var(--yellow));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 .streak-label{font-size:12px;color:var(--text3);margin-top:2px}
+.streak-detail{font-size:10px;color:var(--text3);margin-top:4px}
 .quick-grid{display:flex;gap:10px;padding:0 20px;overflow-x:auto;scrollbar-width:none}
 .quick-grid::-webkit-scrollbar{display:none}
 .quick-btn{flex-shrink:0;padding:12px 16px;background:var(--surface);border:1px solid var(--border);border-radius:14px;cursor:pointer;display:flex;align-items:center;gap:10px;transition:all .15s}
@@ -127,7 +144,9 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',-apple-system,sa
 .mini-chart{margin:10px 20px;padding:16px;background:var(--surface);border:1px solid var(--border);border-radius:16px;height:220px}
 .chart-container{position:relative;height:180px}
 
-/* TRANSACTIONS */
+/* ══════════════════════════════════════════
+   TRANSACTIONS
+   ══════════════════════════════════════════ */
 .tx-header{padding:16px 20px;display:flex;flex-direction:column;gap:12px}
 .month-nav{display:flex;align-items:center;justify-content:space-between}
 .month-name{font-size:20px;font-weight:800}
@@ -154,7 +173,7 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',-apple-system,sa
 .day-label{font-size:12px;color:var(--text3);font-weight:600}
 .today-badge{background:var(--green);color:#000;padding:2px 8px;border-radius:10px;font-size:9px;font-weight:700;margin-left:6px}
 .day-total{font-family:'Space Mono',monospace;font-size:11px;font-weight:700}
-.tx-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:6px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:all .15s}
+.tx-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:6px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:all .15s;position:relative}
 .tx-card:active{transform:scale(.98)}
 .tx-cat-dot{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
 .tx-mid{flex:1;min-width:0}
@@ -162,11 +181,23 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',-apple-system,sa
 .tx-meta{display:flex;align-items:center;gap:6px;margin-top:3px;flex-wrap:wrap}
 .tx-cat-tag{font-size:10px;font-weight:600;padding:2px 8px;border-radius:6px}
 .tx-note-indicator{font-size:10px;color:var(--text3)}
-.tx-right{text-align:right;flex-shrink:0}
+.tx-right{text-align:right;flex-shrink:0;display:flex;align-items:center;gap:8px}
 .tx-val{font-family:'Space Mono',monospace;font-size:14px;font-weight:700}
 .tx-val.pos{color:var(--green)}.tx-val.neg{color:var(--red)}
+/* BUG-01: Botão editar */
+.tx-edit-btn{width:30px;height:30px;border-radius:8px;background:var(--surface2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:14px;cursor:pointer;flex-shrink:0;transition:all .15s}
+.tx-edit-btn:active{transform:scale(.9);background:var(--blue-bg);border-color:var(--blue)}
+/* BUG-03: Badge futuro */
+.tx-badge-future{font-size:10px;font-weight:700;padding:2px 8px;border-radius:6px;background:var(--orange-bg);color:var(--orange);border:1px solid rgba(255,145,0,.3)}
+/* BUG-03: Botão confirmar recebimento */
+.tx-confirm-btn{padding:4px 10px;border-radius:8px;background:var(--green-bg);color:var(--green);border:1px solid rgba(0,200,83,.3);font-size:10px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif}
+.tx-confirm-btn:active{transform:scale(.95)}
+/* BUG-06: Tooltip antecipação */
+.tx-tooltip{font-size:9px;color:var(--purple2);font-style:italic;margin-top:2px}
 
-/* CALENDAR */
+/* ══════════════════════════════════════════
+   CALENDAR
+   ══════════════════════════════════════════ */
 .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;padding:0 16px}
 .cal-weekday{text-align:center;font-size:10px;font-weight:700;color:var(--text3);padding:8px 0;letter-spacing:1px}
 .cal-day{aspect-ratio:1;border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:14px;font-weight:600;cursor:pointer;border:1px solid transparent;transition:all .15s}
@@ -174,11 +205,14 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',-apple-system,sa
 .cal-day.today{border-color:var(--green)}
 .cal-day.positive{background:var(--green-bg);color:var(--green)}
 .cal-day.negative{background:var(--red-bg);color:var(--red)}
+.cal-day.future-proj{background:var(--purple-bg);color:var(--purple);border-style:dashed;border-color:var(--purple)}
 .cal-day.selected{border-color:var(--purple);background:var(--purple-bg)}
 .cal-day-amount{font-family:'Space Mono',monospace;font-size:7px;font-weight:700;margin-top:1px}
 .cal-day-detail{margin:12px 16px;padding:16px;background:var(--surface);border:1px solid var(--border);border-radius:16px}
 
-/* ANALYTICS */
+/* ══════════════════════════════════════════
+   ANALYTICS
+   ══════════════════════════════════════════ */
 .chart-card{margin:10px 20px;padding:20px;background:var(--surface);border:1px solid var(--border);border-radius:20px}
 .chart-area{position:relative;height:220px}
 .chart-area canvas{max-height:220px}
@@ -194,11 +228,23 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',-apple-system,sa
 .sim-result.neg-r .sim-result-val{color:var(--red)}
 .sim-result-label{font-size:12px;color:var(--text3);margin-top:4px}
 
-/* SETTINGS */
+/* ══════════════════════════════════════════
+   SETTINGS
+   ══════════════════════════════════════════ */
 .settings-section{margin:10px 20px;padding:16px;background:var(--surface);border:1px solid var(--border);border-radius:16px}
 .settings-title{font-size:14px;font-weight:700;margin-bottom:12px}
+/* BUG-05: Category manager */
+.cat-manager-item{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)}
+.cat-manager-item .cat-preview{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px}
+.cat-manager-item .cat-info{flex:1}
+.cat-manager-item .cat-info-name{font-size:13px;font-weight:600}
+.cat-manager-item .cat-info-id{font-size:10px;color:var(--text3)}
+.cat-manager-actions{display:flex;gap:6px}
+.cat-manager-actions button{width:28px;height:28px;border-radius:6px;border:1px solid var(--border);background:var(--surface2);cursor:pointer;font-size:12px;display:flex;align-items:center;justify-content:center}
 
-/* MODALS */
+/* ══════════════════════════════════════════
+   MODALS
+   ══════════════════════════════════════════ */
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);z-index:300;display:flex;align-items:flex-end;opacity:0;pointer-events:none;transition:opacity .2s}
 .modal-overlay.open{opacity:1;pointer-events:all}
 .modal{background:var(--surface);border-radius:24px 24px 0 0;padding:24px 20px calc(32px + env(safe-area-inset-bottom));width:100%;transform:translateY(100%);transition:transform .3s cubic-bezier(.32,0,.15,1);max-height:92vh;overflow-y:auto}
@@ -261,11 +307,14 @@ textarea.form-input{resize:none;min-height:60px;font-size:13px}
   <div class="topbar-right">
     <div class="sync-dot" id="syncDot"></div>
     <div class="top-btn" id="themeBtn" onclick="toggleTheme()">🌙</div>
+    <!-- SEC: removido user.email do title -->
     <img class="user-avatar" id="userAvatar" src="" onclick="doLogout()" title="Sair">
   </div>
 </div>
 
-<!-- HOME -->
+<!-- ════════════════════════════════════════
+     HOME PAGE
+     ════════════════════════════════════════ -->
 <div class="page active" id="pageHome">
   <div class="balance-hero">
     <div class="hero-label">Saldo Atual</div>
@@ -278,6 +327,8 @@ textarea.form-input{resize:none;min-height:60px;font-size:13px}
     </div>
   </div>
   <div id="alertsContainer"></div>
+  <!-- BUG-04: alerta de saldo negativo sem receita -->
+  <div id="noIncomeAlertContainer"></div>
   <div id="goalContainer"></div>
   <div id="savingsGoalContainer"></div>
   <div id="streakContainer"></div>
@@ -287,11 +338,20 @@ textarea.form-input{resize:none;min-height:60px;font-size:13px}
   <div class="mini-chart"><div class="chart-container"><canvas id="homePieChart"></canvas></div></div>
 </div>
 
-<!-- TRANSACTIONS -->
+<!-- ════════════════════════════════════════
+     TRANSACTIONS PAGE
+     ════════════════════════════════════════ -->
 <div class="page" id="pageTx">
   <div class="tx-header">
-    <div class="month-nav"><div class="month-btn" onclick="changeMonth(-1)">‹</div><div class="month-name" id="monthTitle">—</div><div class="month-btn" onclick="changeMonth(1)">›</div></div>
-    <div class="search-bar"><input class="search-input" id="searchInput" placeholder="Buscar..." oninput="renderTxList()"><div class="filter-btn" id="filterToggle" onclick="toggleFilters()">🔍</div></div>
+    <div class="month-nav">
+      <div class="month-btn" onclick="changeMonth(-1)">‹</div>
+      <div class="month-name" id="monthTitle">—</div>
+      <div class="month-btn" onclick="changeMonth(1)">›</div>
+    </div>
+    <div class="search-bar">
+      <input class="search-input" id="searchInput" placeholder="Buscar..." oninput="renderTxList()">
+      <div class="filter-btn" id="filterToggle" onclick="toggleFilters()">🔍</div>
+    </div>
   </div>
   <div class="filter-panel" id="filterPanel"><div class="filter-chips" id="filterChips"></div></div>
   <div class="tabs-row">
@@ -304,14 +364,24 @@ textarea.form-input{resize:none;min-height:60px;font-size:13px}
   <div class="tx-list" id="txList"></div>
 </div>
 
-<!-- CALENDAR -->
+<!-- ════════════════════════════════════════
+     CALENDAR PAGE
+     ════════════════════════════════════════ -->
 <div class="page" id="pageCal">
-  <div class="tx-header"><div class="month-nav"><div class="month-btn" onclick="changeMonth(-1)">‹</div><div class="month-name" id="calMonthTitle">—</div><div class="month-btn" onclick="changeMonth(1)">›</div></div></div>
+  <div class="tx-header">
+    <div class="month-nav">
+      <div class="month-btn" onclick="changeMonth(-1)">‹</div>
+      <div class="month-name" id="calMonthTitle">—</div>
+      <div class="month-btn" onclick="changeMonth(1)">›</div>
+    </div>
+  </div>
   <div class="cal-grid" id="calGrid"></div>
   <div id="calDayDetail"></div>
 </div>
 
-<!-- ANALYTICS -->
+<!-- ════════════════════════════════════════
+     ANALYTICS PAGE
+     ════════════════════════════════════════ -->
 <div class="page" id="pageAnalytics">
   <div class="section-title">📊 Gastos por Categoria</div>
   <div class="chart-card"><div class="chart-area"><canvas id="catPieChart"></canvas></div></div>
@@ -321,21 +391,42 @@ textarea.form-input{resize:none;min-height:60px;font-size:13px}
   <div class="sim-card">
     <div class="sim-title">Remover um gasto mensal</div>
     <div class="sim-sub">Quanto economiza se cancelar algo?</div>
-    <div class="sim-row"><input class="sim-input" id="simDesc" placeholder="Ex: Netflix"><input class="sim-input" id="simVal" placeholder="55.90" type="number" step="0.01" style="max-width:120px"></div>
-    <div class="sim-row"><select class="sim-input" id="simMonths"><option value="6">6 meses</option><option value="12" selected>1 ano</option><option value="24">2 anos</option><option value="36">3 anos</option></select></div>
+    <div class="sim-row">
+      <input class="sim-input" id="simDesc" placeholder="Ex: Netflix">
+      <input class="sim-input" id="simVal" placeholder="55.90" type="number" step="0.01" style="max-width:120px">
+    </div>
+    <div class="sim-row">
+      <select class="sim-input" id="simMonths">
+        <option value="6">6 meses</option>
+        <option value="12" selected>1 ano</option>
+        <option value="24">2 anos</option>
+        <option value="36">3 anos</option>
+      </select>
+    </div>
     <button class="btn-primary" onclick="runSim()">Simular</button>
-    <div class="sim-result" id="simResult" style="display:none"><div class="sim-result-val" id="simResultVal"></div><div class="sim-result-label" id="simResultLbl"></div></div>
+    <div class="sim-result" id="simResult" style="display:none">
+      <div class="sim-result-val" id="simResultVal"></div>
+      <div class="sim-result-label" id="simResultLbl"></div>
+    </div>
   </div>
   <div class="section-title">📆 Projeção Futura</div>
   <div class="sim-card">
     <div class="sim-title">Quanto vou ter em...</div>
-    <div class="sim-row"><select class="sim-input" id="projMonth"></select><select class="sim-input" id="projYear"></select></div>
+    <div class="sim-row">
+      <select class="sim-input" id="projMonth"></select>
+      <select class="sim-input" id="projYear"></select>
+    </div>
     <button class="btn-primary" onclick="runProj()">Calcular</button>
-    <div class="sim-result" id="projResult" style="display:none"><div class="sim-result-val" id="projResultVal"></div><div class="sim-result-label" id="projResultLbl"></div></div>
+    <div class="sim-result" id="projResult" style="display:none">
+      <div class="sim-result-val" id="projResultVal"></div>
+      <div class="sim-result-label" id="projResultLbl"></div>
+    </div>
   </div>
 </div>
 
-<!-- SETTINGS -->
+<!-- ════════════════════════════════════════
+     SETTINGS PAGE
+     ════════════════════════════════════════ -->
 <div class="page" id="pageSettings">
   <div class="section-title">💰 Finanças</div>
   <div class="settings-section">
@@ -350,20 +441,39 @@ textarea.form-input{resize:none;min-height:60px;font-size:13px}
   </div>
   <div class="settings-section">
     <div class="settings-title">💰 Meta de economia</div>
-    <div class="form-row"><div class="form-group"><label class="form-label">Valor</label><input class="form-input" id="setSavGoal" type="number" placeholder="5000"></div>
-    <div class="form-group"><label class="form-label">Até quando</label><input class="form-input" id="setSavDate" type="date"></div></div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Valor</label><input class="form-input" id="setSavGoal" type="number" placeholder="5000"></div>
+      <div class="form-group"><label class="form-label">Até quando</label><input class="form-input" id="setSavDate" type="date"></div>
+    </div>
     <button class="btn-primary" onclick="saveSavGoal()">Salvar</button>
   </div>
+
+  <!-- BUG-05: Categorias Personalizadas -->
+  <div class="section-title">🏷️ Categorias</div>
+  <div class="settings-section">
+    <div id="catManagerList"></div>
+    <button class="btn-secondary" onclick="openModal('catModal')">+ Nova categoria</button>
+  </div>
+
   <div class="section-title">⚡ Atalhos Rápidos</div>
-  <div class="settings-section"><div id="quickTxList"></div><button class="btn-secondary" onclick="openModal('quickModal')">+ Adicionar atalho</button></div>
+  <div class="settings-section">
+    <div id="quickTxList"></div>
+    <button class="btn-secondary" onclick="openModal('quickModal')">+ Adicionar atalho</button>
+  </div>
+
   <div class="section-title">🗑️ Lixeira <span id="trashCount" style="color:var(--red)"></span></div>
-  <div class="settings-section"><div id="trashList"></div><button class="btn-danger" onclick="emptyTrash()">Esvaziar lixeira</button></div>
+  <div class="settings-section">
+    <div id="trashList"></div>
+    <button class="btn-danger" onclick="emptyTrash()">Esvaziar lixeira</button>
+  </div>
+
   <div class="section-title">📦 Backup</div>
   <div class="settings-section">
     <button class="btn-primary" onclick="exportBackup()">☁️ Exportar</button>
     <button class="btn-secondary" onclick="document.getElementById('importFile').click()">📂 Importar</button>
     <input type="file" id="importFile" accept=".json" style="display:none" onchange="importBackup(this)">
   </div>
+
   <div class="section-title">⚠️ Perigo</div>
   <div class="settings-section"><button class="btn-danger" onclick="clearAll()">🗑️ Apagar tudo</button></div>
   <div class="settings-section" style="margin-top:20px;text-align:center">
@@ -373,7 +483,9 @@ textarea.form-input{resize:none;min-height:60px;font-size:13px}
 
 </div><!-- /app-container -->
 
-<!-- NAV -->
+<!-- ════════════════════════════════════════
+     BOTTOM NAV + FAB
+     ════════════════════════════════════════ -->
 <div class="bottom-nav" id="bottomNav" style="display:none">
   <div class="nav-item active" onclick="goPage('Home',this)"><div class="nav-icon">🏠</div>Home</div>
   <div class="nav-item" onclick="goPage('Tx',this)"><div class="nav-icon">💳</div>Transações</div>
@@ -381,10 +493,12 @@ textarea.form-input{resize:none;min-height:60px;font-size:13px}
   <div class="nav-item" onclick="goPage('Analytics',this)"><div class="nav-icon">📊</div>Análises</div>
   <div class="nav-item" onclick="goPage('Settings',this)" style="position:relative"><div class="nav-icon">⚙️</div>Config<div class="trash-badge" id="trashBadge" style="display:none">0</div></div>
 </div>
-<button class="fab" id="fabBtn" style="display:none" onclick="openModal('addModal')">+</button>
+<button class="fab" id="fabBtn" style="display:none" onclick="openAddM()">+</button>
 <div class="toast" id="toast"><span id="toastMsg"></span><span class="toast-undo" onclick="undoDelete()">DESFAZER</span></div>
 
-<!-- ADD MODAL -->
+<!-- ════════════════════════════════════════
+     MODAL: ADICIONAR TRANSAÇÃO
+     ════════════════════════════════════════ -->
 <div class="modal-overlay" id="addModal"><div class="modal">
   <div class="modal-handle"></div>
   <div class="modal-title">Nova transação<div class="modal-close" onclick="closeModal('addModal')">✕</div></div>
@@ -393,42 +507,102 @@ textarea.form-input{resize:none;min-height:60px;font-size:13px}
     <div class="type-btn" id="typeIn" onclick="setType('income')">📥 Entrada</div>
   </div></div>
   <div class="form-group"><label class="form-label">Descrição</label><input class="form-input" id="fDesc" placeholder="Ex: Almoço, Netflix..."></div>
-  <div class="form-row"><div class="form-group"><label class="form-label">Valor</label><input class="form-input" id="fAmount" placeholder="0,00" type="number" inputmode="decimal" step="0.01"></div>
-  <div class="form-group"><label class="form-label">Data</label><input class="form-input" id="fDate" type="date"></div></div>
+  <div class="form-row">
+    <div class="form-group"><label class="form-label">Valor</label><input class="form-input" id="fAmount" placeholder="0,00" type="number" inputmode="decimal" step="0.01"></div>
+    <div class="form-group"><label class="form-label">Data</label><input class="form-input" id="fDate" type="date"></div>
+  </div>
   <div class="form-group"><label class="form-label">Categoria</label><div class="cat-picker" id="catPicker"></div></div>
-  <div class="form-group"><label class="form-label">Recorrência</label><div class="rec-toggle">
+  <div class="form-group"><label class="form-label">Recorrência</label><div class="rec-toggle" id="recToggle">
     <div class="rec-pill active" onclick="setRec('none',this)">Único</div>
     <div class="rec-pill" onclick="setRec('monthly',this)">Mensal</div>
     <div class="rec-pill" onclick="setRec('installment',this)">Parcelas</div>
   </div></div>
-  <div id="instGroup" style="display:none"><div class="form-row"><div class="form-group"><label class="form-label">Parcela atual</label><input class="form-input" id="fInstCur" type="number" min="1" placeholder="1"></div><div class="form-group"><label class="form-label">Total</label><input class="form-input" id="fInstTot" type="number" min="2" placeholder="12"></div></div></div>
+  <div id="instGroup" style="display:none"><div class="form-row">
+    <div class="form-group"><label class="form-label">Parcela atual</label><input class="form-input" id="fInstCur" type="number" min="1" placeholder="1"></div>
+    <div class="form-group"><label class="form-label">Total</label><input class="form-input" id="fInstTot" type="number" min="2" placeholder="12"></div>
+  </div></div>
   <div class="form-group"><label class="form-label">Notas (opcional)</label><textarea class="form-input" id="fNotes" placeholder="Observação..."></textarea></div>
   <button class="btn-primary" onclick="saveTx()">Adicionar</button>
 </div></div>
 
-<!-- DETAIL MODAL -->
+<!-- ════════════════════════════════════════
+     MODAL: EDITAR TRANSAÇÃO (BUG-01)
+     ════════════════════════════════════════ -->
+<div class="modal-overlay" id="editModal"><div class="modal">
+  <div class="modal-handle"></div>
+  <div class="modal-title">Editar transação<div class="modal-close" onclick="closeModal('editModal')">✕</div></div>
+  <div class="form-group"><div class="type-toggle">
+    <div class="type-btn" id="editTypeOut" onclick="setEditType('expense')">📤 Gasto</div>
+    <div class="type-btn" id="editTypeIn" onclick="setEditType('income')">📥 Entrada</div>
+  </div></div>
+  <div class="form-group"><label class="form-label">Descrição</label><input class="form-input" id="eDesc"></div>
+  <div class="form-row">
+    <div class="form-group"><label class="form-label">Valor</label><input class="form-input" id="eAmount" type="number" inputmode="decimal" step="0.01"></div>
+    <div class="form-group"><label class="form-label">Data</label><input class="form-input" id="eDate" type="date"></div>
+  </div>
+  <div class="form-group"><label class="form-label">Categoria</label><div class="cat-picker" id="editCatPicker"></div></div>
+  <div class="form-group"><label class="form-label">Recorrência</label><div class="rec-toggle" id="editRecToggle">
+    <div class="rec-pill" onclick="setEditRec('none',this)">Único</div>
+    <div class="rec-pill" onclick="setEditRec('monthly',this)">Mensal</div>
+    <div class="rec-pill" onclick="setEditRec('installment',this)">Parcelas</div>
+  </div></div>
+  <div id="editInstGroup" style="display:none"><div class="form-row">
+    <div class="form-group"><label class="form-label">Parcela atual</label><input class="form-input" id="eInstCur" type="number" min="1"></div>
+    <div class="form-group"><label class="form-label">Total</label><input class="form-input" id="eInstTot" type="number" min="2"></div>
+  </div></div>
+  <div class="form-group"><label class="form-label">Notas</label><textarea class="form-input" id="eNotes"></textarea></div>
+  <button class="btn-primary" onclick="saveEdit()">💾 Salvar alterações</button>
+  <button class="btn-danger" onclick="deleteFromEdit()">🗑️ Mover para lixeira</button>
+</div></div>
+
+<!-- ════════════════════════════════════════
+     MODAL: DETALHES
+     ════════════════════════════════════════ -->
 <div class="modal-overlay" id="detailModal"><div class="modal">
   <div class="modal-handle"></div>
   <div class="modal-title">Detalhes<div class="modal-close" onclick="closeModal('detailModal')">✕</div></div>
   <div id="detailContent"></div>
+  <!-- BUG-01: botão editar nos detalhes -->
+  <button class="btn-secondary" onclick="editFromDetail()" style="background:var(--blue-bg);color:var(--blue);border-color:rgba(68,138,255,.3)">✏️ Editar transação</button>
   <button class="btn-danger" onclick="deleteFromDetail()">🗑️ Mover para lixeira</button>
   <button class="btn-danger" id="groupDelBtn" style="display:none;background:var(--yellow-bg);color:var(--yellow);border-color:rgba(255,215,64,.3);margin-top:6px" onclick="deleteGroupFromDetail()">🗑️ Apagar todas parcelas</button>
 </div></div>
 
-<!-- QUICK TX MODAL -->
+<!-- ════════════════════════════════════════
+     MODAL: ATALHO RÁPIDO
+     ════════════════════════════════════════ -->
 <div class="modal-overlay" id="quickModal"><div class="modal">
   <div class="modal-handle"></div>
   <div class="modal-title">Novo atalho<div class="modal-close" onclick="closeModal('quickModal')">✕</div></div>
   <div class="form-group"><label class="form-label">Descrição</label><input class="form-input" id="qDesc" placeholder="Almoço"></div>
-  <div class="form-row"><div class="form-group"><label class="form-label">Valor</label><input class="form-input" id="qAmount" type="number" placeholder="25"></div>
-  <div class="form-group"><label class="form-label">Tipo</label><select class="form-input" id="qType"><option value="expense">Gasto</option><option value="income">Entrada</option></select></div></div>
+  <div class="form-row">
+    <div class="form-group"><label class="form-label">Valor</label><input class="form-input" id="qAmount" type="number" placeholder="25"></div>
+    <div class="form-group"><label class="form-label">Tipo</label><select class="form-input" id="qType"><option value="expense">Gasto</option><option value="income">Entrada</option></select></div>
+  </div>
   <div class="form-group"><label class="form-label">Emoji</label><input class="form-input" id="qEmoji" placeholder="🍔" maxlength="4"></div>
   <button class="btn-primary" onclick="saveQuickTx()">Salvar</button>
 </div></div>
+
+<!-- ════════════════════════════════════════
+     MODAL: NOVA CATEGORIA (BUG-05)
+     ════════════════════════════════════════ -->
+<div class="modal-overlay" id="catModal"><div class="modal">
+  <div class="modal-handle"></div>
+  <div class="modal-title"><span id="catModalTitle">Nova categoria</span><div class="modal-close" onclick="closeModal('catModal')">✕</div></div>
+  <div class="form-group"><label class="form-label">Nome</label><input class="form-input" id="catName" placeholder="Ex: Investimentos"></div>
+  <div class="form-row">
+    <div class="form-group"><label class="form-label">Emoji</label><input class="form-input" id="catEmoji" placeholder="📈" maxlength="4"></div>
+    <div class="form-group"><label class="form-label">Cor (hex)</label><input class="form-input" id="catColor" type="color" value="#39ff14"></div>
+  </div>
+  <input type="hidden" id="catEditId" value="">
+  <button class="btn-primary" onclick="saveCat()">Salvar categoria</button>
+</div></div>
 <script>
 // ═══════════════════════════════════════════════════════════════
-// FIREBASE CONFIG (seus dados!)
+// FIREBASE CONFIG
 // ═══════════════════════════════════════════════════════════════
+// IMPORTANTE: Proteja com Firebase Security Rules no console!
+// Rules recomendadas: $uid === auth.uid && auth.token.email === 'seu@email'
 const firebaseConfig = {
   apiKey: "AIzaSyBWwV1uaDb5X8PsdolYwu168aeZTQ1kOeU",
   authDomain: "novais-finance.firebaseapp.com",
@@ -444,528 +618,1658 @@ const auth = firebase.auth();
 const provider = new firebase.auth.GoogleAuthProvider();
 
 // ═══════════════════════════════════════════════════════════════
-// CATEGORIES
+// CATEGORIAS PADRÃO (BUG-05: protegidas, não deletáveis)
 // ═══════════════════════════════════════════════════════════════
-const CATS=[
-  {id:'casa',name:'Casa',emoji:'🏠',color:'var(--blue)',bg:'var(--blue-bg)'},
-  {id:'transporte',name:'Transporte',emoji:'🚗',color:'var(--purple)',bg:'var(--purple-bg)'},
-  {id:'alimentacao',name:'Alimentação',emoji:'🍔',color:'var(--orange)',bg:'var(--orange-bg)'},
-  {id:'lazer',name:'Lazer',emoji:'🎮',color:'var(--pink)',bg:'var(--pink-bg)'},
-  {id:'saude',name:'Saúde',emoji:'💊',color:'var(--red)',bg:'var(--red-bg)'},
-  {id:'streaming',name:'Streaming',emoji:'📺',color:'var(--cyan)',bg:'var(--cyan-bg)'},
-  {id:'trabalho',name:'Trabalho',emoji:'💼',color:'var(--green)',bg:'var(--green-bg)'},
-  {id:'educacao',name:'Educação',emoji:'📚',color:'var(--yellow)',bg:'var(--yellow-bg)'},
-  {id:'compras',name:'Compras',emoji:'🛍️',color:'var(--pink)',bg:'var(--pink-bg)'},
-  {id:'outros',name:'Outros',emoji:'📌',color:'var(--text3)',bg:'var(--surface3)'},
+const DEFAULT_CATS = [
+  {id:'casa',name:'Moradia',emoji:'🏠',color:'#448AFF',bg:'rgba(68,138,255,.12)',protected:true},
+  {id:'transporte',name:'Transporte',emoji:'🚗',color:'#7C4DFF',bg:'rgba(124,77,255,.12)',protected:true},
+  {id:'alimentacao',name:'Alimentação',emoji:'🍔',color:'#FF9100',bg:'rgba(255,145,0,.12)',protected:true},
+  {id:'lazer',name:'Lazer',emoji:'🎮',color:'#FF4081',bg:'rgba(255,64,129,.12)',protected:true},
+  {id:'saude',name:'Saúde',emoji:'💊',color:'#FF5252',bg:'rgba(255,82,82,.12)',protected:true},
+  {id:'streaming',name:'Streaming',emoji:'📺',color:'#18FFFF',bg:'rgba(24,255,255,.12)',protected:true},
+  {id:'trabalho',name:'Trabalho',emoji:'💼',color:'#00C853',bg:'rgba(0,200,83,.12)',protected:true},
+  {id:'educacao',name:'Educação',emoji:'📚',color:'#FFD740',bg:'rgba(255,215,64,.12)',protected:true},
+  {id:'compras',name:'Compras',emoji:'🛍️',color:'#FF4081',bg:'rgba(255,64,129,.12)',protected:true},
+  {id:'outros',name:'Outros',emoji:'📌',color:'#606078',bg:'rgba(96,96,120,.12)',protected:true},
 ];
-const getCat=id=>CATS.find(c=>c.id===id)||CATS[CATS.length-1];
-const MO=['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
-const MS=['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
+
+// BUG-05: Lista dinâmica que inclui padrão + custom
+let customCats = [];
+function getAllCats() {
+  return [...DEFAULT_CATS, ...customCats];
+}
+function getCat(id) {
+  return getAllCats().find(c => c.id === id) || DEFAULT_CATS[DEFAULT_CATS.length - 1];
+}
+
+// BUG-05: Gerar cor de fundo a partir de hex
+function hexToBg(hex) {
+  const r = parseInt(hex.slice(1,3),16);
+  const g = parseInt(hex.slice(3,5),16);
+  const b = parseInt(hex.slice(5,7),16);
+  return `rgba(${r},${g},${b},.12)`;
+}
+
+// BUG-05: Gerar ID seguro a partir do nome
+function catNameToId(name) {
+  return name.toLowerCase()
+    .normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+    .replace(/[^a-z0-9]/g,'_')
+    .replace(/_+/g,'_')
+    .replace(/^_|_$/g,'') || 'custom_' + Date.now();
+}
+
+// ═══════════════════════════════════════════════════════════════
+// CONSTANTES
+// ═══════════════════════════════════════════════════════════════
+const MO = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+const MS = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
+
+// BUG-02: Categorias que quebram a streak
+const STREAK_CATS = ['lazer', 'streaming', 'compras'];
 
 // ═══════════════════════════════════════════════════════════════
 // STATE
 // ═══════════════════════════════════════════════════════════════
-let S={initialBalance:0,transactions:[],trash:[],quickTx:[],monthlyGoal:0,savingsGoal:0,savingsDate:'',
-  currentMonth:new Date().getMonth(),currentYear:new Date().getFullYear(),txView:'all',catFilter:null,theme:'dark'};
-let editType='expense',editRec='none',editCat='outros',detailId=null,lastDel=null,toastTmr=null,charts={},calSel=null,dbPath='';
+let S = {
+  initialBalance: 0,
+  transactions: [],
+  trash: [],
+  quickTx: [],
+  monthlyGoal: 0,
+  savingsGoal: 0,
+  savingsDate: '',
+  customCats: [],           // BUG-05
+  streakRecord: 0,          // BUG-02: recorde histórico
+  streakRecordDate: '',     // BUG-02: data do recorde
+  currentMonth: new Date().getMonth(),
+  currentYear: new Date().getFullYear(),
+  txView: 'all',
+  catFilter: null,
+  theme: 'dark',
+  migrated: false           // BUG-03: flag de migração confirmed
+};
+
+let editType = 'expense', editRec = 'none', editCat = 'outros';
+let editModalType = 'expense', editModalRec = 'none', editModalCat = 'outros', editModalId = null;
+let detailId = null, lastDel = null, toastTmr = null, charts = {}, calSel = null, dbPath = '';
 
 // ═══════════════════════════════════════════════════════════════
-// AUTH
+// AUTH (SEC: email removido do DOM)
 // ═══════════════════════════════════════════════════════════════
-function doLogin(){
-  document.getElementById('loginLoading').style.display='flex';
-  document.getElementById('loginError').textContent='';
-  auth.signInWithPopup(provider).catch(e=>{
-    document.getElementById('loginLoading').style.display='none';
-    // Try redirect for mobile
-    if(e.code==='auth/popup-blocked'||e.code==='auth/cancelled-popup-request'){
+function doLogin() {
+  document.getElementById('loginLoading').style.display = 'flex';
+  document.getElementById('loginError').textContent = '';
+  auth.signInWithPopup(provider).catch(e => {
+    document.getElementById('loginLoading').style.display = 'none';
+    if (e.code === 'auth/popup-blocked' || e.code === 'auth/cancelled-popup-request') {
       auth.signInWithRedirect(provider);
     } else {
-      document.getElementById('loginError').textContent='Erro: '+e.message;
+      document.getElementById('loginError').textContent = 'Erro: ' + e.message;
     }
   });
 }
-function doLogout(){
-  if(confirm('Sair da conta?')) auth.signOut();
+
+function doLogout() {
+  if (confirm('Sair da conta?')) auth.signOut();
 }
 
-auth.onAuthStateChanged(user=>{
-  if(user){
-    // Logged in
-    dbPath = 'users/'+user.uid;
+auth.onAuthStateChanged(user => {
+  if (user) {
+    dbPath = 'users/' + user.uid;
     document.getElementById('loginScreen').classList.add('hide');
     document.getElementById('appContainer').classList.add('show');
-    document.getElementById('bottomNav').style.display='flex';
-    document.getElementById('fabBtn').style.display='flex';
-    document.getElementById('userAvatar').src=user.photoURL||'';
-    document.getElementById('userAvatar').title='Sair ('+user.email+')';
+    document.getElementById('bottomNav').style.display = 'flex';
+    document.getElementById('fabBtn').style.display = 'flex';
+    document.getElementById('userAvatar').src = user.photoURL || '';
+    // SEC: não expor email no DOM
+    document.getElementById('userAvatar').title = 'Sair';
     listenData();
   } else {
-    // Logged out
     document.getElementById('loginScreen').classList.remove('hide');
     document.getElementById('appContainer').classList.remove('show');
-    document.getElementById('bottomNav').style.display='none';
-    document.getElementById('fabBtn').style.display='none';
-    document.getElementById('loginLoading').style.display='none';
+    document.getElementById('bottomNav').style.display = 'none';
+    document.getElementById('fabBtn').style.display = 'none';
+    document.getElementById('loginLoading').style.display = 'none';
   }
 });
 
 // ═══════════════════════════════════════════════════════════════
 // FIREBASE SYNC
 // ═══════════════════════════════════════════════════════════════
-let dbListener=null;
-function listenData(){
-  if(dbListener) db.ref(dbPath).off('value',dbListener);
-  db.ref('.info/connected').on('value',s=>{
-    document.getElementById('syncDot').className=s.val()?'sync-dot':'sync-dot off';
+let dbListener = null;
+
+function listenData() {
+  if (dbListener) db.ref(dbPath).off('value', dbListener);
+  db.ref('.info/connected').on('value', s => {
+    document.getElementById('syncDot').className = s.val() ? 'sync-dot' : 'sync-dot off';
   });
-  dbListener=db.ref(dbPath).on('value',snap=>{
-    const d=snap.val();
-    if(d){
-      S.initialBalance=d.initialBalance||0;
-      S.transactions=d.transactions?Object.values(d.transactions):[];
-      S.trash=d.trash?Object.values(d.trash):[];
-      S.quickTx=d.quickTx?Object.values(d.quickTx):[];
-      S.monthlyGoal=d.monthlyGoal||0;
-      S.savingsGoal=d.savingsGoal||0;
-      S.savingsDate=d.savingsDate||'';
+  dbListener = db.ref(dbPath).on('value', snap => {
+    const d = snap.val();
+    if (d) {
+      S.initialBalance = d.initialBalance || 0;
+      S.transactions = d.transactions ? Object.values(d.transactions) : [];
+      S.trash = d.trash ? Object.values(d.trash) : [];
+      S.quickTx = d.quickTx ? Object.values(d.quickTx) : [];
+      S.monthlyGoal = d.monthlyGoal || 0;
+      S.savingsGoal = d.savingsGoal || 0;
+      S.savingsDate = d.savingsDate || '';
+      S.streakRecord = d.streakRecord || 0;
+      S.streakRecordDate = d.streakRecordDate || '';
+      S.migrated = d.migrated || false;
+
+      // BUG-05: carregar categorias customizadas
+      S.customCats = d.customCats ? Object.values(d.customCats) : [];
+      customCats = S.customCats;
+
+      // ═══════════════════════════════════════════════════════
+      // BUG-03: MIGRAÇÃO — transações antigas sem confirmed
+      // Primeira vez: marcar todas como confirmed: false
+      // Depois da migração, novas transações passadas = confirmed: true
+      // ═══════════════════════════════════════════════════════
+      if (!S.migrated) {
+        let needsMigration = false;
+        S.transactions.forEach(t => {
+          if (t.confirmed === undefined) {
+            // Transações antigas: marcar como NÃO confirmadas
+            if (t.amount > 0) {
+              t.confirmed = false;
+              needsMigration = true;
+            } else {
+              // Gastos não precisam de confirmação
+              t.confirmed = true;
+              needsMigration = true;
+            }
+          }
+        });
+        if (needsMigration) {
+          S.migrated = true;
+          sync();
+          return; // sync vai disparar outro onValue
+        }
+      }
     }
     renderAll();
   });
 }
-function sync(){
-  if(!dbPath)return;
-  const tx={},tr={},q={};
-  S.transactions.forEach(t=>{tx[String(t.id).replace(/\./g,'_')]=t;});
-  S.trash.forEach(t=>{tr[String(t.id).replace(/\./g,'_')]=t;});
-  S.quickTx.forEach((v,i)=>{q['q'+i]=v;});
-  db.ref(dbPath).set({initialBalance:S.initialBalance,transactions:tx,trash:tr,quickTx:q,
-    monthlyGoal:S.monthlyGoal,savingsGoal:S.savingsGoal,savingsDate:S.savingsDate,updatedAt:Date.now()});
+
+function sync() {
+  if (!dbPath) return;
+  const tx = {}, tr = {}, q = {}, cc = {};
+  S.transactions.forEach(t => { tx[String(t.id).replace(/\./g, '_')] = t; });
+  S.trash.forEach(t => { tr[String(t.id).replace(/\./g, '_')] = t; });
+  S.quickTx.forEach((v, i) => { q['q' + i] = v; });
+  S.customCats.forEach((c, i) => { cc['c' + i] = c; });
+  db.ref(dbPath).set({
+    initialBalance: S.initialBalance,
+    transactions: tx,
+    trash: tr,
+    quickTx: q,
+    customCats: cc,
+    monthlyGoal: S.monthlyGoal,
+    savingsGoal: S.savingsGoal,
+    savingsDate: S.savingsDate,
+    streakRecord: S.streakRecord,
+    streakRecordDate: S.streakRecordDate,
+    migrated: S.migrated,
+    updatedAt: Date.now()
+  });
 }
 
 // ═══════════════════════════════════════════════════════════════
 // UTILS
 // ═══════════════════════════════════════════════════════════════
-const fmt=n=>'R$ '+Math.abs(n).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
-const td=()=>{const d=new Date();return`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;};
-const genId=()=>Date.now()+'_'+Math.random().toString(36).substr(2,9);
-function dateLabel(ds){const[y,m,d]=ds.split('-').map(Number);const dt=new Date(y,m-1,d);return['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'][dt.getDay()]+`, ${d} ${MS[m-1]} ${y}`;}
-function pfx(y,m){return`${y}-${String(m+1).padStart(2,'0')}`;}
-function gc(v){if(!v||!v.startsWith('var('))return v||'#888';const p=v.replace('var(','').replace(')','');return getComputedStyle(document.body).getPropertyValue(p).trim()||'#888';}
+const fmt = n => 'R$ ' + Math.abs(n).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+// BUG-02/06: data de HOJE no fuso local (nunca UTC)
+function td() {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+}
+
+const genId = () => Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+
+function dateLabel(ds) {
+  const [y, m, d] = ds.split('-').map(Number);
+  const dt = new Date(y, m - 1, d);
+  return ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'][dt.getDay()] + `, ${d} ${MS[m - 1]} ${y}`;
+}
+
+function pfx(y, m) {
+  return `${y}-${String(m + 1).padStart(2, '0')}`;
+}
+
+function gc(v) {
+  if (!v || !v.startsWith('var(')) return v || '#888';
+  const p = v.replace('var(', '').replace(')', '');
+  return getComputedStyle(document.body).getPropertyValue(p).trim() || '#888';
+}
+
+// ═══════════════════════════════════════════════════════════════
+// BUG-06: AJUSTE DE DIAS ÚTEIS (sáb→sex, dom→sex)
+// ═══════════════════════════════════════════════════════════════
+function adjustToBusinessDay(year, month, day) {
+  // month é 0-based aqui (como Date() espera)
+  const lastDay = new Date(year, month + 1, 0).getDate();
+  const actualDay = Math.min(day, lastDay);
+  const dt = new Date(year, month, actualDay);
+  const dow = dt.getDay(); // 0=dom, 6=sab
+
+  let adjusted = actualDay;
+  let wasAdjusted = false;
+  let originalDay = actualDay;
+
+  if (dow === 6) {
+    // Sábado → volta para sexta
+    adjusted = actualDay - 1;
+    wasAdjusted = true;
+  } else if (dow === 0) {
+    // Domingo → volta para sexta
+    adjusted = actualDay - 2;
+    wasAdjusted = true;
+  }
+
+  // Se ajuste caiu em mês anterior (ex: dia 1 era sáb)
+  if (adjusted < 1) {
+    const prevLastDay = new Date(year, month, 0).getDate();
+    const prevMonth = month === 0 ? 11 : month - 1;
+    const prevYear = month === 0 ? year - 1 : year;
+    return {
+      year: prevYear,
+      month: prevMonth,
+      day: prevLastDay + adjusted, // adjusted é negativo ou 0
+      wasAdjusted,
+      originalDay
+    };
+  }
+
+  return { year, month, day: adjusted, wasAdjusted, originalDay };
+}
+
+// BUG-06: Formatar data ajustada como string YYYY-MM-DD
+function makeAdjustedDate(year, monthZeroBased, nominalDay) {
+  const result = adjustToBusinessDay(year, monthZeroBased, nominalDay);
+  return {
+    date: `${result.year}-${String(result.month + 1).padStart(2, '0')}-${String(result.day).padStart(2, '0')}`,
+    wasAdjusted: result.wasAdjusted,
+    originalDay: result.originalDay
+  };
+}
+
+// BUG-06: Verifica se um dia nominal é dia de pagamento (15, 30, 31)
+function isPayDay(day) {
+  return day === 15 || day === 30 || day === 31;
+}
 
 // ═══════════════════════════════════════════════════════════════
 // THEME
 // ═══════════════════════════════════════════════════════════════
-function toggleTheme(){
-  S.theme=S.theme==='dark'?'light':'dark';
-  document.body.dataset.theme=S.theme;
-  document.getElementById('themeBtn').textContent=S.theme==='dark'?'🌙':'☀️';
-  localStorage.setItem('novais_theme',S.theme);
+function toggleTheme() {
+  S.theme = S.theme === 'dark' ? 'light' : 'dark';
+  document.body.dataset.theme = S.theme;
+  document.getElementById('themeBtn').textContent = S.theme === 'dark' ? '🌙' : '☀️';
+  localStorage.setItem('novais_theme', S.theme);
   renderAll();
 }
-(function(){const t=localStorage.getItem('novais_theme');if(t){S.theme=t;document.body.dataset.theme=t;document.getElementById('themeBtn').textContent=t==='dark'?'🌙':'☀️';}})();
+(function() {
+  const t = localStorage.getItem('novais_theme');
+  if (t) {
+    S.theme = t;
+    document.body.dataset.theme = t;
+    document.getElementById('themeBtn').textContent = t === 'dark' ? '🌙' : '☀️';
+  }
+})();
 
 // ═══════════════════════════════════════════════════════════════
 // NAVIGATION
 // ═══════════════════════════════════════════════════════════════
-function goPage(n,el){
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.getElementById('page'+n).classList.add('active');
-  document.querySelectorAll('.nav-item').forEach(i=>i.classList.remove('active'));
+function goPage(n, el) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page' + n).classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
   el.classList.add('active');
-  if(n==='Analytics')renderAnalytics();
-  if(n==='Cal')renderCal();
-  if(n==='Settings')renderSettings();
+  if (n === 'Analytics') renderAnalytics();
+  if (n === 'Cal') renderCal();
+  if (n === 'Settings') renderSettings();
 }
-function changeMonth(d){S.currentMonth+=d;if(S.currentMonth>11){S.currentMonth=0;S.currentYear++;}if(S.currentMonth<0){S.currentMonth=11;S.currentYear--;}renderAll();}
-function openModal(id){document.getElementById(id).classList.add('open');}
-function closeModal(id){document.getElementById(id).classList.remove('open');}
-document.querySelectorAll('.modal-overlay').forEach(o=>{o.addEventListener('click',e=>{if(e.target===o)o.classList.remove('open');});});
+
+function changeMonth(d) {
+  S.currentMonth += d;
+  if (S.currentMonth > 11) { S.currentMonth = 0; S.currentYear++; }
+  if (S.currentMonth < 0) { S.currentMonth = 11; S.currentYear--; }
+  renderAll();
+}
+
+function openModal(id) { document.getElementById(id).classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+
+document.querySelectorAll('.modal-overlay').forEach(o => {
+  o.addEventListener('click', e => { if (e.target === o) o.classList.remove('open'); });
+});
 
 // ═══════════════════════════════════════════════════════════════
-// ADD TRANSACTION
+// BUG-05: CRUD DE CATEGORIAS PERSONALIZADAS
 // ═══════════════════════════════════════════════════════════════
-function setType(t){editType=t;document.getElementById('typeOut').className='type-btn'+(t==='expense'?' act-out':'');document.getElementById('typeIn').className='type-btn'+(t==='income'?' act-in':'');}
-function setRec(r,el){editRec=r;document.querySelectorAll('.rec-pill').forEach(p=>p.classList.remove('active'));el.classList.add('active');document.getElementById('instGroup').style.display=r==='installment'?'block':'none';}
-function renderCatPick(){document.getElementById('catPicker').innerHTML=CATS.map(c=>`<div class="cat-chip ${c.id===editCat?'selected':''}" style="background:${c.bg};color:${c.color};${c.id===editCat?'border-color:'+c.color:''}" onclick="editCat='${c.id}';renderCatPick()">${c.emoji} ${c.name}</div>`).join('');}
+function openCatEdit(id) {
+  const cat = customCats.find(c => c.id === id);
+  if (!cat) return;
+  document.getElementById('catModalTitle').textContent = 'Editar categoria';
+  document.getElementById('catName').value = cat.name;
+  document.getElementById('catEmoji').value = cat.emoji;
+  document.getElementById('catColor').value = cat.color;
+  document.getElementById('catEditId').value = cat.id;
+  openModal('catModal');
+}
 
-document.getElementById('addModal').querySelector('.modal').addEventListener('click',e=>e.stopPropagation());
+function saveCat() {
+  const name = document.getElementById('catName').value.trim();
+  const emoji = document.getElementById('catEmoji').value.trim() || '📂';
+  const color = document.getElementById('catColor').value;
+  const editId = document.getElementById('catEditId').value;
 
-function openAddM(){
-  document.getElementById('fDate').value=td();
-  document.getElementById('fDesc').value='';
-  document.getElementById('fAmount').value='';
-  document.getElementById('fNotes').value='';
+  if (!name) { alert('Digite o nome da categoria!'); return; }
+
+  const bg = hexToBg(color);
+
+  if (editId) {
+    // Editando existente
+    const idx = S.customCats.findIndex(c => c.id === editId);
+    if (idx >= 0) {
+      S.customCats[idx].name = name;
+      S.customCats[idx].emoji = emoji;
+      S.customCats[idx].color = color;
+      S.customCats[idx].bg = bg;
+    }
+  } else {
+    // Nova categoria
+    const id = catNameToId(name);
+    // Verificar duplicata
+    if (getAllCats().find(c => c.id === id)) {
+      alert('Já existe uma categoria com esse nome!');
+      return;
+    }
+    S.customCats.push({ id, name, emoji, color, bg, protected: false });
+  }
+
+  customCats = S.customCats;
+  sync();
+  renderAll();
+  closeModal('catModal');
+  // Reset modal
+  document.getElementById('catEditId').value = '';
+  document.getElementById('catModalTitle').textContent = 'Nova categoria';
+  document.getElementById('catName').value = '';
+  document.getElementById('catEmoji').value = '';
+  document.getElementById('catColor').value = '#39ff14';
+  showToast(editId ? 'Categoria atualizada!' : 'Categoria criada!');
+}
+
+function deleteCat(id) {
+  const cat = S.customCats.find(c => c.id === id);
+  if (!cat) return;
+  if (!confirm(`Excluir categoria "${cat.name}"? Transações com essa categoria serão movidas para "Outros".`)) return;
+
+  // Mover transações dessa categoria para 'outros'
+  S.transactions.forEach(t => {
+    if (t.category === id) t.category = 'outros';
+  });
+
+  S.customCats = S.customCats.filter(c => c.id !== id);
+  customCats = S.customCats;
+  sync();
+  renderAll();
+  showToast(`"${cat.name}" removida!`);
+}
+
+function renderCatManager() {
+  const all = getAllCats();
+  const list = document.getElementById('catManagerList');
+  list.innerHTML = all.map(c => {
+    const bgStyle = c.bg || hexToBg(c.color);
+    const actions = c.protected
+      ? '<span style="font-size:10px;color:var(--text3);padding:4px 8px">padrão</span>'
+      : `<div class="cat-manager-actions">
+           <button onclick="openCatEdit('${c.id}')" title="Editar">✏️</button>
+           <button onclick="deleteCat('${c.id}')" title="Excluir" style="color:var(--red)">✕</button>
+         </div>`;
+    return `<div class="cat-manager-item">
+      <div class="cat-preview" style="background:${bgStyle}">${c.emoji}</div>
+      <div class="cat-info">
+        <div class="cat-info-name">${c.name}</div>
+        <div class="cat-info-id">${c.id}</div>
+      </div>
+      ${actions}
+    </div>`;
+  }).join('');
+}
+
+// ═══════════════════════════════════════════════════════════════
+// ADD TRANSACTION (com BUG-03 confirmed + BUG-06 dias úteis)
+// ═══════════════════════════════════════════════════════════════
+function setType(t) {
+  editType = t;
+  document.getElementById('typeOut').className = 'type-btn' + (t === 'expense' ? ' act-out' : '');
+  document.getElementById('typeIn').className = 'type-btn' + (t === 'income' ? ' act-in' : '');
+}
+
+function setRec(r, el) {
+  editRec = r;
+  document.querySelectorAll('#recToggle .rec-pill').forEach(p => p.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('instGroup').style.display = r === 'installment' ? 'block' : 'none';
+}
+
+function renderCatPick() {
+  const cats = getAllCats();
+  document.getElementById('catPicker').innerHTML = cats.map(c => {
+    const bgStyle = c.bg || hexToBg(c.color);
+    return `<div class="cat-chip ${c.id === editCat ? 'selected' : ''}"
+      style="background:${bgStyle};color:${c.color};${c.id === editCat ? 'border-color:' + c.color : ''}"
+      onclick="editCat='${c.id}';renderCatPick()">${c.emoji} ${c.name}</div>`;
+  }).join('');
+}
+
+function openAddM() {
+  document.getElementById('fDate').value = td();
+  document.getElementById('fDesc').value = '';
+  document.getElementById('fAmount').value = '';
+  document.getElementById('fNotes').value = '';
+  document.getElementById('fInstCur').value = '';
+  document.getElementById('fInstTot').value = '';
   setType('expense');
-  setRec('none',document.querySelector('.rec-pill'));
-  editCat='outros';
+  setRec('none', document.querySelector('#recToggle .rec-pill'));
+  editCat = 'outros';
   renderCatPick();
   openModal('addModal');
 }
-// Override fab
-document.getElementById('fabBtn').onclick=openAddM;
 
-function saveTx(){
-  const desc=document.getElementById('fDesc').value.trim();
-  const amount=parseFloat(document.getElementById('fAmount').value);
-  const date=document.getElementById('fDate').value;
-  const notes=document.getElementById('fNotes').value.trim();
-  if(!desc||isNaN(amount)||!date){alert('Preencha tudo!');return;}
-  const id=genId();
-  const base={id,desc,amount:editType==='income'?Math.abs(amount):-Math.abs(amount),date,type:editType,category:editCat,recurrence:editRec,notes,createdAt:Date.now()};
+function saveTx() {
+  const desc = document.getElementById('fDesc').value.trim();
+  const amount = parseFloat(document.getElementById('fAmount').value);
+  const date = document.getElementById('fDate').value;
+  const notes = document.getElementById('fNotes').value.trim();
+  if (!desc || isNaN(amount) || !date) { alert('Preencha tudo!'); return; }
 
-  if(editRec==='installment'){
-    const cur=parseInt(document.getElementById('fInstCur').value)||1;
-    const tot=parseInt(document.getElementById('fInstTot').value)||1;
-    base.instCurrent=cur;base.instTotal=tot;base.groupId=id;
-    const[y,m,d]=date.split('-').map(Number);
-    for(let i=cur;i<=tot;i++){
-      const mn=m+(i-cur),yr=y+Math.floor((mn-1)/12),mo=((mn-1)%12)+1;
-      const last=new Date(yr,mo,0).getDate(),dd=Math.min(d,last);
-      S.transactions.push({...base,id:i===cur?id:genId(),instCurrent:i,date:`${yr}-${String(mo).padStart(2,'0')}-${String(dd).padStart(2,'0')}`});
+  const id = genId();
+  const today = td();
+  const isIncome = editType === 'income';
+  const realAmount = isIncome ? Math.abs(amount) : -Math.abs(amount);
+
+  // BUG-03: determinar se é confirmed
+  // Receitas futuras = NÃO confirmadas
+  // Receitas passadas/hoje = confirmadas (o usuario está inserindo manualmente)
+  // Gastos = sempre confirmados
+  const confirmed = isIncome ? (date <= today) : true;
+
+  const base = {
+    id, desc, amount: realAmount, date, type: editType,
+    category: editCat, recurrence: editRec, notes,
+    confirmed, createdAt: Date.now()
+  };
+
+  const [y, m, d] = date.split('-').map(Number);
+  const nominalDay = d;
+
+  if (editRec === 'installment') {
+    const cur = parseInt(document.getElementById('fInstCur').value) || 1;
+    const tot = parseInt(document.getElementById('fInstTot').value) || 1;
+    base.instCurrent = cur; base.instTotal = tot; base.groupId = id;
+    for (let i = cur; i <= tot; i++) {
+      const mn = m + (i - cur), yr = y + Math.floor((mn - 1) / 12), mo = ((mn - 1) % 12) + 1;
+      // BUG-06: ajustar dia útil se for dia de pagamento
+      let finalDate;
+      if (isIncome && isPayDay(nominalDay)) {
+        const adj = makeAdjustedDate(yr, mo - 1, nominalDay);
+        finalDate = adj.date;
+      } else {
+        const last = new Date(yr, mo, 0).getDate();
+        const dd = Math.min(nominalDay, last);
+        finalDate = `${yr}-${String(mo).padStart(2, '0')}-${String(dd).padStart(2, '0')}`;
+      }
+      const isFuture = finalDate > today;
+      S.transactions.push({
+        ...base,
+        id: i === cur ? id : genId(),
+        instCurrent: i,
+        date: finalDate,
+        nominalDay: isPayDay(nominalDay) ? nominalDay : undefined,
+        confirmed: isIncome ? !isFuture : true
+      });
     }
-  } else if(editRec==='monthly'){
-    base.groupId=id;const[y,m,d]=date.split('-').map(Number);
-    for(let i=0;i<24;i++){
-      const mn=m+i,yr=y+Math.floor((mn-1)/12),mo=((mn-1)%12)+1;
-      const last=new Date(yr,mo,0).getDate(),dd=Math.min(d,last);
-      S.transactions.push({...base,id:i===0?id:genId(),date:`${yr}-${String(mo).padStart(2,'0')}-${String(dd).padStart(2,'0')}`});
+  } else if (editRec === 'monthly') {
+    base.groupId = id;
+    for (let i = 0; i < 24; i++) {
+      const mn = m + i, yr = y + Math.floor((mn - 1) / 12), mo = ((mn - 1) % 12) + 1;
+      let finalDate;
+      if (isIncome && isPayDay(nominalDay)) {
+        const adj = makeAdjustedDate(yr, mo - 1, nominalDay);
+        finalDate = adj.date;
+      } else {
+        const last = new Date(yr, mo, 0).getDate();
+        const dd = Math.min(nominalDay, last);
+        finalDate = `${yr}-${String(mo).padStart(2, '0')}-${String(dd).padStart(2, '0')}`;
+      }
+      const isFuture = finalDate > today;
+      S.transactions.push({
+        ...base,
+        id: i === 0 ? id : genId(),
+        date: finalDate,
+        nominalDay: isPayDay(nominalDay) ? nominalDay : undefined,
+        confirmed: isIncome ? !isFuture : true
+      });
     }
-  } else { S.transactions.push(base); }
-  sync();renderAll();closeModal
-  ('addModal');
+  } else {
+    base.nominalDay = isPayDay(nominalDay) ? nominalDay : undefined;
+    S.transactions.push(base);
+  }
+
+  sync(); renderAll(); closeModal('addModal');
+  showToast(`"${desc}" adicionado!`);
+}
+
+// ═══════════════════════════════════════════════════════════════
+// BUG-01: EDITAR TRANSAÇÃO
+// ═══════════════════════════════════════════════════════════════
+function setEditType(t) {
+  editModalType = t;
+  document.getElementById('editTypeOut').className = 'type-btn' + (t === 'expense' ? ' act-out' : '');
+  document.getElementById('editTypeIn').className = 'type-btn' + (t === 'income' ? ' act-in' : '');
+}
+
+function setEditRec(r, el) {
+  editModalRec = r;
+  document.querySelectorAll('#editRecToggle .rec-pill').forEach(p => p.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('editInstGroup').style.display = r === 'installment' ? 'block' : 'none';
+}
+
+function renderEditCatPick() {
+  const cats = getAllCats();
+  document.getElementById('editCatPicker').innerHTML = cats.map(c => {
+    const bgStyle = c.bg || hexToBg(c.color);
+    return `<div class="cat-chip ${c.id === editModalCat ? 'selected' : ''}"
+      style="background:${bgStyle};color:${c.color};${c.id === editModalCat ? 'border-color:' + c.color : ''}"
+      onclick="editModalCat='${c.id}';renderEditCatPick()">${c.emoji} ${c.name}</div>`;
+  }).join('');
+}
+
+function openEditModal(id) {
+  const tx = S.transactions.find(t => t.id === id);
+  if (!tx) return;
+  editModalId = id;
+  editModalType = tx.type || (tx.amount > 0 ? 'income' : 'expense');
+  editModalCat = tx.category || 'outros';
+  editModalRec = tx.recurrence || 'none';
+
+  setEditType(editModalType);
+  document.getElementById('eDesc').value = tx.desc || '';
+  document.getElementById('eAmount').value = Math.abs(tx.amount);
+  document.getElementById('eDate').value = tx.date;
+  document.getElementById('eNotes').value = tx.notes || '';
+
+  // Recorrência
+  document.querySelectorAll('#editRecToggle .rec-pill').forEach(p => p.classList.remove('active'));
+  const recPills = document.querySelectorAll('#editRecToggle .rec-pill');
+  if (editModalRec === 'none') recPills[0].classList.add('active');
+  else if (editModalRec === 'monthly') recPills[1].classList.add('active');
+  else if (editModalRec === 'installment') recPills[2].classList.add('active');
+  document.getElementById('editInstGroup').style.display = editModalRec === 'installment' ? 'block' : 'none';
+
+  if (tx.instCurrent) document.getElementById('eInstCur').value = tx.instCurrent;
+  if (tx.instTotal) document.getElementById('eInstTot').value = tx.instTotal;
+
+  renderEditCatPick();
+  openModal('editModal');
+}
+
+function saveEdit() {
+  const tx = S.transactions.find(t => t.id === editModalId);
+  if (!tx) return;
+
+  const desc = document.getElementById('eDesc').value.trim();
+  const amount = parseFloat(document.getElementById('eAmount').value);
+  const date = document.getElementById('eDate').value;
+  const notes = document.getElementById('eNotes').value.trim();
+
+  if (!desc || isNaN(amount) || !date) { alert('Preencha tudo!'); return; }
+
+  const today = td();
+  const isIncome = editModalType === 'income';
+
+  // Guardar estado anterior para histórico
+  tx.lastEdit = {
+    desc: tx.desc, amount: tx.amount, date: tx.date,
+    category: tx.category, type: tx.type, editedAt: Date.now()
+  };
+
+  tx.desc = desc;
+  tx.amount = isIncome ? Math.abs(amount) : -Math.abs(amount);
+  tx.date = date;
+  tx.type = editModalType;
+  tx.category = editModalCat;
+  tx.recurrence = editModalRec;
+  tx.notes = notes;
+
+  if (editModalRec === 'installment') {
+    tx.instCurrent = parseInt(document.getElementById('eInstCur').value) || tx.instCurrent;
+    tx.instTotal = parseInt(document.getElementById('eInstTot').value) || tx.instTotal;
+  }
+
+  // BUG-03: atualizar confirmed
+  if (isIncome && date > today) {
+    tx.confirmed = false;
+  }
+
+  // BUG-06: ajustar dia útil
+  const [, , d] = date.split('-').map(Number);
+  if (isIncome && isPayDay(d)) {
+    tx.nominalDay = d;
+  }
+
+  sync(); renderAll();
+  closeModal('editModal');
+  showToast(`"${desc}" atualizado!`);
+}
+
+function editFromDetail() {
+  closeModal('detailModal');
+  setTimeout(() => openEditModal(detailId), 250);
+}
+
+function deleteFromEdit() {
+  closeModal('editModal');
+  setTimeout(() => deleteTx(editModalId), 200);
+}
+
+// ═══════════════════════════════════════════════════════════════
+// BUG-03: CONFIRMAR RECEBIMENTO
+// ═══════════════════════════════════════════════════════════════
+function confirmReceipt(id) {
+  const tx = S.transactions.find(t => t.id === id);
+  if (!tx) return;
+  tx.confirmed = true;
+  tx.confirmedAt = Date.now();
+  sync(); renderAll();
+  showToast(`"${tx.desc}" confirmado! ✅`);
 }
 
 // ═══════════════════════════════════════════════════════════════
 // DELETE / TRASH / UNDO
 // ═══════════════════════════════════════════════════════════════
-function deleteTx(id){
-  const tx=S.transactions.find(t=>t.id===id);if(!tx)return;
-  tx.deletedAt=Date.now();S.trash.push(tx);
-  lastDel={items:[tx]};
-  S.transactions=S.transactions.filter(t=>t.id!==id);
-  sync();renderAll();showToast(`"${tx.desc}" na lixeira`);
+function deleteTx(id) {
+  const tx = S.transactions.find(t => t.id === id);
+  if (!tx) return;
+  tx.deletedAt = Date.now();
+  S.trash.push(tx);
+  lastDel = { items: [tx] };
+  S.transactions = S.transactions.filter(t => t.id !== id);
+  sync(); renderAll();
+  showToast(`"${tx.desc}" na lixeira`);
 }
-function deleteGroup(gid){
-  const items=S.transactions.filter(t=>t.groupId===gid);
-  items.forEach(t=>{t.deletedAt=Date.now();S.trash.push(t);});
-  lastDel={items};
-  S.transactions=S.transactions.filter(t=>t.groupId!==gid);
-  sync();renderAll();showToast(`${items.length} itens na lixeira`);
+
+function deleteGroup(gid) {
+  const items = S.transactions.filter(t => t.groupId === gid);
+  items.forEach(t => { t.deletedAt = Date.now(); S.trash.push(t); });
+  lastDel = { items };
+  S.transactions = S.transactions.filter(t => t.groupId !== gid);
+  sync(); renderAll();
+  showToast(`${items.length} itens na lixeira`);
 }
-function undoDelete(){
-  if(!lastDel)return;
-  lastDel.items.forEach(t=>{delete t.deletedAt;S.transactions.push(t);S.trash=S.trash.filter(tr=>tr.id!==t.id);});
-  lastDel=null;sync();renderAll();hideToast();
+
+function undoDelete() {
+  if (!lastDel) return;
+  lastDel.items.forEach(t => {
+    delete t.deletedAt;
+    S.transactions.push(t);
+    S.trash = S.trash.filter(tr => tr.id !== t.id);
+  });
+  lastDel = null; sync(); renderAll(); hideToast();
 }
-function restoreTrash(id){
-  const tx=S.trash.find(t=>t.id===id);if(!tx)return;
-  delete tx.deletedAt;S.transactions.push(tx);
-  S.trash=S.trash.filter(t=>t.id!==id);
-  sync();renderAll();showToast(`"${tx.desc}" restaurado!`);
+
+function restoreTrash(id) {
+  const tx = S.trash.find(t => t.id === id);
+  if (!tx) return;
+  delete tx.deletedAt;
+  S.transactions.push(tx);
+  S.trash = S.trash.filter(t => t.id !== id);
+  sync(); renderAll();
+  showToast(`"${tx.desc}" restaurado!`);
 }
-function emptyTrash(){if(!confirm('Esvaziar lixeira?'))return;S.trash=[];sync();renderAll();}
-function showToast(m){clearTimeout(toastTmr);document.getElementById('toastMsg').textContent=m;document.getElementById('toast').classList.add('show');toastTmr=setTimeout(hideToast,5000);}
-function hideToast(){document.getElementById('toast').classList.remove('show');}
+
+function emptyTrash() {
+  if (!confirm('Esvaziar lixeira?')) return;
+  S.trash = []; sync(); renderAll();
+}
+
+function showToast(m) {
+  clearTimeout(toastTmr);
+  document.getElementById('toastMsg').textContent = m;
+  document.getElementById('toast').classList.add('show');
+  toastTmr = setTimeout(hideToast, 5000);
+}
+function hideToast() { document.getElementById('toast').classList.remove('show'); }
 
 // ═══════════════════════════════════════════════════════════════
-// DETAIL
+// DETAIL MODAL (BUG-01: agora com botão editar)
 // ═══════════════════════════════════════════════════════════════
-function openDetail(id){
-  const tx=S.transactions.find(t=>t.id===id);if(!tx)return;
-  detailId=id;const cat=getCat(tx.category);const isIn=tx.amount>0;
-  let h=`<div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;padding:16px;background:${cat.bg};border-radius:14px">
+function openDetail(id) {
+  const tx = S.transactions.find(t => t.id === id);
+  if (!tx) return;
+  detailId = id;
+  const cat = getCat(tx.category);
+  const isIn = tx.amount > 0;
+  const today = td();
+  const isFuture = tx.date > today;
+  const bgStyle = cat.bg || hexToBg(cat.color);
+
+  let h = `<div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;padding:16px;background:${bgStyle};border-radius:14px">
     <div style="font-size:32px">${cat.emoji}</div>
     <div style="flex:1"><div style="font-size:18px;font-weight:700">${tx.desc}</div><div style="font-size:12px;color:var(--text3);margin-top:2px">${cat.name}</div></div>
-    <div style="font-family:'Space Mono',monospace;font-size:20px;font-weight:700;color:${isIn?'var(--green)':'var(--red)'}">${isIn?'+':''}${fmt(tx.amount)}</div>
+    <div style="font-family:'Space Mono',monospace;font-size:20px;font-weight:700;color:${isIn ? 'var(--green)' : 'var(--red)'}">${isIn ? '+' : ''}${fmt(tx.amount)}</div>
   </div>
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px">
     <div style="padding:12px;background:var(--surface2);border-radius:10px"><div style="font-size:10px;color:var(--text3);font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px">Data</div><div style="font-size:13px;font-weight:600">${dateLabel(tx.date)}</div></div>
-    <div style="padding:12px;background:var(--surface2);border-radius:10px"><div style="font-size:10px;color:var(--text3);font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px">Tipo</div><div style="font-size:13px;font-weight:600">${isIn?'📥 Entrada':'📤 Gasto'}</div></div>
+    <div style="padding:12px;background:var(--surface2);border-radius:10px"><div style="font-size:10px;color:var(--text3);font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px">Tipo</div><div style="font-size:13px;font-weight:600">${isIn ? '📥 Entrada' : '📤 Gasto'}</div></div>
   </div>`;
-  if(tx.recurrence==='installment')h+=`<div style="padding:12px;background:var(--purple-bg);border-radius:10px;margin-bottom:12px;font-size:13px"><strong>🗓️ Parcela ${tx.instCurrent}/${tx.instTotal}</strong></div>`;
-  if(tx.recurrence==='monthly')h+=`<div style="padding:12px;background:var(--purple-bg);border-radius:10px;margin-bottom:12px;font-size:13px"><strong>🔄 Mensal</strong></div>`;
-  if(tx.notes)h+=`<div style="padding:12px;background:var(--surface2);border-radius:10px;margin-bottom:12px"><div style="font-size:10px;color:var(--text3);font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px">Notas</div><div style="font-size:13px;line-height:1.5">${tx.notes}</div></div>`;
-  document.getElementById('detailContent').innerHTML=h;
-  document.getElementById('groupDelBtn').style.display=tx.groupId?'block':'none';
+
+  // BUG-03: status de confirmação
+  if (isIn && !tx.confirmed) {
+    h += `<div style="padding:12px;background:var(--orange-bg);border-radius:10px;margin-bottom:12px;font-size:13px;display:flex;align-items:center;justify-content:space-between">
+      <strong>⏳ Aguardando confirmação</strong>
+      <button class="tx-confirm-btn" onclick="confirmReceipt('${tx.id}');closeModal('detailModal')">✅ Confirmar</button>
+    </div>`;
+  } else if (isIn && tx.confirmed) {
+    h += `<div style="padding:12px;background:var(--green-bg);border-radius:10px;margin-bottom:12px;font-size:13px"><strong>✅ Recebimento confirmado</strong></div>`;
+  }
+
+  // BUG-06: tooltip de antecipação
+  if (tx.nominalDay && isPayDay(tx.nominalDay)) {
+    const [, , actualDay] = tx.date.split('-').map(Number);
+    if (actualDay !== tx.nominalDay) {
+      const dayNames = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
+      const [ay, am, ad] = tx.date.split('-').map(Number);
+      const dayName = dayNames[new Date(ay, am - 1, ad).getDay()];
+      h += `<div style="padding:12px;background:var(--purple-bg);border-radius:10px;margin-bottom:12px;font-size:12px;color:var(--purple2)">
+        📅 Originalmente dia ${tx.nominalDay} — antecipado para dia ${actualDay} (${dayName})
+      </div>`;
+    }
+  }
+
+  if (tx.recurrence === 'installment') h += `<div style="padding:12px;background:var(--purple-bg);border-radius:10px;margin-bottom:12px;font-size:13px"><strong>🗓️ Parcela ${tx.instCurrent}/${tx.instTotal}</strong></div>`;
+  if (tx.recurrence === 'monthly') h += `<div style="padding:12px;background:var(--purple-bg);border-radius:10px;margin-bottom:12px;font-size:13px"><strong>🔄 Mensal</strong></div>`;
+  if (tx.notes) h += `<div style="padding:12px;background:var(--surface2);border-radius:10px;margin-bottom:12px"><div style="font-size:10px;color:var(--text3);font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px">Notas</div><div style="font-size:13px;line-height:1.5">${tx.notes}</div></div>`;
+
+  // BUG-01: histórico de edição
+  if (tx.lastEdit) {
+    h += `<div style="padding:12px;background:var(--surface2);border-radius:10px;margin-bottom:12px;font-size:11px;color:var(--text3)">
+      📝 Última edição: era "${tx.lastEdit.desc}" (${fmt(tx.lastEdit.amount)}) em ${new Date(tx.lastEdit.editedAt).toLocaleString('pt-BR')}
+    </div>`;
+  }
+
+  document.getElementById('detailContent').innerHTML = h;
+  document.getElementById('groupDelBtn').style.display = tx.groupId ? 'block' : 'none';
   openModal('detailModal');
 }
-function deleteFromDetail(){closeModal('detailModal');setTimeout(()=>deleteTx(detailId),200);}
-function deleteGroupFromDetail(){const tx=S.transactions.find(t=>t.id===detailId);if(!tx||!tx.groupId)return;closeModal('detailModal');setTimeout(()=>deleteGroup(tx.groupId),200);}
+
+function deleteFromDetail() {
+  closeModal('detailModal');
+  setTimeout(() => deleteTx(detailId), 200);
+}
+
+function deleteGroupFromDetail() {
+  const tx = S.transactions.find(t => t.id === detailId);
+  if (!tx || !tx.groupId) return;
+  closeModal('detailModal');
+  setTimeout(() => deleteGroup(tx.groupId), 200);
+}
 
 // ═══════════════════════════════════════════════════════════════
 // QUICK TX
 // ═══════════════════════════════════════════════════════════════
-function saveQuickTx(){
-  const desc=document.getElementById('qDesc').value.trim();
-  const amount=parseFloat(document.getElementById('qAmount').value);
-  const type=document.getElementById('qType').value;
-  const emoji=document.getElementById('qEmoji').value||'⚡';
-  if(!desc||isNaN(amount)){alert('Preencha!');return;}
-  S.quickTx.push({desc,amount,type,emoji});
-  sync();renderAll();closeModal('quickModal');
+function saveQuickTx() {
+  const desc = document.getElementById('qDesc').value.trim();
+  const amount = parseFloat(document.getElementById('qAmount').value);
+  const type = document.getElementById('qType').value;
+  const emoji = document.getElementById('qEmoji').value || '⚡';
+  if (!desc || isNaN(amount)) { alert('Preencha!'); return; }
+  S.quickTx.push({ desc, amount, type, emoji });
+  sync(); renderAll(); closeModal('quickModal');
 }
-function execQuick(i){
-  const q=S.quickTx[i];if(!q)return;
-  S.transactions.push({id:genId(),desc:q.desc,amount:q.type==='income'?Math.abs(q.amount):-Math.abs(q.amount),date:td(),type:q.type,category:'outros',recurrence:'none',notes:'',createdAt:Date.now()});
-  sync();renderAll();showToast(`"${q.desc}" adicionado!`);
+
+function execQuick(i) {
+  const q = S.quickTx[i];
+  if (!q) return;
+  const today = td();
+  const isIncome = q.type === 'income';
+  S.transactions.push({
+    id: genId(), desc: q.desc,
+    amount: isIncome ? Math.abs(q.amount) : -Math.abs(q.amount),
+    date: today, type: q.type, category: 'outros',
+    recurrence: 'none', notes: '',
+    confirmed: true, // atalho rápido = agora = confirmado
+    createdAt: Date.now()
+  });
+  sync(); renderAll();
+  showToast(`"${q.desc}" adicionado!`);
 }
-function removeQuick(i){S.quickTx.splice(i,1);sync();renderAll();}
+
+function removeQuick(i) { S.quickTx.splice(i, 1); sync(); renderAll(); }
+  // ═══════════════════════════════════════════════════════════════
+// CALCULATIONS (BUG-03: saldo só conta confirmed)
+// ═══════════════════════════════════════════════════════════════
+function allSorted() {
+  return [...S.transactions].sort((a, b) => a.date.localeCompare(b.date) || (a.createdAt || 0) - (b.createdAt || 0));
+}
+
+// BUG-03: Saldo real = só transações confirmadas até hoje
+function curBal() {
+  const today = td();
+  let b = S.initialBalance;
+  allSorted().forEach(t => {
+    // Receitas: só soma se confirmed === true E data <= hoje
+    // Gastos: sempre soma se data <= hoje
+    if (t.date <= today) {
+      if (t.amount > 0) {
+        if (t.confirmed) b += t.amount;
+      } else {
+        b += t.amount;
+      }
+    }
+  });
+  return b;
+}
+
+// BUG-03: Running balance para exibição na lista
+function calcRunning() {
+  const txs = allSorted();
+  const today = td();
+  let bal = S.initialBalance;
+  const map = {};
+  for (const t of txs) {
+    if (t.amount > 0) {
+      if (t.confirmed) bal += t.amount;
+    } else {
+      bal += t.amount;
+    }
+    map[t.id] = bal;
+  }
+  return { bal, map };
+}
+
+// BUG-03: Stats do mês — entradas só confirmadas, projeção inclui não confirmadas
+function mStats(y, m) {
+  const p = pfx(y, m);
+  const txs = S.transactions.filter(t => t.date.startsWith(p));
+  let inc = 0, exp = 0, proj = 0;
+  txs.forEach(t => {
+    if (t.amount > 0) {
+      if (t.confirmed) inc += t.amount;
+      else proj += t.amount; // BUG-03: não confirmada vai para projeção
+    } else {
+      exp += t.amount;
+    }
+  });
+  return { inc, exp, proj };
+}
+
+// BUG-03: Projeção futura (inclui tudo, confirmado ou não)
+function projBal(y, m) {
+  const end = `${y}-${String(m + 1).padStart(2, '0')}-31`;
+  let b = S.initialBalance;
+  allSorted().filter(t => t.date <= end).forEach(t => b += t.amount);
+  return b;
+}
+
+// Achar data em que saldo fica negativo
+function findNegDate() {
+  const txs = allSorted();
+  const today = td();
+  let b = S.initialBalance;
+  for (const t of txs) {
+    if (t.amount > 0 && !t.confirmed) continue; // não conta receita não confirmada
+    b += t.amount;
+    if (b < 0 && t.date >= today) return { date: t.date, bal: b };
+  }
+  return null;
+}
 
 // ═══════════════════════════════════════════════════════════════
-// CALCULATIONS
+// BUG-04: ALERTA "SEM RECEITA, SALDO ZERO EM X MESES"
+// Fórmula: saldo_atual / média_gastos_fixos_mensais = meses restantes
 // ═══════════════════════════════════════════════════════════════
-function allSorted(){return[...S.transactions].sort((a,b)=>a.date.localeCompare(b.date)||(a.createdAt||0)-(b.createdAt||0));}
-function calcRunning(){const txs=allSorted();let bal=S.initialBalance;const map={};for(const t of txs){bal+=t.amount;map[t.id]=bal;}return{bal,map};}
-function curBal(){const d=td();let b=S.initialBalance;allSorted().filter(t=>t.date<=d).forEach(t=>b+=t.amount);return b;}
-function mStats(y,m){const p=pfx(y,m);const txs=S.transactions.filter(t=>t.date.startsWith(p));let inc=0,exp=0;txs.forEach(t=>{if(t.amount>0)inc+=t.amount;else exp+=t.amount;});return{inc,exp};}
-function projBal(y,m){const end=`${y}-${String(m+1).padStart(2,'0')}-31`;let b=S.initialBalance;allSorted().filter(t=>t.date<=end).forEach(t=>b+=t.amount);return b;}
-function findNegDate(){const txs=allSorted();let b=S.initialBalance;const d=td();for(const t of txs){b+=t.amount;if(b<0&&t.date>=d)return{date:t.date,bal:b};}return null;}
-function calcStreak(){const lc=['lazer','streaming','compras'];const d=td();const[ty,tm,tday]=d.split('-').map(Number);let s=0;
-  for(let i=0;i<365;i++){const dd=new Date(ty,tm-1,tday-i);const ds=`${dd.getFullYear()}-${String(dd.getMonth()+1).padStart(2,'0')}-${String(dd.getDate()).padStart(2,'0')}`;
-    const has=S.transactions.filter(t=>t.date===ds&&t.amount<0&&lc.includes(t.category));
-    if(has.length>0&&i>0)break;if(i>0)s++;}return s;}
+function calcNoIncomeAlert() {
+  const bal = curBal();
+  if (bal <= 0) return null;
+
+  // Calcular média de gastos fixos mensais (últimos 3 meses ou o que tiver)
+  const today = new Date();
+  let totalExp = 0;
+  let monthsCounted = 0;
+
+  for (let i = 0; i < 3; i++) {
+    let mm = today.getMonth() - i;
+    let yy = today.getFullYear();
+    if (mm < 0) { mm += 12; yy--; }
+    const p = pfx(yy, mm);
+    const exps = S.transactions.filter(t => t.date.startsWith(p) && t.amount < 0);
+    if (exps.length > 0) {
+      totalExp += exps.reduce((s, t) => s + Math.abs(t.amount), 0);
+      monthsCounted++;
+    }
+  }
+
+  if (monthsCounted === 0) return null;
+
+  const avgMonthlyExp = totalExp / monthsCounted;
+  if (avgMonthlyExp <= 0) return null;
+
+  const monthsLeft = bal / avgMonthlyExp;
+  const targetDate = new Date(today.getFullYear(), today.getMonth() + Math.floor(monthsLeft), 1);
+  const targetMonthName = MO[targetDate.getMonth()];
+  const targetYear = targetDate.getFullYear();
+
+  return {
+    months: monthsLeft,
+    monthName: targetMonthName,
+    year: targetYear,
+    avgExp: avgMonthlyExp
+  };
+}
+
+// ═══════════════════════════════════════════════════════════════
+// BUG-02: STREAK CORRIGIDA
+// Conta dias CONSECUTIVOS sem gastos em lazer/streaming/compras
+// Fuso local, recorde histórico, data de início
+// ═══════════════════════════════════════════════════════════════
+function calcStreak() {
+  const today = new Date();
+  const todayStr = td();
+  let streak = 0;
+
+  // Começar de hoje e ir voltando
+  for (let i = 0; i < 730; i++) { // até 2 anos
+    const checkDate = new Date(today.getFullYear(), today.getMonth(), today.getDate() - i);
+    const ds = `${checkDate.getFullYear()}-${String(checkDate.getMonth() + 1).padStart(2, '0')}-${String(checkDate.getDate()).padStart(2, '0')}`;
+
+    // Verificar se tem gasto nessas categorias neste dia
+    const hasStreakBreaker = S.transactions.some(t =>
+      t.date === ds &&
+      t.amount < 0 &&
+      STREAK_CATS.includes(t.category)
+    );
+
+    if (hasStreakBreaker) {
+      // Se é hoje e tem gasto, streak é 0
+      // Se é dia anterior, streak para aqui
+      break;
+    }
+
+    streak++;
+  }
+
+  // Data de início da streak
+  const startDate = new Date(today.getFullYear(), today.getMonth(), today.getDate() - streak + 1);
+  const startStr = `${startDate.getFullYear()}-${String(startDate.getMonth() + 1).padStart(2, '0')}-${String(startDate.getDate()).padStart(2, '0')}`;
+
+  // Atualizar recorde
+  let recordUpdated = false;
+  if (streak > S.streakRecord) {
+    S.streakRecord = streak;
+    S.streakRecordDate = todayStr;
+    recordUpdated = true;
+  }
+
+  return {
+    current: streak,
+    startDate: startStr,
+    record: S.streakRecord,
+    recordDate: S.streakRecordDate,
+    recordUpdated
+  };
+}
 
 // ═══════════════════════════════════════════════════════════════
 // RENDER ALL
 // ═══════════════════════════════════════════════════════════════
-function renderAll(){renderHome();renderTxPage();renderCal();renderTrashBadge();}
+function renderAll() {
+  renderHome();
+  renderTxPage();
+  renderCal();
+  renderTrashBadge();
+}
 
 // ═══════════════════════════════════════════════════════════════
 // HOME
 // ═══════════════════════════════════════════════════════════════
-function renderHome(){
-  const b=curBal();const el=document.getElementById('heroBalance');
-  el.textContent=fmt(b);el.className='hero-amount'+(b<0?' neg':'');
-  document.getElementById('heroSub').textContent=`atualizado ${new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})}`;
-  const{inc,exp}=mStats(S.currentYear,S.currentMonth);
-  document.getElementById('heroIn').textContent=fmt(inc);
-  document.getElementById('heroOut').textContent=fmt(Math.abs(exp));
-  document.getElementById('heroProj').textContent=fmt(projBal(S.currentYear,S.currentMonth));
+function renderHome() {
+  // BUG-03: saldo real (só confirmados)
+  const b = curBal();
+  const el = document.getElementById('heroBalance');
+  el.textContent = fmt(b);
+  el.className = 'hero-amount' + (b < 0 ? ' neg' : '');
+  document.getElementById('heroSub').textContent = `atualizado ${new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}`;
 
-  // Alerts
-  let al='';const neg=findNegDate();
-  if(neg)al+=`<div class="alert-card danger"><div style="font-size:20px">🚨</div><div><strong>Alerta!</strong> Saldo negativo em <strong>${dateLabel(neg.date)}</strong> (${fmt(neg.bal)})</div></div>`;
-  if(b<0)al+=`<div class="alert-card danger"><div style="font-size:20px">⚠️</div><div>Você está no <strong>negativo!</strong> Saldo: −${fmt(b)}</div></div>`;
-  if(S.monthlyGoal>0){const pct=Math.abs(exp)/S.monthlyGoal*100;
-    if(pct>=90&&pct<100)al+=`<div class="alert-card warning"><div style="font-size:20px">⚠️</div><div>Gastou <strong>${pct.toFixed(0)}%</strong> da meta mensal!</div></div>`;
-    if(pct>=100)al+=`<div class="alert-card danger"><div style="font-size:20px">🔴</div><div>Meta <strong>estourada!</strong> ${fmt(Math.abs(exp))} de ${fmt(S.monthlyGoal)}</div></div>`;
+  // BUG-03: entradas = só confirmadas, projeção = não confirmadas
+  const { inc, exp, proj } = mStats(S.currentYear, S.currentMonth);
+  document.getElementById('heroIn').textContent = fmt(inc);
+  document.getElementById('heroOut').textContent = fmt(Math.abs(exp));
+  document.getElementById('heroProj').textContent = fmt(proj > 0 ? proj : projBal(S.currentYear, S.currentMonth));
+
+  // ═══ ALERTAS ═══
+  let al = '';
+  const neg = findNegDate();
+  if (neg) al += `<div class="alert-card danger"><div style="font-size:20px">🚨</div><div><strong>Alerta!</strong> Saldo negativo em <strong>${dateLabel(neg.date)}</strong> (${fmt(neg.bal)})</div></div>`;
+  if (b < 0) al += `<div class="alert-card danger"><div style="font-size:20px">⚠️</div><div>Você está no <strong>negativo!</strong> Saldo: −${fmt(b)}</div></div>`;
+  if (S.monthlyGoal > 0) {
+    const pct = Math.abs(exp) / S.monthlyGoal * 100;
+    if (pct >= 90 && pct < 100) al += `<div class="alert-card warning"><div style="font-size:20px">⚠️</div><div>Gastou <strong>${pct.toFixed(0)}%</strong> da meta mensal!</div></div>`;
+    if (pct >= 100) al += `<div class="alert-card danger"><div style="font-size:20px">🔴</div><div>Meta <strong>estourada!</strong> ${fmt(Math.abs(exp))} de ${fmt(S.monthlyGoal)}</div></div>`;
   }
-  document.getElementById('alertsContainer').innerHTML=al;
+  document.getElementById('alertsContainer').innerHTML = al;
 
-  // Goal
-  let gh='';if(S.monthlyGoal>0){const pct=Math.min(Math.abs(exp)/S.monthlyGoal*100,100);const cls=pct>=80?'red':'green';
-    gh=`<div class="goal-card"><div class="goal-header"><div class="goal-title">🎯 Meta de gastos</div><div class="goal-value" style="color:${pct>=100?'var(--red)':'var(--green)'}">${fmt(Math.abs(exp))} / ${fmt(S.monthlyGoal)}</div></div><div class="progress-bar"><div class="progress-fill ${cls}" style="width:${pct}%"></div></div></div>`;}
-  document.getElementById('goalContainer').innerHTML=gh;
+  // ═══ BUG-04: Alerta sem receita ═══
+  const noIncome = calcNoIncomeAlert();
+  let nia = '';
+  if (noIncome) {
+    nia = `<div class="alert-card warning">
+      <div style="font-size:20px">⚠️</div>
+      <div>Sem novas receitas, saldo vai a zero em <strong>${noIncome.monthName} ${noIncome.year}</strong>
+      (daqui <strong>${Math.floor(noIncome.months)} meses</strong>).
+      Suas despesas fixas mensais são <strong>${fmt(noIncome.avgExp)}</strong>.</div>
+    </div>`;
+  }
+  document.getElementById('noIncomeAlertContainer').innerHTML = nia;
 
-  // Savings
-  let sh='';if(S.savingsGoal>0){const saved=Math.max(b,0);const pct=Math.min(saved/S.savingsGoal*100,100);
-    sh=`<div class="goal-card"><div class="goal-header"><div class="goal-title">💰 Meta de economia</div><div class="goal-value" style="color:var(--purple)">${fmt(saved)} / ${fmt(S.savingsGoal)}</div></div><div class="progress-bar"><div class="progress-fill purple" style="width:${pct}%"></div></div><div style="font-size:11px;color:var(--text3);margin-top:6px">${pct.toFixed(1)}% concluído</div></div>`;}
-  document.getElementById('savingsGoalContainer').innerHTML=sh;
+  // ═══ META DE GASTOS ═══
+  let gh = '';
+  if (S.monthlyGoal > 0) {
+    const pct = Math.min(Math.abs(exp) / S.monthlyGoal * 100, 100);
+    const cls = pct >= 80 ? 'red' : 'green';
+    gh = `<div class="goal-card"><div class="goal-header"><div class="goal-title">🎯 Meta de gastos</div><div class="goal-value" style="color:${pct >= 100 ? 'var(--red)' : 'var(--green)'}">${fmt(Math.abs(exp))} / ${fmt(S.monthlyGoal)}</div></div><div class="progress-bar"><div class="progress-fill ${cls}" style="width:${pct}%"></div></div></div>`;
+  }
+  document.getElementById('goalContainer').innerHTML = gh;
 
-  // Streak
-  const streak=calcStreak();const sc=document.getElementById('streakContainer');
-  sc.innerHTML=streak>0?`<div class="streak-card"><div class="streak-fire">${streak>=7?'🔥🔥🔥':streak>=3?'🔥🔥':'🔥'}</div><div><div class="streak-days">${streak} dia${streak>1?'s':''}</div><div class="streak-label">sem gastos com lazer/streaming/compras</div></div></div>`:'';
+  // ═══ META DE ECONOMIA ═══
+  let sh = '';
+  if (S.savingsGoal > 0) {
+    const saved = Math.max(b, 0);
+    const pct = Math.min(saved / S.savingsGoal * 100, 100);
+    sh = `<div class="goal-card"><div class="goal-header"><div class="goal-title">💰 Meta de economia</div><div class="goal-value" style="color:var(--purple)">${fmt(saved)} / ${fmt(S.savingsGoal)}</div></div><div class="progress-bar"><div class="progress-fill purple" style="width:${pct}%"></div></div><div style="font-size:11px;color:var(--text3);margin-top:6px">${pct.toFixed(1)}% concluído</div></div>`;
+  }
+  document.getElementById('savingsGoalContainer').innerHTML = sh;
 
-  // Quick
-  const qg=document.getElementById('quickGrid');
-  qg.innerHTML=S.quickTx.length?S.quickTx.map((q,i)=>`<div class="quick-btn" onclick="execQuick(${i})"><div class="qicon" style="background:var(--green-bg)">${q.emoji}</div><div><div class="qlabel">${q.desc}</div><div class="qamount">${q.type==='income'?'+':'−'} ${fmt(q.amount)}</div></div></div>`).join('')
-    :`<div class="quick-btn" onclick="goPage('Settings',document.querySelectorAll('.nav-item')[4])"><div class="qicon" style="background:var(--surface3)">➕</div><div><div class="qlabel">Criar atalho</div><div class="qamount">em Config</div></div></div>`;
+  // ═══ BUG-02: STREAK CORRIGIDA ═══
+  const streak = calcStreak();
+  const sc = document.getElementById('streakContainer');
+  if (streak.current > 0) {
+    const fireEmoji = streak.current >= 30 ? '🔥🔥🔥🔥' : streak.current >= 14 ? '🔥🔥🔥' : streak.current >= 7 ? '🔥🔥' : '🔥';
+    sc.innerHTML = `<div class="streak-card">
+      <div class="streak-fire">${fireEmoji}</div>
+      <div>
+        <div class="streak-days">${streak.current} dia${streak.current > 1 ? 's' : ''}</div>
+        <div class="streak-label">sem gastos com lazer/streaming/compras</div>
+        <div class="streak-detail">
+          📅 Início: ${dateLabel(streak.startDate)}
+          ${streak.record > 0 ? ` · 🏆 Recorde: ${streak.record} dias` : ''}
+        </div>
+      </div>
+    </div>`;
 
-  // Pie
+    // Salvar recorde se mudou
+    if (streak.recordUpdated) sync();
+  } else {
+    sc.innerHTML = '';
+  }
+
+  // ═══ ATALHOS RÁPIDOS ═══
+  const qg = document.getElementById('quickGrid');
+  qg.innerHTML = S.quickTx.length
+    ? S.quickTx.map((q, i) => `<div class="quick-btn" onclick="execQuick(${i})"><div class="qicon" style="background:var(--green-bg)">${q.emoji}</div><div><div class="qlabel">${q.desc}</div><div class="qamount">${q.type === 'income' ? '+' : '−'} ${fmt(q.amount)}</div></div></div>`).join('')
+    : `<div class="quick-btn" onclick="goPage('Settings',document.querySelectorAll('.nav-item')[4])"><div class="qicon" style="background:var(--surface3)">➕</div><div><div class="qlabel">Criar atalho</div><div class="qamount">em Config</div></div></div>`;
+
+  // ═══ PIE CHART ═══
   renderHomePie();
 }
 
-function renderHomePie(){
-  const p=pfx(S.currentYear,S.currentMonth);
-  const exps=S.transactions.filter(t=>t.date.startsWith(p)&&t.amount<0);
-  const ct={};exps.forEach(t=>{const c=t.category||'outros';ct[c]=(ct[c]||0)+Math.abs(t.amount);});
-  const labels=[],data=[],colors=[];
-  Object.entries(ct).sort((a,b)=>b[1]-a[1]).forEach(([id,v])=>{const c=getCat(id);labels.push(c.emoji+' '+c.name);data.push(v);colors.push(gc(c.color));});
-  if(charts.hp)charts.hp.destroy();if(!data.length)return;
-  charts.hp=new Chart(document.getElementById('homePieChart'),{type:'doughnut',data:{labels,datasets:[{data,backgroundColor:colors,borderWidth:0}]},
-    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{color:gc('var(--text2)'),font:{size:11,family:'Inter'},padding:8,boxWidth:12,boxHeight:12}}}}});
+function renderHomePie() {
+  const p = pfx(S.currentYear, S.currentMonth);
+  const exps = S.transactions.filter(t => t.date.startsWith(p) && t.amount < 0);
+  const ct = {};
+  exps.forEach(t => {
+    const c = t.category || 'outros';
+    ct[c] = (ct[c] || 0) + Math.abs(t.amount);
+  });
+  const labels = [], data = [], colors = [];
+  Object.entries(ct).sort((a, b) => b[1] - a[1]).forEach(([id, v]) => {
+    const c = getCat(id);
+    labels.push(c.emoji + ' ' + c.name);
+    data.push(v);
+    colors.push(c.color.startsWith('#') ? c.color : gc(c.color));
+  });
+  if (charts.hp) charts.hp.destroy();
+  if (!data.length) return;
+  charts.hp = new Chart(document.getElementById('homePieChart'), {
+    type: 'doughnut',
+    data: { labels, datasets: [{ data, backgroundColor: colors, borderWidth: 0 }] },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { position: 'right', labels: { color: gc('var(--text2)'), font: { size: 11, family: 'Inter' }, padding: 8, boxWidth: 12, boxHeight: 12 } } }
+    }
+  });
 }
 
 // ═══════════════════════════════════════════════════════════════
-// TRANSACTIONS PAGE
+// TRANSACTIONS PAGE (BUG-01: botão editar, BUG-03: badges, BUG-06: tooltip)
 // ═══════════════════════════════════════════════════════════════
-function renderTxPage(){
-  document.getElementById('monthTitle').textContent=`${MO[S.currentMonth]} ${S.currentYear}`;
-  document.getElementById('calMonthTitle').textContent=`${MO[S.currentMonth]} ${S.currentYear}`;
-  renderFilterChips();renderTxList();
+function renderTxPage() {
+  document.getElementById('monthTitle').textContent = `${MO[S.currentMonth]} ${S.currentYear}`;
+  document.getElementById('calMonthTitle').textContent = `${MO[S.currentMonth]} ${S.currentYear}`;
+  renderFilterChips();
+  renderTxList();
 }
-function renderFilterChips(){
-  const used=new Set(S.transactions.map(t=>t.category||'outros'));
-  document.getElementById('filterChips').innerHTML=[...used].map(id=>{const c=getCat(id);return`<div class="filter-chip ${S.catFilter===id?'active':''}" onclick="toggleCatF('${id}')">${c.emoji} ${c.name}</div>`;}).join('');
-}
-function toggleCatF(id){S.catFilter=S.catFilter===id?null:id;renderTxList();renderFilterChips();}
-function toggleFilters(){document.getElementById('filterPanel').classList.toggle('open');document.getElementById('filterToggle').classList.toggle('active');}
-function setTxView(v,el){S.txView=v;document.querySelectorAll('.tab-pill').forEach(t=>t.classList.remove('active'));el.classList.add('active');renderTxList();}
 
-function renderTxList(){
-  const y=S.currentYear,m=S.currentMonth,p=pfx(y,m),d=td();
-  const search=(document.getElementById('searchInput').value||'').toLowerCase();
+function renderFilterChips() {
+  const used = new Set(S.transactions.map(t => t.category || 'outros'));
+  document.getElementById('filterChips').innerHTML = [...used].map(id => {
+    const c = getCat(id);
+    return `<div class="filter-chip ${S.catFilter === id ? 'active' : ''}" onclick="toggleCatF('${id}')">${c.emoji} ${c.name}</div>`;
+  }).join('');
+}
+
+function toggleCatF(id) { S.catFilter = S.catFilter === id ? null : id; renderTxList(); renderFilterChips(); }
+function toggleFilters() { document.getElementById('filterPanel').classList.toggle('open'); document.getElementById('filterToggle').classList.toggle('active'); }
+function setTxView(v, el) { S.txView = v; document.querySelectorAll('.tab-pill').forEach(t => t.classList.remove('active')); el.classList.add('active'); renderTxList(); }
+
+function renderTxList() {
+  const y = S.currentYear, m = S.currentMonth, p = pfx(y, m), today = td();
+  const search = (document.getElementById('searchInput').value || '').toLowerCase();
   let txs;
-  if(S.txView==='future')txs=S.transactions.filter(t=>t.date>d);
-  else{txs=S.transactions.filter(t=>t.date.startsWith(p));
-    if(S.txView==='expenses')txs=txs.filter(t=>t.amount<0);
-    else if(S.txView==='income')txs=txs.filter(t=>t.amount>0);
-    else if(S.txView==='fixed')txs=txs.filter(t=>t.recurrence&&t.recurrence!=='none');}
-  if(S.catFilter)txs=txs.filter(t=>(t.category||'outros')===S.catFilter);
-  if(search)txs=txs.filter(t=>t.desc.toLowerCase().includes(search)||(t.notes||'').toLowerCase().includes(search));
-  txs.sort((a,b)=>a.date.localeCompare(b.date));
 
-  const groups={};txs.forEach(t=>{(groups[t.date]=groups[t.date]||[]).push(t);});
-  const{map}=calcRunning();const list=document.getElementById('txList');
-
-  if(!Object.keys(groups).length){list.innerHTML=`<div class="empty-state"><div class="emoji">📭</div><div class="title">Nenhuma transação</div><div class="sub">Toque + para adicionar</div></div>`;return;}
-
-  let html='';
-  for(const date of Object.keys(groups).sort()){
-    const dt=groups[date];const isT=date===d;const isFut=date>d;
-    const label=isT?'Hoje':dateLabel(date);
-    const lastB=map[dt[dt.length-1].id]||0;
-    html+=`<div class="day-group"><div class="day-header"><div class="day-label">${label}${isT?'<span class="today-badge">HOJE</span>':''}</div><div class="day-total" style="color:${lastB>=0?'var(--green)':'var(--red)'}">${fmt(lastB)}</div></div>`;
-    dt.forEach(t=>{
-      const cat=getCat(t.category);const isIn=t.amount>0;
-      let meta='';
-      if(t.recurrence==='installment')meta+=`<span class="tx-cat-tag" style="background:var(--purple-bg);color:var(--purple)">📅 ${t.instCurrent}/${t.instTotal}</span>`;
-      if(t.recurrence==='monthly')meta+=`<span class="tx-cat-tag" style="background:var(--purple-bg);color:var(--purple)">🔄 mensal</span>`;
-      meta+=`<span class="tx-cat-tag" style="background:${cat.bg};color:${cat.color}">${cat.emoji} ${cat.name}</span>`;
-      if(t.notes)meta+=`<span class="tx-note-indicator">📝</span>`;
-      if(isFut)meta+=`<span class="tx-cat-tag" style="background:var(--yellow-bg);color:var(--yellow)">⏳</span>`;
-      html+=`<div class="tx-card" onclick="openDetail('${t.id}')"><div class="tx-cat-dot" style="background:${cat.bg}">${cat.emoji}</div><div class="tx-mid"><div class="tx-desc">${t.desc}</div><div class="tx-meta">${meta}</div></div><div class="tx-right"><div class="tx-val ${isIn?'pos':'neg'}">${isIn?'+':''}${fmt(t.amount)}</div></div></div>`;
-    });html+='</div>';}
-  list.innerHTML=html;
-}
-
-// ═══════════════════════════════════════════════════════════════
-// CALENDAR
-// ═══════════════════════════════════════════════════════════════
-function renderCal(){
-  document.getElementById('calMonthTitle').textContent=`${MO[S.currentMonth]} ${S.currentYear}`;
-  const y=S.currentYear,m=S.currentMonth;
-  const fd=new Date(y,m,1).getDay(),dim=new Date(y,m+1,0).getDate(),d=td(),p=pfx(y,m);
-  const dt={};S.transactions.filter(t=>t.date.startsWith(p)).forEach(t=>{const dd=parseInt(t.date.split('-')[2]);dt[dd]=(dt[dd]||0)+t.amount;});
-  let h='';['D','S','T','Q','Q','S','S'].forEach(w=>{h+=`<div class="cal-weekday">${w}</div>`;});
-  for(let i=0;i<fd;i++)h+=`<div class="cal-day"></div>`;
-  for(let i=1;i<=dim;i++){
-    const ds=`${y}-${String(m+1).padStart(2,'0')}-${String(i).padStart(2,'0')}`;
-    const isT=ds===d,sel=ds===calSel,tot=dt[i]||0;
-    let cls='cal-day';if(isT)cls+=' today';if(sel)cls+=' selected';else if(tot>0)cls+=' positive';else if(tot<0)cls+=' negative';
-    const amt=tot!==0?`<div class="cal-day-amount">${tot>0?'+':''}${Math.abs(tot)>=1000?(Math.abs(tot)/1000).toFixed(1)+'k':Math.abs(tot).toFixed(0)}</div>`:'';
-    h+=`<div class="${cls}" onclick="selCalDay('${ds}')">${i}${amt}</div>`;
+  if (S.txView === 'future') {
+    txs = S.transactions.filter(t => t.date > today);
+  } else {
+    txs = S.transactions.filter(t => t.date.startsWith(p));
+    if (S.txView === 'expenses') txs = txs.filter(t => t.amount < 0);
+    else if (S.txView === 'income') txs = txs.filter(t => t.amount > 0);
+    else if (S.txView === 'fixed') txs = txs.filter(t => t.recurrence && t.recurrence !== 'none');
   }
-  document.getElementById('calGrid').innerHTML=h;
+  if (S.catFilter) txs = txs.filter(t => (t.category || 'outros') === S.catFilter);
+  if (search) txs = txs.filter(t => t.desc.toLowerCase().includes(search) || (t.notes || '').toLowerCase().includes(search));
+  txs.sort((a, b) => a.date.localeCompare(b.date));
 
-  const dd=document.getElementById('calDayDetail');
-  if(calSel){
-    const txs=S.transactions.filter(t=>t.date===calSel);
-    if(txs.length){
-      let dh=`<div class="cal-day-detail"><div style="font-size:14px;font-weight:700;margin-bottom:10px">${dateLabel(calSel)}</div>`;
-      txs.forEach(t=>{const cat=getCat(t.category);const isIn=t.amount>0;
-        dh+=`<div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border);cursor:pointer" onclick="openDetail('${t.id}')"><div style="font-size:16px">${cat.emoji}</div><div style="flex:1;font-size:13px;font-weight:600">${t.desc}</div><div style="font-family:'Space Mono',monospace;font-size:13px;font-weight:700;color:${isIn?'var(--green)':'var(--red)'}">${isIn?'+':''}${fmt(t.amount)}</div></div>`;
-      });dh+='</div>';dd.innerHTML=dh;
-    } else dd.innerHTML=`<div class="cal-day-detail" style="text-align:center;color:var(--text3);font-size:13px">Nada neste dia</div>`;
-  } else dd.innerHTML='';
+  const groups = {};
+  txs.forEach(t => { (groups[t.date] = groups[t.date] || []).push(t); });
+  const { map } = calcRunning();
+  const list = document.getElementById('txList');
+
+  if (!Object.keys(groups).length) {
+    list.innerHTML = `<div class="empty-state"><div class="emoji">📭</div><div class="title">Nenhuma transação</div><div class="sub">Toque + para adicionar</div></div>`;
+    return;
+  }
+
+  let html = '';
+  for (const date of Object.keys(groups).sort()) {
+    const dt = groups[date];
+    const isT = date === today;
+    const isFut = date > today;
+    const label = isT ? 'Hoje' : dateLabel(date);
+    const lastB = map[dt[dt.length - 1].id] || 0;
+
+    html += `<div class="day-group"><div class="day-header"><div class="day-label">${label}${isT ? '<span class="today-badge">HOJE</span>' : ''}</div><div class="day-total" style="color:${lastB >= 0 ? 'var(--green)' : 'var(--red)'}">${fmt(lastB)}</div></div>`;
+
+    dt.forEach(t => {
+      const cat = getCat(t.category);
+      const isIn = t.amount > 0;
+      const bgStyle = cat.bg || hexToBg(cat.color);
+      let meta = '';
+
+      if (t.recurrence === 'installment') meta += `<span class="tx-cat-tag" style="background:var(--purple-bg);color:var(--purple)">📅 ${t.instCurrent}/${t.instTotal}</span>`;
+      if (t.recurrence === 'monthly') meta += `<span class="tx-cat-tag" style="background:var(--purple-bg);color:var(--purple)">🔄 mensal</span>`;
+      meta += `<span class="tx-cat-tag" style="background:${bgStyle};color:${cat.color}">${cat.emoji} ${cat.name}</span>`;
+      if (t.notes) meta += `<span class="tx-note-indicator">📝</span>`;
+
+      // BUG-03: Badge FUTURO para receitas não confirmadas
+      if (isIn && !t.confirmed) {
+        meta += `<span class="tx-badge-future">FUTURO</span>`;
+      }
+
+      // BUG-06: Tooltip de antecipação
+      let tooltip = '';
+      if (t.nominalDay && isPayDay(t.nominalDay)) {
+        const [, , actualDay] = t.date.split('-').map(Number);
+        if (actualDay !== t.nominalDay) {
+          tooltip = `<div class="tx-tooltip">📅 Antecipado do dia ${t.nominalDay}</div>`;
+        }
+      }
+
+      // BUG-03: Botão confirmar para receitas futuras
+      let confirmBtn = '';
+      if (isIn && !t.confirmed) {
+        confirmBtn = `<button class="tx-confirm-btn" onclick="event.stopPropagation();confirmReceipt('${t.id}')">✅</button>`;
+      }
+
+      html += `<div class="tx-card" onclick="openDetail('${t.id}')">
+        <div class="tx-cat-dot" style="background:${bgStyle}">${cat.emoji}</div>
+        <div class="tx-mid">
+          <div class="tx-desc">${t.desc}</div>
+          <div class="tx-meta">${meta}</div>
+          ${tooltip}
+        </div>
+        <div class="tx-right">
+          ${confirmBtn}
+          <div class="tx-val ${isIn ? 'pos' : 'neg'}">${isIn ? '+' : ''}${fmt(t.amount)}</div>
+          <div class="tx-edit-btn" onclick="event.stopPropagation();openEditModal('${t.id}')" title="Editar">✏️</div>
+        </div>
+      </div>`;
+    });
+    html += '</div>';
+  }
+  list.innerHTML = html;
 }
-function selCalDay(ds){calSel=calSel===ds?null:ds;renderCal();}
 
 // ═══════════════════════════════════════════════════════════════
+// CALENDAR (BUG-03: futuras em roxo/tracejado, BUG-06: data real)
+// ═══════════════════════════════════════════════════════════════
+function renderCal() {
+  document.getElementById('calMonthTitle').textContent = `${MO[S.currentMonth]} ${S.currentYear}`;
+  const y = S.currentYear, m = S.currentMonth;
+  const fd = new Date(y, m, 1).getDay();
+  const dim = new Date(y, m + 1, 0).getDate();
+  const today = td();
+  const p = pfx(y, m);
+
+  // Calcular totais por dia e rastrear se tem receita não confirmada
+  const dt = {};
+  const hasUnconfirmed = {};
+  S.transactions.filter(t => t.date.startsWith(p)).forEach(t => {
+    const dd = parseInt(t.date.split('-')[2]);
+    dt[dd] = (dt[dd] || 0) + t.amount;
+    if (t.amount > 0 && !t.confirmed) {
+      hasUnconfirmed[dd] = true;
+    }
+  });
+
+  let h = '';
+  ['D', 'S', 'T', 'Q', 'Q', 'S', 'S'].forEach(w => { h += `<div class="cal-weekday">${w}</div>`; });
+  for (let i = 0; i < fd; i++) h += `<div class="cal-day"></div>`;
+
+  for (let i = 1; i <= dim; i++) {
+    const ds = `${y}-${String(m + 1).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
+    const isT = ds === today;
+    const sel = ds === calSel;
+    const tot = dt[i] || 0;
+    const isFutureUnconfirmed = hasUnconfirmed[i];
+
+    let cls = 'cal-day';
+    if (isT) cls += ' today';
+    if (sel) cls += ' selected';
+    else if (isFutureUnconfirmed) cls += ' future-proj'; // BUG-03: roxo tracejado
+    else if (tot > 0) cls += ' positive';
+    else if (tot < 0) cls += ' negative';
+
+    const amt = tot !== 0
+      ? `<div class="cal-day-amount">${tot > 0 ? '+' : ''}${Math.abs(tot) >= 1000 ? (Math.abs(tot) / 1000).toFixed(1) + 'k' : Math.abs(tot).toFixed(0)}</div>`
+      : '';
+    h += `<div class="${cls}" onclick="selCalDay('${ds}')">${i}${amt}</div>`;
+  }
+  document.getElementById('calGrid').innerHTML = h;
+
+  // Detalhe do dia selecionado
+  const dd = document.getElementById('calDayDetail');
+  if (calSel) {
+    const txs = S.transactions.filter(t => t.date === calSel);
+    if (txs.length) {
+      let dh = `<div class="cal-day-detail"><div style="font-size:14px;font-weight:700;margin-bottom:10px">${dateLabel(calSel)}</div>`;
+      txs.forEach(t => {
+        const cat = getCat(t.category);
+        const isIn = t.amount > 0;
+        const unconfirmedTag = (isIn && !t.confirmed) ? ' <span class="tx-badge-future">FUTURO</span>' : '';
+        dh += `<div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border);cursor:pointer" onclick="openDetail('${t.id}')">
+          <div style="font-size:16px">${cat.emoji}</div>
+          <div style="flex:1;font-size:13px;font-weight:600">${t.desc}${unconfirmedTag}</div>
+          <div style="font-family:'Space Mono',monospace;font-size:13px;font-weight:700;color:${isIn ? 'var(--green)' : 'var(--red)'}">${isIn ? '+' : ''}${fmt(t.amount)}</div>
+        </div>`;
+      });
+      dh += '</div>';
+      dd.innerHTML = dh;
+    } else {
+      dd.innerHTML = `<div class="cal-day-detail" style="text-align:center;color:var(--text3);font-size:13px">Nada neste dia</div>`;
+    }
+  } else {
+    dd.innerHTML = '';
+  }
+}
+
+function selCalDay(ds) { calSel = calSel === ds ? null : ds; renderCal(); }
+  // ═══════════════════════════════════════════════════════════════
 // ANALYTICS
 // ═══════════════════════════════════════════════════════════════
-function renderAnalytics(){renderCatPie();renderEvo();fillProj();}
-function renderCatPie(){
-  const p=pfx(S.currentYear,S.currentMonth);
-  const exps=S.transactions.filter(t=>t.date.startsWith(p)&&t.amount<0);
-  const ct={};exps.forEach(t=>{const c=t.category||'outros';ct[c]=(ct[c]||0)+Math.abs(t.amount);});
-  const labels=[],data=[],colors=[];
-  Object.entries(ct).sort((a,b)=>b[1]-a[1]).forEach(([id,v])=>{const c=getCat(id);labels.push(c.emoji+' '+c.name);data.push(v);colors.push(gc(c.color));});
-  if(charts.cp)charts.cp.destroy();if(!data.length)return;
-  charts.cp=new Chart(document.getElementById('catPieChart'),{type:'doughnut',data:{labels,datasets:[{data,backgroundColor:colors,borderWidth:0}]},
-    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{color:gc('var(--text2)'),font:{size:11,family:'Inter'},padding:10,boxWidth:12,boxHeight:12}}}}});
+function renderAnalytics() {
+  renderCatPie();
+  renderEvo();
+  fillProj();
 }
-function renderEvo(){
-  const labels=[],data=[];
-  for(let i=5;i>=0;i--){let mm=S.currentMonth-i,yy=S.currentYear;if(mm<0){mm+=12;yy--;}labels.push(MS[mm]+' '+yy);data.push(projBal(yy,mm));}
-  if(charts.ev)charts.ev.destroy();
-  const ctx=document.getElementById('evoLineChart');
-  const gr=ctx.getContext('2d').createLinearGradient(0,0,0,220);
-  gr.addColorStop(0,gc('var(--green)')+'40');gr.addColorStop(1,gc('var(--green)')+'00');
-  charts.ev=new Chart(ctx,{type:'line',data:{labels,datasets:[{data,fill:true,backgroundColor:gr,borderColor:gc('var(--green)'),borderWidth:2,pointBackgroundColor:gc('var(--green)'),pointRadius:4,tension:.4}]},
-    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
-      scales:{x:{ticks:{color:gc('var(--text3)'),font:{size:10}},grid:{color:gc('var(--border)')}},y:{ticks:{color:gc('var(--text3)'),font:{size:10},callback:v=>'R$'+(v/1000).toFixed(1)+'k'},grid:{color:gc('var(--border)')}}}}});
+
+function renderCatPie() {
+  const p = pfx(S.currentYear, S.currentMonth);
+  const exps = S.transactions.filter(t => t.date.startsWith(p) && t.amount < 0);
+  const ct = {};
+  exps.forEach(t => {
+    const c = t.category || 'outros';
+    ct[c] = (ct[c] || 0) + Math.abs(t.amount);
+  });
+  const labels = [], data = [], colors = [];
+  Object.entries(ct).sort((a, b) => b[1] - a[1]).forEach(([id, v]) => {
+    const c = getCat(id);
+    labels.push(c.emoji + ' ' + c.name);
+    data.push(v);
+    colors.push(c.color.startsWith('#') ? c.color : gc(c.color));
+  });
+  if (charts.cp) charts.cp.destroy();
+  if (!data.length) return;
+  charts.cp = new Chart(document.getElementById('catPieChart'), {
+    type: 'doughnut',
+    data: { labels, datasets: [{ data, backgroundColor: colors, borderWidth: 0 }] },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          position: 'bottom',
+          labels: { color: gc('var(--text2)'), font: { size: 11, family: 'Inter' }, padding: 10, boxWidth: 12, boxHeight: 12 }
+        }
+      }
+    }
+  });
 }
-function fillProj(){
-  const pm=document.getElementById('projMonth'),py=document.getElementById('projYear');
-  if(pm.children.length)return;
-  MO.forEach((m,i)=>{pm.innerHTML+=`<option value="${i}">${m}</option>`;});pm.value=11;
-  for(let y=new Date().getFullYear();y<=2030;y++)py.innerHTML+=`<option value="${y}">${y}</option>`;py.value=2027;
+
+function renderEvo() {
+  const labels = [], data = [], projData = [];
+  const today = td();
+  const [todayY, todayM] = today.split('-').map(Number);
+
+  for (let i = 5; i >= -3; i--) {
+    let mm = S.currentMonth - i, yy = S.currentYear;
+    if (mm < 0) { mm += 12; yy--; }
+    if (mm > 11) { mm -= 12; yy++; }
+    labels.push(MS[mm] + ' ' + yy);
+
+    const bal = projBal(yy, mm);
+    const isFuture = (yy > todayY) || (yy === todayY && mm + 1 > todayM);
+
+    if (isFuture) {
+      data.push(null);
+      projData.push(bal);
+    } else {
+      data.push(bal);
+      projData.push(bal); // ponto de conexão
+    }
+  }
+
+  if (charts.ev) charts.ev.destroy();
+  const ctx = document.getElementById('evoLineChart');
+  const gr = ctx.getContext('2d').createLinearGradient(0, 0, 0, 220);
+  gr.addColorStop(0, gc('var(--green)') + '40');
+  gr.addColorStop(1, gc('var(--green)') + '00');
+
+  charts.ev = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [
+        {
+          label: 'Saldo Real',
+          data,
+          fill: true,
+          backgroundColor: gr,
+          borderColor: gc('var(--green)'),
+          borderWidth: 2,
+          pointBackgroundColor: gc('var(--green)'),
+          pointRadius: 4,
+          tension: .4,
+          spanGaps: false
+        },
+        {
+          label: 'Projeção',
+          data: projData,
+          fill: false,
+          borderColor: gc('var(--purple)'),
+          borderWidth: 2,
+          borderDash: [6, 4],
+          pointBackgroundColor: gc('var(--purple)'),
+          pointRadius: 3,
+          tension: .4,
+          spanGaps: true
+        }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          display: true,
+          labels: { color: gc('var(--text2)'), font: { size: 10, family: 'Inter' }, boxWidth: 12 }
+        },
+        tooltip: {
+          callbacks: {
+            label: function(ctx) {
+              const v = ctx.parsed.y;
+              return ctx.dataset.label + ': ' + fmt(v);
+            }
+          }
+        }
+      },
+      scales: {
+        x: { ticks: { color: gc('var(--text3)'), font: { size: 10 } }, grid: { color: gc('var(--border)') } },
+        y: {
+          ticks: {
+            color: gc('var(--text3)'), font: { size: 10 },
+            callback: v => 'R$' + (v / 1000).toFixed(1) + 'k'
+          },
+          grid: { color: gc('var(--border)') }
+        }
+      }
+    }
+  });
 }
-function runSim(){
-  const v=parseFloat(document.getElementById('simVal').value);
-  const m=parseInt(document.getElementById('simMonths').value);
-  const d=document.getElementById('simDesc').value||'este gasto';
-  if(isNaN(v)){alert('Digite um valor!');return;}
-  document.getElementById('simResult').style.display='block';
-  document.getElementById('simResultVal').textContent=fmt(v*m);
-  document.getElementById('simResultLbl').textContent=`economizados cancelando "${d}" por ${m} meses`;
+
+function fillProj() {
+  const pm = document.getElementById('projMonth');
+  const py = document.getElementById('projYear');
+  if (pm.children.length) return;
+  MO.forEach((m, i) => { pm.innerHTML += `<option value="${i}">${m}</option>`; });
+  pm.value = 11;
+  for (let y = new Date().getFullYear(); y <= 2030; y++) {
+    py.innerHTML += `<option value="${y}">${y}</option>`;
+  }
+  py.value = new Date().getFullYear() + 1;
 }
-function runProj(){
-  const m=parseInt(document.getElementById('projMonth').value);
-  const y=parseInt(document.getElementById('projYear').value);
-  const b=projBal(y,m);const r=document.getElementById('projResult');
-  r.style.display='block';r.className='sim-result'+(b<0?' neg-r':'');
-  document.getElementById('projResultVal').textContent=(b<0?'− ':'')+fmt(b);
-  document.getElementById('projResultLbl').textContent=`saldo em ${MO[m]} ${y}`;
+
+function runSim() {
+  const v = parseFloat(document.getElementById('simVal').value);
+  const m = parseInt(document.getElementById('simMonths').value);
+  const d = document.getElementById('simDesc').value || 'este gasto';
+  if (isNaN(v)) { alert('Digite um valor!'); return; }
+  document.getElementById('simResult').style.display = 'block';
+  document.getElementById('simResultVal').textContent = fmt(v * m);
+  document.getElementById('simResultLbl').textContent = `economizados cancelando "${d}" por ${m} meses`;
+}
+
+function runProj() {
+  const m = parseInt(document.getElementById('projMonth').value);
+  const y = parseInt(document.getElementById('projYear').value);
+  const b = projBal(y, m);
+  const r = document.getElementById('projResult');
+  r.style.display = 'block';
+  r.className = 'sim-result' + (b < 0 ? ' neg-r' : '');
+  document.getElementById('projResultVal').textContent = (b < 0 ? '− ' : '') + fmt(b);
+  document.getElementById('projResultLbl').textContent = `saldo em ${MO[m]} ${y}`;
 }
 
 // ═══════════════════════════════════════════════════════════════
-// SETTINGS
+// SETTINGS (BUG-05: inclui gerenciador de categorias)
 // ═══════════════════════════════════════════════════════════════
-function renderSettings(){
-  document.getElementById('setInitBal').value=S.initialBalance||'';
-  document.getElementById('setGoal').value=S.monthlyGoal||'';
-  document.getElementById('setSavGoal').value=S.savingsGoal||'';
-  document.getElementById('setSavDate').value=S.savingsDate||'';
-  const ql=document.getElementById('quickTxList');
-  ql.innerHTML=S.quickTx.length?S.quickTx.map((q,i)=>
-    `<div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)"><div style="font-size:20px">${q.emoji}</div><div style="flex:1"><div style="font-size:14px;font-weight:600">${q.desc}</div><div style="font-size:12px;color:var(--text3)">${q.type==='income'?'+':'−'} ${fmt(q.amount)}</div></div><div style="color:var(--red);cursor:pointer;padding:6px" onclick="removeQuick(${i})">✕</div></div>`).join('')
-    :`<div style="color:var(--text3);font-size:13px;padding:10px 0">Nenhum atalho</div>`;
+function renderSettings() {
+  document.getElementById('setInitBal').value = S.initialBalance || '';
+  document.getElementById('setGoal').value = S.monthlyGoal || '';
+  document.getElementById('setSavGoal').value = S.savingsGoal || '';
+  document.getElementById('setSavDate').value = S.savingsDate || '';
+
+  // BUG-05: Renderizar gerenciador de categorias
+  renderCatManager();
+
+  // Atalhos rápidos
+  const ql = document.getElementById('quickTxList');
+  ql.innerHTML = S.quickTx.length
+    ? S.quickTx.map((q, i) =>
+      `<div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)">
+        <div style="font-size:20px">${q.emoji}</div>
+        <div style="flex:1">
+          <div style="font-size:14px;font-weight:600">${q.desc}</div>
+          <div style="font-size:12px;color:var(--text3)">${q.type === 'income' ? '+' : '−'} ${fmt(q.amount)}</div>
+        </div>
+        <div style="color:var(--red);cursor:pointer;padding:6px" onclick="removeQuick(${i})">✕</div>
+      </div>`).join('')
+    : `<div style="color:var(--text3);font-size:13px;padding:10px 0">Nenhum atalho</div>`;
+
   renderTrash();
 }
-function renderTrash(){
-  const tl=document.getElementById('trashList');
-  document.getElementById('trashCount').textContent=S.trash.length?`(${S.trash.length})`:'';
-  tl.innerHTML=S.trash.length?S.trash.slice(-20).reverse().map(t=>{const cat=getCat(t.category);const d=t.deletedAt?new Date(t.deletedAt).toLocaleDateString('pt-BR'):'';
-    return`<div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)"><div style="font-size:16px">${cat.emoji}</div><div style="flex:1"><div style="font-size:13px;font-weight:600">${t.desc}</div><div style="font-size:11px;color:var(--text3)">${fmt(t.amount)} · ${d}</div></div><div style="color:var(--green);cursor:pointer;padding:6px;font-weight:700" onclick="restoreTrash('${t.id}')">↩️</div></div>`;}).join('')
-    :`<div style="color:var(--text3);font-size:13px;padding:10px 0">Lixeira vazia 🎉</div>`;
+
+function renderTrash() {
+  const tl = document.getElementById('trashList');
+  document.getElementById('trashCount').textContent = S.trash.length ? `(${S.trash.length})` : '';
+  tl.innerHTML = S.trash.length
+    ? S.trash.slice(-20).reverse().map(t => {
+      const cat = getCat(t.category);
+      const d = t.deletedAt ? new Date(t.deletedAt).toLocaleDateString('pt-BR') : '';
+      return `<div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)">
+        <div style="font-size:16px">${cat.emoji}</div>
+        <div style="flex:1">
+          <div style="font-size:13px;font-weight:600">${t.desc}</div>
+          <div style="font-size:11px;color:var(--text3)">${fmt(t.amount)} · ${d}</div>
+        </div>
+        <div style="color:var(--green);cursor:pointer;padding:6px;font-weight:700" onclick="restoreTrash('${t.id}')">↩️</div>
+      </div>`;
+    }).join('')
+    : `<div style="color:var(--text3);font-size:13px;padding:10px 0">Lixeira vazia 🎉</div>`;
 }
-function renderTrashBadge(){const b=document.getElementById('trashBadge');if(S.trash.length){b.style.display='flex';b.textContent=S.trash.length;}else b.style.display='none';}
-function saveInitBal(){S.initialBalance=parseFloat(document.getElementById('setInitBal').value)||0;sync();renderAll();showToast('Salvo!');}
-function saveGoal(){S.monthlyGoal=parseFloat(document.getElementById('setGoal').value)||0;sync();renderAll();showToast('Meta salva!');}
-function saveSavGoal(){S.savingsGoal=parseFloat(document.getElementById('setSavGoal').value)||0;S.savingsDate=document.getElementById('setSavDate').value||'';sync();renderAll();showToast('Meta salva!');}
-function clearAll(){if(!confirm('Apagar TODOS os dados?'))return;S.transactions=[];S.trash=[];S.quickTx=[];S.initialBalance=0;S.monthlyGoal=0;S.savingsGoal=0;S.savingsDate='';sync();renderAll();}
+
+function renderTrashBadge() {
+  const b = document.getElementById('trashBadge');
+  if (S.trash.length) { b.style.display = 'flex'; b.textContent = S.trash.length; }
+  else b.style.display = 'none';
+}
+
+function saveInitBal() {
+  S.initialBalance = parseFloat(document.getElementById('setInitBal').value) || 0;
+  sync(); renderAll();
+  showToast('Saldo inicial salvo!');
+}
+
+function saveGoal() {
+  S.monthlyGoal = parseFloat(document.getElementById('setGoal').value) || 0;
+  sync(); renderAll();
+  showToast('Meta salva!');
+}
+
+function saveSavGoal() {
+  S.savingsGoal = parseFloat(document.getElementById('setSavGoal').value) || 0;
+  S.savingsDate = document.getElementById('setSavDate').value || '';
+  sync(); renderAll();
+  showToast('Meta salva!');
+}
+
+function clearAll() {
+  if (!confirm('Apagar TODOS os dados? Isso não pode ser desfeito!')) return;
+  if (!confirm('TEM CERTEZA? Todos os dados serão perdidos!')) return;
+  S.transactions = [];
+  S.trash = [];
+  S.quickTx = [];
+  S.customCats = [];
+  customCats = [];
+  S.initialBalance = 0;
+  S.monthlyGoal = 0;
+  S.savingsGoal = 0;
+  S.savingsDate = '';
+  S.streakRecord = 0;
+  S.streakRecordDate = '';
+  S.migrated = false;
+  sync(); renderAll();
+}
 
 // ═══════════════════════════════════════════════════════════════
-// BACKUP
+// BACKUP (BUG-05: inclui categorias customizadas)
 // ═══════════════════════════════════════════════════════════════
-function exportBackup(){
-  const data=JSON.stringify({version:5,app:'NovAIS',exportedAt:new Date().toISOString(),initialBalance:S.initialBalance,transactions:S.transactions,trash:S.trash,quickTx:S.quickTx,monthlyGoal:S.monthlyGoal,savingsGoal:S.savingsGoal,savingsDate:S.savingsDate},null,2);
-  const blob=new Blob([data],{type:'application/json'});const url=URL.createObjectURL(blob);
-  const a=document.createElement('a');const d=new Date();
-  a.href=url;a.download=`novais_${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}.json`;
-  a.click();URL.revokeObjectURL(url);
+function exportBackup() {
+  const data = JSON.stringify({
+    version: 6, // versão atualizada
+    app: 'NovAIS',
+    exportedAt: new Date().toISOString(),
+    initialBalance: S.initialBalance,
+    transactions: S.transactions,
+    trash: S.trash,
+    quickTx: S.quickTx,
+    customCats: S.customCats,
+    monthlyGoal: S.monthlyGoal,
+    savingsGoal: S.savingsGoal,
+    savingsDate: S.savingsDate,
+    streakRecord: S.streakRecord,
+    streakRecordDate: S.streakRecordDate,
+    migrated: S.migrated
+  }, null, 2);
+
+  const blob = new Blob([data], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  const d = new Date();
+  a.href = url;
+  a.download = `novais_backup_${d.getFullYear()}${String(d.getMonth() + 1).padStart(2, '0')}${String(d.getDate()).padStart(2, '0')}_${String(d.getHours()).padStart(2, '0')}${String(d.getMinutes()).padStart(2, '0')}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast('Backup exportado! 📦');
 }
-function importBackup(input){
-  const file=input.files[0];if(!file)return;
-  const reader=new FileReader();
-  reader.onload=e=>{try{const d=JSON.parse(e.target.result);if(!d.transactions)throw 0;
-    if(!confirm(`Importar ${d.transactions.length} transações?`))return;
-    S.initialBalance=d.initialBalance||0;S.transactions=d.transactions||[];S.trash=d.trash||[];S.quickTx=d.quickTx||[];S.monthlyGoal=d.monthlyGoal||0;S.savingsGoal=d.savingsGoal||0;S.savingsDate=d.savingsDate||'';
-    sync();renderAll();showToast('Importado!');}catch(e){alert('Arquivo inválido!');}};
-  reader.readAsText(file);input.value='';
+
+function importBackup(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const d = JSON.parse(e.target.result);
+      if (!d.transactions) throw new Error('Formato inválido');
+
+      const txCount = d.transactions.length;
+      const catCount = (d.customCats || []).length;
+      if (!confirm(`Importar ${txCount} transações${catCount ? ` e ${catCount} categorias` : ''}?\n\nIsso vai SUBSTITUIR todos os dados atuais.`)) return;
+
+      S.initialBalance = d.initialBalance || 0;
+      S.transactions = d.transactions || [];
+      S.trash = d.trash || [];
+      S.quickTx = d.quickTx || [];
+      S.monthlyGoal = d.monthlyGoal || 0;
+      S.savingsGoal = d.savingsGoal || 0;
+      S.savingsDate = d.savingsDate || '';
+      S.streakRecord = d.streakRecord || 0;
+      S.streakRecordDate = d.streakRecordDate || '';
+
+      // BUG-05: importar categorias customizadas
+      S.customCats = d.customCats || [];
+      customCats = S.customCats;
+
+      // BUG-03: Se importando backup antigo (sem confirmed), marcar migração
+      if (!d.migrated) {
+        S.migrated = false; // vai migrar no próximo listenData
+      } else {
+        S.migrated = d.migrated;
+      }
+
+      sync(); renderAll();
+      showToast('Importado com sucesso! ✅');
+    } catch (err) {
+      alert('Arquivo inválido! Verifique se é um backup do NovAI$.');
+    }
+  };
+  reader.readAsText(file);
+  input.value = '';
 }
 </script>
 </body>
