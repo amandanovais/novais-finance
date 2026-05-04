@@ -1159,7 +1159,7 @@ function saveTx() {
       });
     }
   } else {
-    base.nominalDay = isPayDay(nominalDay) ? nominalDay : undefined;
+    base.nominalDay = isPayDay(nominalDay) ? nominalDay : null;
     S.transactions.push(base);
   }
 
@@ -1444,9 +1444,10 @@ function execQuick(i) {
   S.transactions.push({
     id: genId(), desc: q.desc,
     amount: isIncome ? Math.abs(q.amount) : -Math.abs(q.amount),
-    date: today, type: q.type, category: 'outros',
+    date: today, type: q.type,
+    category: q.category || 'outros', // 🔧 FIX: usar categoria do atalho
     recurrence: 'none', notes: '',
-    confirmed: true, // atalho rápido = agora = confirmado
+    confirmed: true,
     createdAt: Date.now()
   });
   sync(); renderAll();
@@ -1586,32 +1587,39 @@ function calcStreak() {
   const todayStr = td();
   let streak = 0;
 
-  // Começar de hoje e ir voltando
-  for (let i = 0; i < 730; i++) { // até 2 anos
+  // 🔧 FIX: Capear streak na data da transação mais antiga
+  // Evita mostrar 730 dias quando não há histórico suficiente
+  let maxDays = 730;
+  if (S.transactions.length > 0) {
+    const oldest = [...S.transactions].map(t => t.date).sort()[0];
+    if (oldest) {
+      const [oy, om, od] = oldest.split('-').map(Number);
+      const oldestDate = new Date(oy, om - 1, od);
+      maxDays = Math.min(730, Math.floor((today - oldestDate) / (1000 * 60 * 60 * 24)) + 1);
+    }
+  }
+
+  if (maxDays === 0) {
+    return { current: 0, startDate: todayStr, record: S.streakRecord, recordDate: S.streakRecordDate, recordUpdated: false };
+  }
+
+  for (let i = 0; i < maxDays; i++) {
     const checkDate = new Date(today.getFullYear(), today.getMonth(), today.getDate() - i);
     const ds = `${checkDate.getFullYear()}-${String(checkDate.getMonth() + 1).padStart(2, '0')}-${String(checkDate.getDate()).padStart(2, '0')}`;
 
-    // Verificar se tem gasto nessas categorias neste dia
     const hasStreakBreaker = S.transactions.some(t =>
       t.date === ds &&
       t.amount < 0 &&
       STREAK_CATS.includes(t.category)
     );
 
-    if (hasStreakBreaker) {
-      // Se é hoje e tem gasto, streak é 0
-      // Se é dia anterior, streak para aqui
-      break;
-    }
-
+    if (hasStreakBreaker) break;
     streak++;
   }
 
-  // Data de início da streak
   const startDate = new Date(today.getFullYear(), today.getMonth(), today.getDate() - streak + 1);
   const startStr = `${startDate.getFullYear()}-${String(startDate.getMonth() + 1).padStart(2, '0')}-${String(startDate.getDate()).padStart(2, '0')}`;
 
-  // Atualizar recorde
   let recordUpdated = false;
   if (streak > S.streakRecord) {
     S.streakRecord = streak;
@@ -1619,13 +1627,7 @@ function calcStreak() {
     recordUpdated = true;
   }
 
-  return {
-    current: streak,
-    startDate: startStr,
-    record: S.streakRecord,
-    recordDate: S.streakRecordDate,
-    recordUpdated
-  };
+  return { current: streak, startDate: startStr, record: S.streakRecord, recordDate: S.streakRecordDate, recordUpdated };
 }
 
 // ═══════════════════════════════════════════════════════════════
