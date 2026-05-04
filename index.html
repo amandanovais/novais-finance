@@ -1132,7 +1132,7 @@ function saveTx() {
         id: i === cur ? id : genId(),
         instCurrent: i,
         date: finalDate,
-        nominalDay: isPayDay(nominalDay) ? nominalDay : undefined,
+        nominalDay: isPayDay(nominalDay) ? nominalDay : null, // ← era undefined
         confirmed: isIncome ? !isFuture : true
       });
     }
@@ -1154,7 +1154,7 @@ function saveTx() {
         ...base,
         id: i === 0 ? id : genId(),
         date: finalDate,
-        nominalDay: isPayDay(nominalDay) ? nominalDay : undefined,
+        nominalDay: isPayDay(nominalDay) ? nominalDay : null, // ← era undefined
         confirmed: isIncome ? !isFuture : true
       });
     }
