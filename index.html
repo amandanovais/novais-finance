@@ -1597,7 +1597,9 @@ function saveTx() {
     S.transactions.push(base);
   }
 
-  sync(); renderAll(); closeModal('addModal');
+   closeModal('addModal');
+   sync();
+   renderAll(); 
   showToast(`"${desc}" adicionado!`);
 }
 
