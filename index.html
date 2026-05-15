@@ -1410,9 +1410,10 @@ function saveCat() {
   }
 
   customCats = S.customCats;
+  closeModal('catModal');
   sync();
   renderAll();
-  closeModal('catModal');
+  
   // Reset modal
   document.getElementById('catEditId').value = '';
   document.getElementById('catModalTitle').textContent = 'Nova categoria';
@@ -1716,8 +1717,8 @@ function saveEdit() {
 
   const [, , d] = date.split('-').map(Number);
   if (isIncome && isPayDay(d)) tx.nominalDay = d;
-
-  sync(); renderAll(); closeModal('editModal');
+  closeModal('editModal');
+  sync(); renderAll(); 
   showToast(`"${desc}" atualizado!`);
 }
 
@@ -1898,7 +1899,8 @@ function saveQuickTx() {
   const emoji = document.getElementById('qEmoji').value || '⚡';
   if (!desc || isNaN(amount)) { alert('Preencha!'); return; }
   S.quickTx.push({ desc, amount, type, emoji });
-  sync(); renderAll(); closeModal('quickModal');
+  closeModal('quickModal');
+  sync(); renderAll(); 
 }
 
 function execQuick(i) {
@@ -3243,7 +3245,8 @@ function saveCard() {
       owner, color: cardEditColor, archived: false, createdAt: Date.now()
     });
   }
-  sync(); closeModal('cardModal'); renderCardsPage();
+  closeModal('cardModal');
+  sync();  renderCardsPage();
   showToast(editId ? 'Cartão atualizado!' : 'Cartão criado!');
 }
 
@@ -3261,7 +3264,8 @@ function deleteCardConfirm() {
   S.cardPurchases = S.cardPurchases.filter(p => p.cardId !== editId);
   S.cardInvoicesPaid = S.cardInvoicesPaid.filter(ip => ip.cardId !== editId);
   S.selectedCardId = null;
-  sync(); closeModal('cardModal'); renderCardsPage();
+  closeModal('cardModal');
+  sync();  renderCardsPage();
   showToast('Cartão excluído');
 }
 function setPurchaseOwner(o) {
@@ -3415,7 +3419,8 @@ function savePurchase() {
       createdAt: Date.now()
     });
   }
-  sync(); closeModal('purchaseModal'); renderCardsPage();
+  closeModal('purchaseModal');
+  sync();  renderCardsPage();
   showToast(editId ? 'Compra atualizada!' : 'Compra adicionada!');
 }
 
@@ -3426,7 +3431,8 @@ function deletePurchaseFromModal() {
   if (!p) return;
   if (!confirm(`Excluir compra "${p.desc}"?`)) return;
   S.cardPurchases = S.cardPurchases.filter(x => x.id !== editId);
-  sync(); closeModal('purchaseModal'); renderCardsPage();
+  closeModal('purchaseModal');
+  sync();  renderCardsPage();
   showToast('Compra excluída');
 }
 function openPayInvoice(cardId, invoiceKey) {
@@ -3498,8 +3504,8 @@ function confirmPayInvoice() {
     txIdMe, txIdPartner,
     amountMe: split.me, amountPartner: split.partner
   });
-
-  sync(); closeModal('payInvoiceModal'); renderCardsPage();
+  closeModal('payInvoiceModal');
+  sync();  renderCardsPage();
   showToast(`Fatura ${monthLabel} paga! ✅`);
   payInvoiceData = null;
 }
