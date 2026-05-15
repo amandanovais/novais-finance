@@ -1280,6 +1280,41 @@ textarea.form-input{resize:none;min-height:60px;font-size:13px}
   <button class="btn-primary" onclick="confirmPayInvoice()">✅ Confirmar pagamento</button>
 </div></div>
 <script>
+  // ═══════════════════════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════════════════════
+let S = {
+  initialBalance: 0,
+  transactions: [],
+  trash: [],
+  quickTx: [],
+  monthlyGoal: 0,
+  savingsGoal: 0,
+  savingsDate: '',
+  customCats: [],
+  streakRecord: 0,
+  streakRecordDate: '',
+  currentMonth: new Date().getMonth(),
+  currentYear: new Date().getFullYear(),
+  txView: 'all',
+  txMode: 'list',
+  catFilter: null,
+  theme: 'dark',
+  migrated: false,
+  partner: { enabled: false, name: 'Parceira', emoji: '💜', initialBalance: 0 },
+  cards: [],
+  cardPurchases: [],
+  cardInvoicesPaid: [],
+  selectedCardId: null
+};
+
+let editType='expense', editRec='none', editCat='outros', editOwner='me';
+let editModalType='expense', editModalRec='none', editModalCat='outros', editModalOwner='me', editModalId=null;
+let cardEditOwner='me', cardEditColor='#7C4DFF';
+let purchaseEditOwner='me', purchaseSelectedCardId=null, purchaseEditCat='outros';
+let payInvoiceData=null;
+let detailId=null, lastDel=null, toastTmr=null, charts={}, calSel=null, dbPath='';
+
 // ═══════════════════════════════════════════════════════════════
 // FIREBASE CONFIG
 // ═══════════════════════════════════════════════════════════════
@@ -3224,40 +3259,6 @@ function getOwnerLabel(owner) { return OWNER_LABELS[owner] || OWNER_LABELS.me; }
 function getPartnerName()  { return (S.partner && S.partner.name)  || 'Parceira'; }
 function getPartnerEmoji() { return (S.partner && S.partner.emoji) || '💜'; }
 
-// ═══════════════════════════════════════════════════════════════
-// STATE
-// ═══════════════════════════════════════════════════════════════
-let S = {
-  initialBalance: 0,
-  transactions: [],
-  trash: [],
-  quickTx: [],
-  monthlyGoal: 0,
-  savingsGoal: 0,
-  savingsDate: '',
-  customCats: [],
-  streakRecord: 0,
-  streakRecordDate: '',
-  currentMonth: new Date().getMonth(),
-  currentYear: new Date().getFullYear(),
-  txView: 'all',
-  txMode: 'list',
-  catFilter: null,
-  theme: 'dark',
-  migrated: false,
-  partner: { enabled: false, name: 'Parceira', emoji: '💜', initialBalance: 0 },
-  cards: [],
-  cardPurchases: [],
-  cardInvoicesPaid: [],
-  selectedCardId: null
-};
-
-let editType='expense', editRec='none', editCat='outros', editOwner='me';
-let editModalType='expense', editModalRec='none', editModalCat='outros', editModalOwner='me', editModalId=null;
-let cardEditOwner='me', cardEditColor='#7C4DFF';
-let purchaseEditOwner='me', purchaseSelectedCardId=null, purchaseEditCat='outros';
-let payInvoiceData=null;
-let detailId=null, lastDel=null, toastTmr=null, charts={}, calSel=null, dbPath='';
 
 // ═══════════════════════════════════════════════════════════════
 // AUTH
@@ -3671,17 +3672,6 @@ function getCardInvoiceKeys(cardId) {
   return [...keys].sort();
 }
 
-// Calcular split do total da fatura considerando split por compra
-function getInvoiceSplit(cardId, invoiceKey) {
-  const installments = getCardOpenInstallments(cardId).filter(i => i.invoiceKey === invoiceKey);
-  let me = 0, partner = 0;
-  installments.forEach(i => {
-    const s = getSplitFromOwner(i.amount, i.owner, i.splitMe, i.splitPartner);
-    me += s.me;
-    partner += s.partner;
-  });
-  return { me, partner, total: me + partner };
-}
 
 
 
