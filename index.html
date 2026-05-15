@@ -2662,8 +2662,10 @@ function renderTrash() {
 }
 
 function renderTrashBadge() {
+  const c = S.trash.length;
   const b = document.getElementById('trashBadge');
-  if (S.trash.length) { b.style.display = 'flex'; b.textContent = S.trash.length; }
+  if (!b) return;
+  if (c > 0) { b.style.display = 'flex'; b.textContent = c; }
   else b.style.display = 'none';
 }
 
