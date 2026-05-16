@@ -1983,12 +1983,12 @@ function mStats(y, m) {
 }
 
 function projBal(y, m) {
-  const end = `${y}-${String(m + 1).padStart(2, '0')}-31`;
+  const end = `${y}-${String(m+1).padStart(2,'0')}-31`;
   let b = S.initialBalance;
-  allSorted().filter(t => t.date <= end).forEach(t => {
-    const { me } = getSplit(t);
-    b += me;
-  });
+  // transações reais
+  allSorted().filter(t => t.date <= end).forEach(t => { b += getSplit(t).me; });
+  // faturas virtuais até essa data
+  getVirtualFaturas().filter(v => v.date <= end).forEach(v => { b += v.amount; });
   return b;
 }
 
@@ -2387,7 +2387,15 @@ function renderTxList() {
   const days = {};
   txs.forEach(t => { (days[t.date] = days[t.date] || []).push(t); });
   const running = calcRunning().map;
-
+   // Injeta faturas virtuais do mês
+  const virtualFaturas = getVirtualFaturas().filter(v => v.date.startsWith(pfx(S.currentYear, S.currentMonth)));
+  // Só adiciona se ainda não foi paga (já filtrado no helper) e não estiver no filtro de excluir
+  if (S.txView === 'all' || S.txView === 'future' || S.txView === 'expenses') {
+    virtualFaturas.forEach(v => {
+      // evita duplicar se já existir transação real de fatura paga
+      if (!txs.find(t => t.id === v.id)) txs.push(v);
+    });
+  }
   list.innerHTML = Object.entries(days).map(([d, items]) => {
     // total do dia = soma da parte do user
     const tot = items.reduce((s, t) => s + getSplit(t).me, 0);
@@ -2404,9 +2412,17 @@ function renderTxList() {
         const owner = t.owner || 'me';
         const ownerL = getOwnerLabel(owner);
         const { me } = getSplit(t);
-        const cls = `tx-card${owner === 'shared' ? ' shared-tx' : ''}${owner === 'partner' ? ' partner-tx' : ''}`;
+        const isVirtual = !!t.isVirtual;
+        const cls = isVirtual
+          ? 'tx-card'
+          : `tx-card${owner==='shared' ? ' shared-tx' : ''}${owner==='partner' ? ' partner-tx' : ''}`;
 
         let valHtml;
+         if (isVirtual) {
+          valHtml = `<div class="tx-val neg">${fmt(t.amount)}</div>
+                     <div class="tx-val-sub" style="color:var(--orange)">💳 a pagar</div>`;
+        } else if (owner === 'shared' || owner === 'partner') {
+        ...
          if (owner === 'shared' || owner === 'partner') {
            valHtml = `<div class="tx-val ${isIn?'pos':'neg'}">${isIn?'+':''}${fmt(t.amount)}</div>
                       <div class="tx-val-sub">Você: ${fmt(me)}</div>`;
@@ -2430,6 +2446,7 @@ function renderTxList() {
               <div class="tx-desc">${t.desc}</div>
               <div class="tx-meta">
                 <span class="tx-cat-tag" style="color:${c.color};background:${bgStyle}">${c.name}</span>
+                ${isVirtual ? '<span class="tx-badge-future" style="background:var(--purple-bg);color:var(--purple);border-color:var(--purple)">FATURA</span>' : ''}
                 ${ownerBadgeHtml}
                 ${t.recurrence === 'installment' ? `<span class="tx-cat-tag" style="color:var(--purple);background:var(--purple-bg)">${t.instCurrent}/${t.instTotal}</span>` : ''}
                 ${t.recurrence === 'monthly' ? `<span class="tx-cat-tag" style="color:var(--purple);background:var(--purple-bg)">🔄</span>` : ''}
@@ -2441,9 +2458,12 @@ function renderTxList() {
           </div>
           <div class="tx-right">
             ${valHtml}
-            ${showAwait
-              ? `<button class="tx-confirm-btn" onclick="event.stopPropagation();confirmReceipt('${t.id}')">✓</button>`
-              : `<div class="tx-edit-btn" onclick="event.stopPropagation();openEditModal('${t.id}')" title="Editar">✏️</div>`}
+            ${isVirtual
+              ? `<div class="tx-edit-btn" onclick="event.stopPropagation();selectCard('${t.cardId}');goPage('Cards',document.querySelectorAll('.nav-item')[2])" title="Ver fatura" style="font-size:12px">💳</div>`
+              : showAwait
+                ? `<button class="tx-confirm-btn" onclick="event.stopPropagation();confirmReceipt('${t.id}')">✓</button>`
+                : `<div class="tx-edit-btn" onclick="event.stopPropagation();openEditModal('${t.id}')" title="Editar">✏️</div>`
+            }
           </div>
         </div>`;
       }).join('')}
@@ -3538,6 +3558,35 @@ function savePartner() {
   S.partner.initialBalance = initialBalance;
   sync(); renderAll();
   showToast(`${name} salva! ${emoji}`);
+}
+   function getVirtualFaturas() {
+  const entries = [];
+  S.cards.forEach(card => {
+    getCardInvoiceKeys(card.id).forEach(k => {
+      // ignora faturas já pagas (já virou transação real)
+      const paid = S.cardInvoicesPaid.find(ip => ip.cardId===card.id && ip.invoiceKey===k);
+      if (paid) return;
+      const inv = getCardInvoice(card.id, k);
+      if (!inv || inv.total===0 || !inv.dueDate) return;
+      const split = getInvoiceSplit(card.id, k);
+      const [iy,im] = k.split('-').map(Number);
+      entries.push({
+        id: `vf_${card.id}_${k}`,
+        desc: `Fatura ${card.name} (${MS[im-1]}/${iy})`,
+        amount: -(split.me || inv.total), // parte do usuário
+        amountTotal: inv.total,
+        date: inv.dueDate,
+        category: 'fatura',
+        confirmed: false,
+        owner: 'me',
+        isVirtual: true,   // flag pra distinguir das reais
+        cardId: card.id,
+        invoiceKey: k,
+        split
+      });
+    });
+  });
+  return entries;
 }
 </script>
 <!-- ════════════════ MODAL: CARTÃO (novo/editar) ════════════════ -->
