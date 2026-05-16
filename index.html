@@ -2304,11 +2304,13 @@ function setEl(id, html) {
   if (el) el.innerHTML = html;
 }
 function renderHomePie() {
+  const canvas = document.getElementById('homePieChart');
+  if (!canvas) return; // ← evita crash se canvas não existir ainda
+
   const st = mStats(S.currentYear, S.currentMonth);
   if (Math.abs(st.exp) === 0) {
     if (charts.homePie) { charts.homePie.destroy(); charts.homePie = null; }
-    const ctx = document.getElementById('homePieChart').getContext('2d');
-    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+    canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
     return;
   }
 
@@ -2324,19 +2326,14 @@ function renderHomePie() {
   if (cats.length === 0) return;
 
   if (charts.homePie) charts.homePie.destroy();
-  charts.homePie = new Chart(document.getElementById('homePieChart').getContext('2d'), {
+  charts.homePie = new Chart(canvas.getContext('2d'), {
     type: 'doughnut',
     data: {
       labels: cats.map(([id]) => getCat(id).name),
-      datasets: [{
-        data: cats.map(([, v]) => v),
-        backgroundColor: cats.map(([id]) => getCat(id).color),
-        borderWidth: 0
-      }]
+      datasets: [{ data: cats.map(([,v]) => v), backgroundColor: cats.map(([id]) => getCat(id).color), borderWidth: 0 }]
     },
     options: {
-      responsive: true,
-      maintainAspectRatio: false,
+      responsive: true, maintainAspectRatio: false,
       plugins: { legend: { position: 'right', labels: { color: gc('var(--text2)'), boxWidth: 10, padding: 8, font: { size: 10 } } } },
       cutout: '60%'
     }
@@ -2914,6 +2911,7 @@ function getSplitFromOwner(amount, owner, splitMe, splitPartner) {
   const sp = (splitPartner ?? 50) / 100;
   return { me: amount * sm, partner: amount * sp };
 }
+
 function renderCouplePage() {
   const c = document.getElementById('coupleContent');
 
