@@ -1052,9 +1052,13 @@ function td() {
 const genId = () => Date.now() + '_' + Math.random().toString(36).substr(2, 9);
 
 function dateLabel(ds) {
-  const [y, m, d] = ds.split('-').map(Number);
+  if (!ds || typeof ds !== 'string') return '—';
+  const parts = ds.split('-').map(Number);
+  if (parts.length < 3) return ds;
+  const [y, m, d] = parts;
+  if (!y || !m || !d) return ds;
   const dt = new Date(y, m - 1, d);
-  return ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'][dt.getDay()] + `, ${d} ${MS[m - 1]} ${y}`;
+  return ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'][dt.getDay()] + `, ${d} ${MS[m-1]} ${y}`;
 }
 
 function pfx(y, m) {
@@ -2816,7 +2820,7 @@ function renderCardDetail() {
       const monthLabel = `${MS[im-1]}/${iy}`;
       const dueDateStr = paid && paid.paidDate
         ? `Paga em ${dateLabel(paid.paidDate)}`
-        : inv.dueDate ? `Vence ${dateLabel(inv.dueDate)}` : '—';
+        : inv.dueDate ? `Vence ${inv.dueDate ? dateLabel(inv.dueDate) : '—'}`
 
       let splitRow = '';
       if (S.partner.enabled) {
@@ -3584,6 +3588,16 @@ function savePartner() {
     });
   });
   return entries;
+}
+   function getInvoiceSplit(cardId, invoiceKey) {
+  const installments = getCardOpenInstallments(cardId).filter(i => i.invoiceKey === invoiceKey);
+  let me = 0, partner = 0;
+  installments.forEach(i => {
+    const s = getSplitFromOwner(i.amount, i.owner, i.splitMe, i.splitPartner);
+    me += s.me;
+    partner += s.partner;
+  });
+  return { me, partner, total: me + partner };
 }
 </script>
 <!-- ════════════════ MODAL: CARTÃO (novo/editar) ════════════════ -->
