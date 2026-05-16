@@ -1271,16 +1271,16 @@ function getCardInvoiceKeys(cardId) {
 // ═══════════════════════════════════════════════════════════════
 // MODO CASAL — cálculos
 // ═══════════════════════════════════════════════════════════════
-
+function getSplitFromOwner(amount, owner, splitMe, splitPartner) {
+  if (owner === 'me')      return { me: amount, partner: 0 };
+  if (owner === 'partner') return { me: 0, partner: amount };
+  const sm = (splitMe ?? 50) / 100;
+  const sp = (splitPartner ?? 50) / 100;
+  return { me: amount * sm, partner: amount * sp };
+}
 // Split: retorna {me, partner} em valores absolutos para uma transação
 function getSplit(t) {
-  const owner = t.owner || 'me';
-  if (owner === 'me')      return { me: t.amount, partner: 0 };
-  if (owner === 'partner') return { me: 0, partner: t.amount };
-  // shared
-  const sm = (t.splitMe ?? 50) / 100;
-  const sp = (t.splitPartner ?? 50) / 100;
-  return { me: t.amount * sm, partner: t.amount * sp };
+  return getSplitFromOwner(t.amount, t.owner || 'me', t.splitMe, t.splitPartner);
 }
 
 // Saldo dela (só transações dela + parte dela das shared)
@@ -2904,14 +2904,6 @@ const dueDateStr = paid && paid.paidDate
   `;
 }
 
-function getSplitFromOwner(amount, owner, splitMe, splitPartner) {
-  if (owner === 'me')      return { me: amount, partner: 0 };
-  if (owner === 'partner') return { me: 0, partner: amount };
-  const sm = (splitMe ?? 50) / 100;
-  const sp = (splitPartner ?? 50) / 100;
-  return { me: amount * sm, partner: amount * sp };
-}
-
 function renderCouplePage() {
   const c = document.getElementById('coupleContent');
 
@@ -3450,9 +3442,12 @@ function savePurchase() {
       createdAt: Date.now()
     });
   }
-  closeModal('purchaseModal');
-  sync();  renderCardsPage();
-  showToast(editId ? 'Compra atualizada!' : 'Compra adicionada!');
+  const cardIdParaVoltar = S.selectedCardId; // salva antes
+closeModal('purchaseModal');
+sync();
+S.selectedCardId = cardIdParaVoltar;       // garante que não perdeu
+renderCardsPage();
+showToast(editId ? 'Compra atualizada!' : 'Compra adicionada!');
 }
 
 function deletePurchaseFromModal() {
