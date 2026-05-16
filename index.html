@@ -2130,8 +2130,9 @@ function renderHome() {
   }
 
   const noInc = calcNoIncomeAlert();
-  setEl('noIncomeAlertContainer', noInc ? `<div class="alert-card warning">💸 <div><strong>${noInc.days ?? '?'} dias sem entradas!</strong><br>Última: ${noInc.lastDate ? dateLabel(noInc.lastDate) : '—'};
-
+setEl('noIncomeAlertContainer', noInc
+  ? `<div class="alert-card warning">💸 <div><strong>${noInc.days ?? '?'} dias sem entradas!</strong><br>Última: ${noInc.lastDate ? dateLabel(noInc.lastDate) : '—'}</div></div>`
+  : '');
 
   // CARD ALERTS (faturas vencendo em <= 10 dias)
   const cabox = document.getElementById('cardAlertContainer');
