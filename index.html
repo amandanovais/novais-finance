@@ -431,6 +431,7 @@ textarea.form-input{resize:none;min-height:60px;font-size:13px}
   <div id="cardCatHomeContainer"></div>
   <div id="goalContainer"></div>
   <div id="savingsGoalContainer"></div>
+  <div id="quickGrid"></div>
   <div id="streakContainer"></div>
 </div>
 
@@ -2242,8 +2243,8 @@ function renderHome() {
     </div>`;
   } else stkBox.innerHTML = '';
 
-  // QUICK GRID
   const qg = document.getElementById('quickGrid');
+if (qg) {
   qg.innerHTML = S.quickTx.map((q, i) => {
     const color = q.type === 'income' ? 'var(--green)' : 'var(--red)';
     const bg = q.type === 'income' ? 'var(--green-bg)' : 'var(--red-bg)';
@@ -2255,8 +2256,9 @@ function renderHome() {
     <div class="qicon" style="background:var(--surface3);color:var(--text3)">+</div>
     <div><div class="qlabel" style="color:var(--text3)">Adicionar</div></div>
   </div>`;
+}
 
-  renderHomePie();
+renderHomePie();
 }
 
 // Gastos de cartão por categoria (mês atual)
