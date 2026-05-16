@@ -2153,9 +2153,8 @@ function renderHome() {
   }
 
   const noInc = calcNoIncomeAlert();
-  document.getElementById('noIncomeAlertContainer').innerHTML = noInc
-    ? `<div class="alert-card warning">💸 <div><strong>${noInc.days} dias sem entradas!</strong><br>Última: ${dateLabel(noInc.lastDate)}</div></div>`
-    : '';
+  setEl('noIncomeAlertContainer', noInc ? `<div class="alert-card warning">💸 <div><strong>${noInc.days} dias sem entradas!</strong><br>Última: ${dateLabel(noInc.lastDate)}</div></div>` : '');
+
 
   // CARD ALERTS (faturas vencendo em <= 10 dias)
   const cabox = document.getElementById('cardAlertContainer');
@@ -2298,7 +2297,10 @@ if (cardCatBox) {
     cardCatBox.innerHTML = '';
   }
 }
-
+function setEl(id, html) {
+  const el = document.getElementById(id);
+  if (el) el.innerHTML = html;
+}
 function renderHomePie() {
   const st = mStats(S.currentYear, S.currentMonth);
   if (Math.abs(st.exp) === 0) {
@@ -2903,7 +2905,13 @@ const dueDateStr = paid && paid.paidDate
   `;
 }
 
-
+function getSplitFromOwner(amount, owner, splitMe, splitPartner) {
+  if (owner === 'me')      return { me: amount, partner: 0 };
+  if (owner === 'partner') return { me: 0, partner: amount };
+  const sm = (splitMe ?? 50) / 100;
+  const sp = (splitPartner ?? 50) / 100;
+  return { me: amount * sm, partner: amount * sp };
+}
 function renderCouplePage() {
   const c = document.getElementById('coupleContent');
 
