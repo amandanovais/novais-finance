@@ -2418,22 +2418,19 @@ function renderTxList() {
           : `tx-card${owner==='shared' ? ' shared-tx' : ''}${owner==='partner' ? ' partner-tx' : ''}`;
 
         let valHtml;
-         if (isVirtual) {
-          valHtml = `<div class="tx-val neg">${fmt(t.amount)}</div>
-                     <div class="tx-val-sub" style="color:var(--orange)">💳 a pagar</div>`;
-        } else if (owner === 'shared' || owner === 'partner') {
-        ...
-         if (owner === 'shared' || owner === 'partner') {
-           valHtml = `<div class="tx-val ${isIn?'pos':'neg'}">${isIn?'+':''}${fmt(t.amount)}</div>
-                      <div class="tx-val-sub">Você: ${fmt(me)}</div>`;
-         } else if (isIn && !t.confirmed) {
-           // entrada pendente — não mostra saldo (que seria enganoso)
-           valHtml = `<div class="tx-val pos">+${fmt(t.amount)}</div>
-                      <div class="tx-val-sub" style="color:var(--orange)">⏳ pendente</div>`;
-         } else {
-           valHtml = `<div class="tx-val ${isIn?'pos':'neg'}">${isIn?'+':''}${fmt(t.amount)}</div>
-                      <div class="tx-val-sub">→ ${fmt(running[t.id]||0)}</div>`;
-         }
+if (isVirtual) {
+  valHtml = `<div class="tx-val neg">${fmt(t.amount)}</div>
+             <div class="tx-val-sub" style="color:var(--orange)">💳 a pagar</div>`;
+} else if (owner === 'shared' || owner === 'partner') {
+  valHtml = `<div class="tx-val ${isIn?'pos':'neg'}">${isIn?'+':''}${fmt(t.amount)}</div>
+             <div class="tx-val-sub">Você: ${fmt(me)}</div>`;
+} else if (isIn && !t.confirmed) {
+  valHtml = `<div class="tx-val pos">+${fmt(t.amount)}</div>
+             <div class="tx-val-sub" style="color:var(--orange)">⏳ pendente</div>`;
+} else {
+  valHtml = `<div class="tx-val ${isIn?'pos':'neg'}">${isIn?'+':''}${fmt(t.amount)}</div>
+             <div class="tx-val-sub">→ ${fmt(running[t.id]||0)}</div>`;
+}
 
         const ownerBadgeHtml = S.partner.enabled && owner !== 'me'
           ? `<span class="owner-badge ${ownerL.bgClass}">${ownerL.emoji} ${owner === 'shared' ? 'Casal' : getPartnerName()}</span>`
