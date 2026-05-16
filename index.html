@@ -428,6 +428,7 @@ textarea.form-input{resize:none;min-height:60px;font-size:13px}
   <div id="noIncomeAlertContainer"></div>
   <div id="cardAlertContainer"></div>
   <div id="coupleSummaryContainer"></div>
+  <div id="cardCatHomeContainer"></div>
   <div id="goalContainer"></div>
   <div id="savingsGoalContainer"></div>
   <div id="streakContainer"></div>
@@ -1298,19 +1299,21 @@ function partnerBal() {
 // Stats das transações shared num período (entradas, saídas, total casal)
 function coupleStats(y, m) {
   const p = pfx(y, m);
-  const txs = S.transactions.filter(t => t.date.startsWith(p) && t.owner === 'shared');
-  let inc = 0, exp = 0, paidMe = 0, paidPartner = 0;
+  // inclui shared E partner (não só shared)
+  const txs = S.transactions.filter(t => t.date.startsWith(p) && (t.owner==='shared' || t.owner==='partner'));
+  let inc=0, incProj=0, exp=0, paidMe=0, paidPartner=0;
   txs.forEach(t => {
     const { me, partner } = getSplit(t);
     if (t.amount > 0) {
       if (t.confirmed) inc += t.amount;
+      else incProj += t.amount;
     } else {
       exp += t.amount;
       paidMe += me;
       paidPartner += partner;
     }
   });
-  return { inc, exp, paidMe, paidPartner, txs };
+  return { inc, incProj, exp, paidMe, paidPartner, txs };
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -2253,6 +2256,45 @@ function renderHome() {
   renderHomePie();
 }
 
+// Gastos de cartão por categoria (mês atual)
+const cardCatBox = document.getElementById('cardCatHomeContainer');
+if (cardCatBox) {
+  const p2 = pfx(S.currentYear, S.currentMonth);
+  const byCatCard = {};
+  S.cardPurchases.forEach(pur => {
+    // Incluir só parcelas que caem neste mês
+    const card2 = S.cards.find(c => c.id === pur.cardId);
+    if (!card2) return;
+    const total = pur.installments || 1;
+    for (let n = 1; n <= total; n++) {
+      const inv2 = getInstallmentInvoice(pur.date, n, card2.closingDay, card2.dueDay);
+      if (inv2.invoiceKey.startsWith(pfx(S.currentYear, S.currentMonth).slice(0,7))) {
+        byCatCard[pur.category] = (byCatCard[pur.category] || 0) + (pur.amount / total);
+      }
+    }
+  });
+  const cardCatEntries = Object.entries(byCatCard).sort((a,b)=>b[1]-a[1]);
+  if (cardCatEntries.length > 0) {
+    cardCatBox.innerHTML = `<div class="section-title">💳 Cartões · gastos por categoria</div>
+      <div class="mini-chart"><div class="chart-container"><canvas id="cardCatHomeChart"></canvas></div></div>`;
+    setTimeout(() => {
+      if (charts.cardCatHome) charts.cardCatHome.destroy();
+      const ctx = document.getElementById('cardCatHomeChart');
+      if (!ctx) return;
+      charts.cardCatHome = new Chart(ctx.getContext('2d'), {
+        type: 'doughnut',
+        data: {
+          labels: cardCatEntries.map(([id]) => getCat(id).name),
+          datasets: [{ data: cardCatEntries.map(([,v])=>v), backgroundColor: cardCatEntries.map(([id])=>getCat(id).color), borderWidth:0 }]
+        },
+        options: { responsive:true, maintainAspectRatio:false, plugins:{legend:{position:'right',labels:{color:gc('var(--text2)'),boxWidth:10,padding:8,font:{size:10}}}}, cutout:'60%' }
+      });
+    }, 100);
+  } else {
+    cardCatBox.innerHTML = '';
+  }
+}
+
 function renderHomePie() {
   const st = mStats(S.currentYear, S.currentMonth);
   if (Math.abs(st.exp) === 0) {
@@ -2365,13 +2407,17 @@ function renderTxList() {
         const cls = `tx-card${owner === 'shared' ? ' shared-tx' : ''}${owner === 'partner' ? ' partner-tx' : ''}`;
 
         let valHtml;
-        if (owner === 'shared' || owner === 'partner') {
-          valHtml = `<div class="tx-val ${isIn ? 'pos' : 'neg'}">${isIn ? '+' : ''}${fmt(t.amount)}</div>
-                     <div class="tx-val-sub">Você: ${fmt(me)}</div>`;
-        } else {
-          valHtml = `<div class="tx-val ${isIn ? 'pos' : 'neg'}">${isIn ? '+' : ''}${fmt(t.amount)}</div>
-                     <div class="tx-val-sub">→ ${fmt(running[t.id] || 0)}</div>`;
-        }
+         if (owner === 'shared' || owner === 'partner') {
+           valHtml = `<div class="tx-val ${isIn?'pos':'neg'}">${isIn?'+':''}${fmt(t.amount)}</div>
+                      <div class="tx-val-sub">Você: ${fmt(me)}</div>`;
+         } else if (isIn && !t.confirmed) {
+           // entrada pendente — não mostra saldo (que seria enganoso)
+           valHtml = `<div class="tx-val pos">+${fmt(t.amount)}</div>
+                      <div class="tx-val-sub" style="color:var(--orange)">⏳ pendente</div>`;
+         } else {
+           valHtml = `<div class="tx-val ${isIn?'pos':'neg'}">${isIn?'+':''}${fmt(t.amount)}</div>
+                      <div class="tx-val-sub">→ ${fmt(running[t.id]||0)}</div>`;
+         }
 
         const ownerBadgeHtml = S.partner.enabled && owner !== 'me'
           ? `<span class="owner-badge ${ownerL.bgClass}">${ownerL.emoji} ${owner === 'shared' ? 'Casal' : getPartnerName()}</span>`
@@ -2731,24 +2777,89 @@ function renderCardDetail() {
   const used = calcCardUsedLimit(card.id);
   const avail = card.limit - used;
   const pct = card.limit > 0 ? Math.min(100, (used / card.limit) * 100) : 0;
-  const grad = `linear-gradient(135deg, ${card.color || '#7C4DFF'} 0%, ${shadeColor(card.color || '#7C4DFF', -20)} 100%)`;
+  const grad = `linear-gradient(135deg,${card.color||'#7C4DFF'},${shadeColor(card.color||'#7C4DFF',-20)})`;
   const ownerL = getOwnerLabel(card.owner || 'me');
-  const ownerName = card.owner === 'partner' ? getPartnerName() : (card.owner === 'shared' ? 'Casal' : 'Eu');
-
-  const keys = getCardInvoiceKeys(card.id).reverse();
+  const ownerName = card.owner==='partner' ? getPartnerName() : card.owner==='shared' ? 'Casal' : 'Eu';
   const today = td();
 
-  // Dashboard por categoria
-  const purchases = S.cardPurchases.filter(p => p.cardId === card.id);
-  const byCat = {};
-  purchases.forEach(p => { byCat[p.category] = (byCat[p.category] || 0) + p.amount; });
-  const cats = Object.entries(byCat).sort((a, b) => b[1] - a[1]);
+  // ── FATURAS ──────────────────────────────
+  const keys = getCardInvoiceKeys(card.id).slice().reverse();
+  let invoicesHtml = keys.length === 0
+    ? `<div style="padding:0 20px;color:var(--text3);font-size:13px">Nenhuma fatura ainda.</div>`
+    : '';
 
+  keys.forEach(k => {
+    try {
+      const inv = getCardInvoice(card.id, k);
+      const paid = S.cardInvoicesPaid.find(ip => ip.cardId===card.id && ip.invoiceKey===k);
+      const totalShow = paid ? (paid.amountMe + paid.amountPartner) : inv.total;
+      const isCurrent = !paid && inv.total>0 && inv.dueDate && inv.dueDate>=today;
+      const isLate    = !paid && inv.total>0 && inv.dueDate && inv.dueDate<today;
+      const [iy,im] = k.split('-').map(Number);
+      const monthLabel = `${MS[im-1]}/${iy}`;
+      const dueDateStr = paid && paid.paidDate
+        ? `Paga em ${dateLabel(paid.paidDate)}`
+        : inv.dueDate ? `Vence ${dateLabel(inv.dueDate)}` : '—';
+
+      let splitRow = '';
+      if (S.partner.enabled) {
+        if (!paid) {
+          const s = getInvoiceSplit(card.id, k);
+          if (s.partner > 0) splitRow = `<div style="font-size:11px;color:var(--text3);margin-top:4px">Você: ${fmt(s.me)} · ${getPartnerName()}: ${fmt(s.partner)}</div>`;
+        } else if (paid.amountPartner > 0) {
+          splitRow = `<div style="font-size:11px;color:var(--text3);margin-top:4px">Você pagou: ${fmt(paid.amountMe)} · ${getPartnerName()} pagou: ${fmt(paid.amountPartner)}</div>`;
+        }
+      }
+
+      const actionBtn = paid
+        ? `<button class="unpay-btn" onclick="unpayInvoice('${card.id}','${k}')">↺ Desfazer</button>`
+        : inv.total > 0
+          ? `<button class="pay-btn" onclick="openPayInvoice('${card.id}','${k}')">💰 Pagar fatura</button>`
+          : `<div style="color:var(--text3);font-size:12px;padding:6px;flex:1;text-align:center">Fatura vazia</div>`;
+
+      const badge = paid ? '<div class="invoice-paid-badge">✓ PAGA</div>'
+        : isLate ? '<div class="invoice-paid-badge" style="background:var(--red-bg);color:var(--red)">ATRASADA</div>' : '';
+
+      invoicesHtml += `<div class="invoice-card ${paid?'paid':isCurrent?'current':''}">
+        <div class="invoice-header">
+          <div><div class="invoice-month">Fatura ${monthLabel}</div><div class="invoice-due">${dueDateStr}</div></div>
+          ${badge}
+        </div>
+        <div class="invoice-amount">${fmt(totalShow)}</div>
+        ${splitRow}
+        <div class="invoice-actions">${actionBtn}</div>
+      </div>`;
+    } catch(e) { console.error('fatura',k,e); }
+  });
+
+  // ── COMPRAS ───────────────────────────────
+  const purchases = S.cardPurchases.filter(p => p.cardId===card.id);
+  const sorted = [...purchases].sort((a,b) => b.date.localeCompare(a.date));
+  let purchasesHtml = sorted.length === 0
+    ? `<div style="color:var(--text3);font-size:13px;text-align:center;padding:20px">Nenhuma compra ainda</div>`
+    : '';
+  sorted.forEach(p => {
+    try {
+      const cat = getCat(p.category);
+      const bg = cat.bg || `rgba(128,128,128,.12)`;
+      const badge = p.installments > 1 ? `<span class="purchase-installment-badge">${p.installments}x</span>` : '';
+      purchasesHtml += `<div class="purchase-card" onclick="openPurchaseModal('${p.id}')">
+        <div class="tx-cat-dot" style="background:${bg};width:34px;height:34px;font-size:16px">${cat.emoji}</div>
+        <div class="purchase-info">
+          <div class="purchase-desc">${p.desc} ${badge}</div>
+          <div class="purchase-meta">${dateLabel(p.date)} · ${cat.name}</div>
+        </div>
+        <div class="purchase-amount">${fmt(p.amount)}</div>
+      </div>`;
+    } catch(e) { console.error('compra',p.id,e); }
+  });
+
+  // ── RENDER ────────────────────────────────
   document.getElementById('cardsContent').innerHTML = `
     <div class="card-detail-back" onclick="selectCard(null)">‹ Voltar</div>
     <div class="card-visual" style="background:${grad}">
       <div class="card-visual-head">
-        <div class="card-visual-name">${card.emoji || '💳'} ${card.name}</div>
+        <div class="card-visual-name">${card.emoji||'💳'} ${card.name}</div>
         <div style="display:flex;gap:6px">
           ${S.partner.enabled ? `<div class="card-visual-owner">${ownerL.emoji} ${ownerName}</div>` : ''}
           <div class="card-visual-owner" onclick="event.stopPropagation();openCardModal('${card.id}')" style="cursor:pointer">✏️</div>
@@ -2758,126 +2869,19 @@ function renderCardDetail() {
         <div class="card-visual-limit">Disponível</div>
         <div class="card-visual-amount">${fmt(avail)}</div>
         <div class="card-visual-bar"><div class="card-visual-bar-fill" style="width:${pct}%"></div></div>
-        <div class="card-visual-meta">
-          <span>Usado: ${fmt(used)}</span>
-          <span>Limite: ${fmt(card.limit)}</span>
-        </div>
-        <div style="margin-top:8px;font-size:11px;color:rgba(255,255,255,.85)">
-          Fecha dia ${card.closingDay} · Vence dia ${card.dueDay}
-        </div>
+        <div class="card-visual-meta"><span>Usado: ${fmt(used)}</span><span>Limite: ${fmt(card.limit)}</span></div>
+        <div style="margin-top:8px;font-size:11px;color:rgba(255,255,255,.85)">Fecha dia ${card.closingDay} · Vence dia ${card.dueDay}</div>
       </div>
     </div>
-
     <div class="section-title">📅 Faturas</div>
-    <div id="invoicesList"></div>
-
-    ${cats.length > 0 ? `
-      <div class="section-title">📊 Gastos por categoria</div>
-      <div class="chart-card"><div class="chart-area" style="height:200px"><canvas id="cardCatChart"></canvas></div></div>
-    ` : ''}
-
+    ${invoicesHtml}
     <div class="section-title">🧾 Compras (${purchases.length})</div>
-    <div id="cardPurchasesList" style="padding:0 20px 20px"></div>
-    <div style="padding:0 20px 20px">
-      <button class="btn-secondary" onclick="openPurchaseModal()">+ Nova compra</button>
-    </div>
+    <div style="padding:0 20px 20px">${purchasesHtml}</div>
+    <div style="padding:0 20px 20px"><button class="btn-secondary" onclick="openPurchaseModal()">+ Nova compra</button></div>
   `;
-
-  // Renderizar faturas
-  const invList = document.getElementById('invoicesList');
-  if (keys.length === 0) {
-    invList.innerHTML = `<div style="padding:0 20px;color:var(--text3);font-size:13px">Nenhuma fatura ainda.</div>`;
-  } else {
-    invList.innerHTML = keys.map(k => {
-      const inv = getCardInvoice(card.id, k);
-      const paid = S.cardInvoicesPaid.find(ip => ip.cardId === card.id && ip.invoiceKey === k);
-      const totalShow = paid ? (paid.amountMe + paid.amountPartner) : inv.total;
-      const isCurrent = !paid && inv.total > 0 && inv.dueDate >= today;
-      const isLate = !paid && inv.dueDate < today && inv.total > 0;
-      const cls = `invoice-card ${paid ? 'paid' : isCurrent ? 'current' : ''}`;
-      const [y, m] = k.split('-').map(Number);
-      const monthLabel = `${MS[m - 1]}/${y}`;
-
-      let split = '';
-      if (S.partner.enabled && !paid) {
-        const s = getInvoiceSplit(card.id, k);
-        if (s.partner > 0) {
-          split = `<div style="font-size:11px;color:var(--text3);margin-top:4px">Você: ${fmt(s.me)} · ${getPartnerName()}: ${fmt(s.partner)}</div>`;
-        }
-      } else if (paid && S.partner.enabled && paid.amountPartner > 0) {
-        split = `<div style="font-size:11px;color:var(--text3);margin-top:4px">Você pagou: ${fmt(paid.amountMe)} · ${getPartnerName()} pagou: ${fmt(paid.amountPartner)}</div>`;
-      }
-
-      return `<div class="${cls}">
-        <div class="invoice-header">
-          <div>
-            <div class="invoice-month">Fatura ${monthLabel}</div>
-            <div class="invoice-due">${paid ? `Paga em ${dateLabel(paid.paidDate)}` : `Vence ${inv.dueDate ? dateLabel(inv.dueDate) : '—'}`}</div>
-          </div>
-          ${paid ? '<div class="invoice-paid-badge">✓ PAGA</div>' : isLate ? '<div class="invoice-paid-badge" style="background:var(--red-bg);color:var(--red)">ATRASADA</div>' : ''}
-        </div>
-        <div class="invoice-amount">${fmt(totalShow)}</div>
-        ${split}
-        <div class="invoice-actions">
-          ${paid
-            ? `<button class="unpay-btn" onclick="unpayInvoice('${card.id}','${k}')">↺ Desfazer pagamento</button>`
-            : (inv.total > 0 ? `<button class="pay-btn" onclick="openPayInvoice('${card.id}','${k}')">💰 Pagar fatura</button>` : '<div style="color:var(--text3);font-size:12px;text-align:center;padding:6px;flex:1">Fatura vazia</div>')}
-        </div>
-      </div>`;
-    }).join('');
-  }
-
-  // Renderizar dashboard de categoria
-  if (cats.length > 0) {
-    setTimeout(() => {
-      if (charts.cardCat) charts.cardCat.destroy();
-      const ctx = document.getElementById('cardCatChart');
-      if (ctx) {
-        charts.cardCat = new Chart(ctx.getContext('2d'), {
-          type: 'doughnut',
-          data: {
-            labels: cats.map(([id]) => getCat(id).name),
-            datasets: [{
-              data: cats.map(([, v]) => v),
-              backgroundColor: cats.map(([id]) => getCat(id).color),
-              borderWidth: 0
-            }]
-          },
-          options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: { legend: { position: 'right', labels: { color: gc('var(--text2)'), boxWidth: 10, padding: 8, font: { size: 10 } } } },
-            cutout: '60%'
-          }
-        });
-      }
-    }, 50);
-  }
-
-  // Renderizar compras
-  const purchaseList = document.getElementById('cardPurchasesList');
-  const sortedPurchases = [...purchases].sort((a, b) => b.date.localeCompare(a.date));
-  if (sortedPurchases.length === 0) {
-    purchaseList.innerHTML = `<div style="color:var(--text3);font-size:13px;text-align:center;padding:20px">Nenhuma compra ainda</div>`;
-  } else {
-    purchaseList.innerHTML = sortedPurchases.map(p => {
-      const cat = getCat(p.category);
-      const bgStyle = cat.bg || hexToBg(cat.color);
-      const installmentBadge = (p.installments > 1) ? `<span class="purchase-installment-badge">${p.installments}x</span>` : '';
-      const ownerL = getOwnerLabel(p.owner || 'me');
-      const ownerBadgeHtml = S.partner.enabled && p.owner && p.owner !== 'me'
-        ? `<span class="owner-badge ${ownerL.bgClass}">${ownerL.emoji}</span>` : '';
-      return `<div class="purchase-card" onclick="openPurchaseModal('${p.id}')">
-        <div class="tx-cat-dot" style="background:${bgStyle};width:34px;height:34px;font-size:16px">${cat.emoji}</div>
-        <div class="purchase-info">
-          <div class="purchase-desc">${p.desc} ${installmentBadge} ${ownerBadgeHtml}</div>
-          <div class="purchase-meta">${dateLabel(p.date)} · ${cat.name}</div>
-        </div>
-        <div class="purchase-amount">${fmt(p.amount)}</div>
-      </div>`;
-    }).join('');
-  }
 }
+
+
 function renderCouplePage() {
   const c = document.getElementById('coupleContent');
 
@@ -2918,23 +2922,24 @@ function renderCouplePage() {
     </div>
 
     <div class="couple-stats-grid">
-      <div class="couple-stat">
-        <div class="couple-stat-label">📥 Entradas casal</div>
-        <div class="couple-stat-val" style="color:var(--green)">${fmt(cs.inc)}</div>
-      </div>
-      <div class="couple-stat">
-        <div class="couple-stat-label">📤 Gastos casal</div>
-        <div class="couple-stat-val" style="color:var(--red)">${fmt(Math.abs(cs.exp))}</div>
-      </div>
-      <div class="couple-stat">
-        <div class="couple-stat-label">👤 Você pagou</div>
-        <div class="couple-stat-val" style="color:var(--green)">${fmt(Math.abs(cs.paidMe))}</div>
-      </div>
-      <div class="couple-stat">
-        <div class="couple-stat-label">${getPartnerEmoji()} ${getPartnerName()} pagou</div>
-        <div class="couple-stat-val" style="color:var(--pink)">${fmt(Math.abs(cs.paidPartner))}</div>
-      </div>
-    </div>
+  <div class="couple-stat">
+    <div class="couple-stat-label">📥 Entradas confirmadas</div>
+    <div class="couple-stat-val" style="color:var(--green)">${fmt(cs.inc)}</div>
+    ${cs.incProj > 0 ? `<div style="font-size:10px;color:var(--orange);margin-top:3px">+ ${fmt(cs.incProj)} esperado</div>` : ''}
+  </div>
+  <div class="couple-stat">
+    <div class="couple-stat-label">📤 Gastos casal</div>
+    <div class="couple-stat-val" style="color:var(--red)">${fmt(Math.abs(cs.exp))}</div>
+  </div>
+  <div class="couple-stat">
+    <div class="couple-stat-label">👤 Você pagou</div>
+    <div class="couple-stat-val" style="color:var(--green)">${fmt(Math.abs(cs.paidMe))}</div>
+  </div>
+  <div class="couple-stat">
+    <div class="couple-stat-label">${getPartnerEmoji()} ${getPartnerName()} pagou</div>
+    <div class="couple-stat-val" style="color:var(--pink)">${fmt(Math.abs(cs.paidPartner))}</div>
+  </div>
+</div>
 
     <div class="section-title">🧾 Transações do mês (casal e dela)</div>
     <div id="coupleTxList" style="padding:0 20px 20px"></div>
