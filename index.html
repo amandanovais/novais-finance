@@ -2818,11 +2818,12 @@ function renderCardDetail() {
       const isLate    = !paid && inv.total>0 && inv.dueDate && inv.dueDate<today;
       const [iy,im] = k.split('-').map(Number);
       const monthLabel = `${MS[im-1]}/${iy}`;
-      const dueDateStr = paid && paid.paidDate
-        ? `Paga em ${dateLabel(paid.paidDate)}`
-        : inv.dueDate ? `Vence ${inv.dueDate ? dateLabel(inv.dueDate) : '—'}`
+      // ✅ CORRETO
+const dueDateStr = paid && paid.paidDate
+  ? `Paga em ${dateLabel(paid.paidDate)}`
+  : inv.dueDate ? `Vence ${dateLabel(inv.dueDate)}` : '—';
 
-      let splitRow = '';
+      var splitRow = '';
       if (S.partner.enabled) {
         if (!paid) {
           const s = getInvoiceSplit(card.id, k);
