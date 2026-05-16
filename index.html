@@ -2016,43 +2016,19 @@ function findNegDate() {
 // BUG-04: ALERTA "SEM RECEITA, SALDO ZERO EM X MESES"
 // Fórmula: saldo_atual / média_gastos_fixos_mensais = meses restantes
 // ═══════════════════════════════════════════════════════════════
-function calcNoIncomeAlert() {
-  const bal = curBal();
-  if (bal <= 0) return null;
 
-  // Calcular média de gastos fixos mensais (últimos 3 meses ou o que tiver)
-  const today = new Date();
-  let totalExp = 0;
-  let monthsCounted = 0;
-
-  for (let i = 0; i < 3; i++) {
-    let mm = today.getMonth() - i;
-    let yy = today.getFullYear();
-    if (mm < 0) { mm += 12; yy--; }
-    const p = pfx(yy, mm);
-    const exps = S.transactions.filter(t => t.date.startsWith(p) && t.amount < 0);
-    if (exps.length > 0) {
-      totalExp += exps.reduce((s, t) => s + Math.abs(t.amount), 0);
-      monthsCounted++;
-    }
-  }
-
-  if (monthsCounted === 0) return null;
-
-  const avgMonthlyExp = totalExp / monthsCounted;
-  if (avgMonthlyExp <= 0) return null;
-
-  const monthsLeft = bal / avgMonthlyExp;
-  const targetDate = new Date(today.getFullYear(), today.getMonth() + Math.floor(monthsLeft), 1);
-  const targetMonthName = MO[targetDate.getMonth()];
-  const targetYear = targetDate.getFullYear();
-
-  return {
-    months: monthsLeft,
-    monthName: targetMonthName,
-    year: targetYear,
-    avgExp: avgMonthlyExp
-  };
+ function calcNoIncomeAlert() {
+  const today = td();
+  const inc = S.transactions
+    .filter(t => t.amount > 0 && t.confirmed && t.date && t.date <= today)
+    .sort((a, b) => b.date.localeCompare(a.date));
+  if (inc.length === 0) return null;
+  const lastDate = inc[0].date;
+  if (!lastDate || typeof lastDate !== 'string') return null;
+  const [y, m, d] = lastDate.split('-').map(Number);
+  const diffDays = Math.floor((new Date() - new Date(y, m - 1, d)) / 86400000);
+  if (diffDays >= 30) return { days: diffDays, lastDate };
+  return null;
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -2154,7 +2130,7 @@ function renderHome() {
   }
 
   const noInc = calcNoIncomeAlert();
-  setEl('noIncomeAlertContainer', noInc ? `<div class="alert-card warning">💸 <div><strong>${noInc.days} dias sem entradas!</strong><br>Última: ${dateLabel(noInc.lastDate)}</div></div>` : '');
+  setEl('noIncomeAlertContainer', noInc ? `<div class="alert-card warning">💸 <div>`<strong>${noInc.days ?? '?'} dias sem entradas!</strong><br>Última: ${noInc.lastDate ? dateLabel(noInc.lastDate) : '—'}`;
 
 
   // CARD ALERTS (faturas vencendo em <= 10 dias)
