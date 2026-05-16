@@ -2370,14 +2370,14 @@ function renderTxList() {
   txs.forEach(t => { (days[t.date] = days[t.date] || []).push(t); });
   const running = calcRunning().map;
    // Injeta faturas virtuais do mês
-  const virtualFaturas = getVirtualFaturas().filter(v => v.date.startsWith(pfx(S.currentYear, S.currentMonth)));
-  // Só adiciona se ainda não foi paga (já filtrado no helper) e não estiver no filtro de excluir
-  if (S.txView === 'all' || S.txView === 'future' || S.txView === 'expenses') {
-    virtualFaturas.forEach(v => {
-      // evita duplicar se já existir transação real de fatura paga
-      if (!txs.find(t => t.id === v.id)) txs.push(v);
-    });
-  }
+  // Injeta faturas virtuais do mês
+const virtualFaturas = getVirtualFaturas().filter(v => v.date.startsWith(pfx(S.currentYear, S.currentMonth)));
+if (S.txView === 'all' || S.txView === 'future' || S.txView === 'expenses') {
+  virtualFaturas.forEach(v => {
+    if (!txs.find(t => t.id === v.id)) txs.push(v);
+  });
+}
+
   list.innerHTML = Object.entries(days).map(([d, items]) => {
     // total do dia = soma da parte do user
     const tot = items.reduce((s, t) => s + getSplit(t).me, 0);
@@ -3541,35 +3541,54 @@ function savePartner() {
   sync(); renderAll();
   showToast(`${name} salva! ${emoji}`);
 }
-   function getVirtualFaturas() {
+function getVirtualFaturas() {
   const entries = [];
   S.cards.forEach(card => {
     getCardInvoiceKeys(card.id).forEach(k => {
-      // ignora faturas já pagas (já virou transação real)
       const paid = S.cardInvoicesPaid.find(ip => ip.cardId===card.id && ip.invoiceKey===k);
       if (paid) return;
       const inv = getCardInvoice(card.id, k);
       if (!inv || inv.total===0 || !inv.dueDate) return;
       const split = getInvoiceSplit(card.id, k);
       const [iy,im] = k.split('-').map(Number);
-      entries.push({
-        id: `vf_${card.id}_${k}`,
-        desc: `Fatura ${card.name} (${MS[im-1]}/${iy})`,
-        amount: -(split.me || inv.total), // parte do usuário
-        amountTotal: inv.total,
-        date: inv.dueDate,
-        category: 'fatura',
-        confirmed: false,
-        owner: 'me',
-        isVirtual: true,   // flag pra distinguir das reais
-        cardId: card.id,
-        invoiceKey: k,
-        split
-      });
+      const label = `${MS[im-1]}/${iy}`;
+
+      // Minha parte (só cria se eu tenho algo a pagar)
+      if (split.me > 0) {
+        entries.push({
+          id: `vf_${card.id}_${k}_me`,
+          desc: `Fatura ${card.name} (${label})`,
+          amount: -split.me,
+          date: inv.dueDate,
+          category: 'fatura',
+          confirmed: false,
+          owner: 'me',
+          isVirtual: true,
+          cardId: card.id,
+          invoiceKey: k
+        });
+      }
+
+      // Parte da parceira (só se modo casal ativo e ela tem algo a pagar)
+      if (split.partner > 0 && S.partner.enabled) {
+        entries.push({
+          id: `vf_${card.id}_${k}_partner`,
+          desc: `Fatura ${card.name} (${label})`,
+          amount: -split.partner,
+          date: inv.dueDate,
+          category: 'fatura',
+          confirmed: false,
+          owner: 'partner',
+          isVirtual: true,
+          cardId: card.id,
+          invoiceKey: k
+        });
+      }
     });
   });
   return entries;
 }
+
    function getInvoiceSplit(cardId, invoiceKey) {
   const installments = getCardOpenInstallments(cardId).filter(i => i.invoiceKey === invoiceKey);
   let me = 0, partner = 0;
