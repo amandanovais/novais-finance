@@ -1498,7 +1498,7 @@ function listenData() {
   db.ref('.info/connected').on('value', s => {
     document.getElementById('syncDot').className = s.val() ? 'sync-dot' : 'sync-dot off';
   });
-S.objectives = d.objectives ? Object.values(d.objectives) : [];
+
   dbListener = db.ref(dbPath).on('value', snap => {
     const d = snap.val();
     if (d) {
@@ -1512,7 +1512,7 @@ S.objectives = d.objectives ? Object.values(d.objectives) : [];
       S.streakRecord     = d.streakRecord     || 0;
       S.streakRecordDate = d.streakRecordDate || '';
       S.migrated         = d.migrated         || false;
-
+      S.objectives = d.objectives ? Object.values(d.objectives) : [];
       // Categorias custom
       S.customCats = d.customCats ? Object.values(d.customCats) : [];
       customCats   = S.customCats;
