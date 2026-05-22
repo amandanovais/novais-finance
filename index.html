@@ -3105,7 +3105,7 @@ function renderTxList() {
         } else {
           const rb = running[t.id];
           valHtml=`<div class="tx-val ${isIn?'pos':'neg'}">${isIn?'+':''}${fmt(t.amount)}</div>
-                   ${rb!==undefined?`<div class="tx-val-sub" style="color:${rb>=0?'var(--cyan)':'var(--red)'}">→ ${fmtShort(rb)}</div>`:''}`;
+                   ${rb!==undefined?`<div class="tx-val-sub" style="color:${rb>=0?'var(--cyan)':'var(--red)'}">→ ${fmt(rb)}</div>`:''}`;
         }
 
         const ownerBadge = S.partner.enabled&&owner!=='me'
