@@ -223,6 +223,18 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',-apple-system,sa
 .aperto-item-desc{color:var(--text2)}
 .aperto-item-val{font-family:'Space Mono',monospace;font-weight:700;color:var(--red)}
 .aperto-safe{font-size:13px;font-weight:700;color:var(--green);margin-top:10px;padding:10px;background:var(--green-bg);border-radius:10px;text-align:center}
+.obj-card{margin:0 20px 10px;padding:16px;background:var(--surface);border:1px solid var(--border);border-radius:16px;cursor:pointer;transition:all .15s}
+.obj-card:active{transform:scale(.98)}
+.obj-header{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.obj-icon{width:44px;height:44px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+.obj-name{font-size:15px;font-weight:700}
+.obj-deadline{font-size:11px;color:var(--text3);margin-top:2px}
+.obj-body{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:10px}
+.obj-current{font-family:'Space Mono',monospace;font-size:18px;font-weight:700}
+.obj-target{font-size:11px;color:var(--text3);text-align:right}
+.obj-months{font-family:'Space Mono',monospace;font-size:12px;font-weight:700;color:var(--purple)}
+.obj-add-btn{margin:0 20px 10px;padding:14px;border-radius:14px;background:var(--surface2);border:2px dashed var(--border);color:var(--text3);font-size:13px;font-weight:600;cursor:pointer;text-align:center;transition:all .15s}
+.obj-add-btn:active{transform:scale(.97)}
 /* ══════════════════════════════════════════
    RECURRING DETECTION
 ══════════════════════════════════════════ */
@@ -670,6 +682,9 @@ textarea.form-input{resize:none;min-height:60px;font-size:13px}
   <!-- Meta mensal e economia -->
   <div id="goalContainer"></div>
   <div id="savingsGoalContainer"></div>
+  <div class="section-title" id="objTitle" style="display:none">🎯 Metas de objetivo</div>
+<div id="objectivesContainer"></div>
+<div class="obj-add-btn" id="objAddBtn" onclick="openObjectiveModal()" style="display:none">+ Nova meta de objetivo</div>
 
   <!-- Orçamento por categoria -->
   <div id="budgetAlertsContainer"></div>
@@ -1409,6 +1424,7 @@ let S = {
   theme:         'dark',
   selectedCardId: null,
   coupleView:    'overview',
+  objectives: [], // [{id,name,emoji,targetAmount,currentAmount,monthlyAmount,deadline,color}]
 };
 
 // Vars de edição — fora do state pq não precisam ser persistidas
@@ -1482,7 +1498,7 @@ function listenData() {
   db.ref('.info/connected').on('value', s => {
     document.getElementById('syncDot').className = s.val() ? 'sync-dot' : 'sync-dot off';
   });
-
+S.objectives = d.objectives ? Object.values(d.objectives) : [];
   dbListener = db.ref(dbPath).on('value', snap => {
     const d = snap.val();
     if (d) {
@@ -1556,7 +1572,8 @@ function sync() {
   S.investMovements.forEach(v=> { im[String(v.id).replace(/\./g,'_')]   = v;  });
   // budgets já é objeto {catId: valor}
   Object.assign(bud, S.budgets);
-
+const obj={};
+S.objectives.forEach(o=>{obj[String(o.id).replace(/\./g,'_')]=o;});
   db.ref(dbPath).set({
     initialBalance:   S.initialBalance,
     transactions:     tx,
@@ -1580,6 +1597,7 @@ function sync() {
     migrated:         S.migrated,
     updatedAt:        Date.now(),
     modoAperto: S.modoAperto,
+    objectives: obj,
   });
 }
 // ═══════════════════════════════════════════════════════════════
@@ -1951,6 +1969,7 @@ function getEmergencyFundTarget() {
 // Sugestão: quanto investir esse mês?
 function getInvestSuggestion() {
   const bal = curBal();
+  renderObjectives();
   // soma acordos do mês
   const today = td();
   const [y,m] = today.split('-').map(Number);
@@ -2791,6 +2810,205 @@ function calcModoAperto(){
 
   return{deficit,gastoAtual,receitaMes,compromissos,naoEssenciais,limiteDiario,diasRestantes,saldoAtual};
 }
+// Cobrança duplicada: mesmo desc, mesmo valor, dentro de 7 dias
+function calcDuplicateAlert(){
+  const today=td();
+  const [y,m,d]=today.split('-').map(Number);
+  const weekAgo=new Date(y,m-1,d-7);
+  const recent=S.transactions.filter(t=>{
+    const [ty,tm,td2]=t.date.split('-').map(Number);
+    return new Date(ty,tm-1,td2)>=weekAgo && t.amount<0;
+  });
+  const seen={};
+  const dupes=[];
+  recent.forEach(t=>{
+    const key=t.desc.trim().toLowerCase()+'_'+Math.round(Math.abs(t.amount));
+    if(seen[key]&&seen[key]!==t.id) dupes.push({desc:t.desc,amount:Math.abs(t.amount)});
+    else seen[key]=t.id;
+  });
+  return [...new Map(dupes.map(d=>[d.desc,d])).values()].slice(0,3);
+}
+
+// Gasto acima da média: compara mês atual vs média dos 3 anteriores por categoria
+function calcAboveAverageAlerts(){
+  const today=td();
+  const [y,m]=today.split('-').map(Number);
+  const curP=pfx(y,m-1);
+  const alerts=[];
+  getAllCats().forEach(cat=>{
+    const curSpent=S.transactions
+      .filter(t=>t.date.startsWith(curP)&&t.amount<0&&t.category===cat.id)
+      .reduce((s,t)=>s+Math.abs(getSplit(t).me),0);
+    if(curSpent===0) return;
+    let total=0,months=0;
+    for(let i=1;i<=3;i++){
+      let mm=m-1-i,yy=y; if(mm<0){mm+=12;yy--;}
+      const spent=S.transactions
+        .filter(t=>t.date.startsWith(pfx(yy,mm))&&t.amount<0&&t.category===cat.id)
+        .reduce((s,t)=>s+Math.abs(getSplit(t).me),0);
+      if(spent>0){total+=spent;months++;}
+    }
+    if(months===0) return;
+    const avg=total/months;
+    const pct=((curSpent-avg)/avg)*100;
+    if(pct>=40) alerts.push({cat,curSpent,avg,pct:Math.round(pct)});
+  });
+  return alerts.sort((a,b)=>b.pct-a.pct).slice(0,3);
+}
+
+// Janela segura: quanto posso gastar hoje sem ficar negativo até o fim do mês
+function calcSafeSpend(){
+  const today=td();
+  const [y,m,d]=today.split('-').map(Number);
+  const diasRestantes=new Date(y,m,0).getDate()-d+1;
+  const bal=curBal();
+  const compromissos=getVirtualFaturas()
+    .filter(v=>v.date>today&&v.owner==='me')
+    .reduce((s,v)=>s+Math.abs(v.amount),0)
+    +S.acordos.filter(a=>a.paidInstallments<a.totalInstallments)
+     .reduce((s,a)=>s+a.installmentAmount,0);
+  const disponivel=bal-compromissos;
+  if(disponivel<=0) return 0;
+  return disponivel/Math.max(1,diasRestantes);
+}
+let objEditColor='#7C4DFF';
+
+function renderObjColorPicker(){
+  const el=document.getElementById('objColorPicker');
+  if(!el)return;
+  el.innerHTML=CARD_COLORS.map(c=>
+    `<div class="color-dot ${c.hex===objEditColor?'selected':''}" style="background:${c.hex};width:28px;height:28px" onclick="objEditColor='${c.hex}';renderObjColorPicker()"></div>`
+  ).join('');
+}
+
+function openObjectiveModal(editId){
+  if(editId){
+    const o=S.objectives.find(x=>x.id===editId);if(!o)return;
+    document.getElementById('objModalTitle').textContent='Editar meta';
+    document.getElementById('objName').value=o.name;
+    document.getElementById('objEmoji').value=o.emoji||'🎯';
+    document.getElementById('objTarget').value=o.targetAmount;
+    document.getElementById('objCurrent').value=o.currentAmount||0;
+    document.getElementById('objMonthly').value=o.monthlyAmount||0;
+    document.getElementById('objDeadline').value=o.deadline||'';
+    document.getElementById('objEditId').value=o.id;
+    document.getElementById('objDeleteBtn').style.display='block';
+    objEditColor=o.color||'#7C4DFF';
+  } else {
+    document.getElementById('objModalTitle').textContent='Nova meta';
+    ['objName','objTarget','objCurrent','objMonthly','objDeadline'].forEach(id=>document.getElementById(id).value='');
+    document.getElementById('objEmoji').value='🎯';
+    document.getElementById('objEditId').value='';
+    document.getElementById('objDeleteBtn').style.display='none';
+    objEditColor='#7C4DFF';
+  }
+  renderObjColorPicker();updateObjCalc();openModal('objectiveModal');
+}
+
+function updateObjCalc(){
+  const target =parseFloat(document.getElementById('objTarget').value)||0;
+  const current=parseFloat(document.getElementById('objCurrent').value)||0;
+  const monthly=parseFloat(document.getElementById('objMonthly').value)||0;
+  const prev=document.getElementById('objCalcPreview');
+  if(target>0&&monthly>0){
+    const falta=Math.max(0,target-current);
+    const months=Math.ceil(falta/monthly);
+    const today=new Date();
+    const arrive=new Date(today.getFullYear(),today.getMonth()+months,1);
+    const arriveStr=`${MS[arrive.getMonth()]}/${arrive.getFullYear()}`;
+    const pct=Math.min(100,Math.round((current/target)*100));
+    prev.style.display='block';
+    prev.innerHTML=`📅 Chega em: <strong>${arriveStr}</strong> (${months} meses)<br>
+      💰 Falta: <strong>${fmt(falta)}</strong> · ${pct}% concluído`;
+  } else { prev.style.display='none'; }
+}
+
+function saveObjective(){
+  const name=document.getElementById('objName').value.trim();
+  const emoji=document.getElementById('objEmoji').value.trim()||'🎯';
+  const target=parseFloat(document.getElementById('objTarget').value)||0;
+  const current=parseFloat(document.getElementById('objCurrent').value)||0;
+  const monthly=parseFloat(document.getElementById('objMonthly').value)||0;
+  const deadline=document.getElementById('objDeadline').value||'';
+  const editId=document.getElementById('objEditId').value;
+  if(!name||target<=0){alert('Preencha nome e valor da meta!');return;}
+  if(editId){
+    const o=S.objectives.find(x=>x.id===editId);if(!o)return;
+    Object.assign(o,{name,emoji,targetAmount:target,currentAmount:current,monthlyAmount:monthly,deadline,color:objEditColor});
+  } else {
+    S.objectives.push({id:genId(),name,emoji,targetAmount:target,currentAmount:current,monthlyAmount:monthly,deadline,color:objEditColor,createdAt:Date.now()});
+  }
+  closeModal('objectiveModal');sync();renderHome();
+  showToast(editId?'Meta atualizada!':'Meta criada! 🎯');
+}
+
+function deleteObjective(){
+  const editId=document.getElementById('objEditId').value;if(!editId)return;
+  const o=S.objectives.find(x=>x.id===editId);if(!o)return;
+  if(!confirm(`Excluir meta "${o.name}"?`))return;
+  S.objectives=S.objectives.filter(x=>x.id!==editId);
+  closeModal('objectiveModal');sync();renderHome();showToast('Meta excluída');
+}
+
+function renderObjectives(){
+  const container=document.getElementById('objectivesContainer');
+  const title=document.getElementById('objTitle');
+  const addBtn=document.getElementById('objAddBtn');
+  if(!container)return;
+  if(title) title.style.display='block';
+  if(addBtn) addBtn.style.display='block';
+  if(S.objectives.length===0){container.innerHTML='';return;}
+
+  container.innerHTML=S.objectives.map(o=>{
+    const falta=Math.max(0,o.targetAmount-o.currentAmount);
+    const pct=Math.min(100,Math.round(((o.currentAmount||0)/o.targetAmount)*100));
+    const months=o.monthlyAmount>0?Math.ceil(falta/o.monthlyAmount):null;
+    const bg=hexToBg(o.color||'#7C4DFF');
+    const clr=o.color||'#7C4DFF';
+
+    let arriveStr='';
+    if(months!==null){
+      const arrive=new Date();
+      arrive.setMonth(arrive.getMonth()+months);
+      arriveStr=`${MS[arrive.getMonth()]}/${arrive.getFullYear()}`;
+    }
+
+    // Alerta de prazo
+    let deadlineAlert='';
+    if(o.deadline&&months!==null){
+      const [dy,dm,dd]=o.deadline.split('-').map(Number);
+      const deadlineDate=new Date(dy,dm-1,dd);
+      const arriveDate=new Date(); arriveDate.setMonth(arriveDate.getMonth()+months);
+      if(arriveDate>deadlineDate) deadlineAlert=`<div style="font-size:11px;color:var(--red);margin-top:6px">⚠️ No ritmo atual não chega até ${dateLabel(o.deadline)}</div>`;
+    }
+
+    return `<div class="obj-card" onclick="openObjectiveModal('${o.id}')">
+      <div class="obj-header">
+        <div class="obj-icon" style="background:${bg}">${o.emoji||'🎯'}</div>
+        <div style="flex:1">
+          <div class="obj-name">${o.name}</div>
+          <div class="obj-deadline">${arriveStr?`Chega em ${arriveStr}`:''} ${o.deadline?'· Prazo: '+dateLabel(o.deadline):''}</div>
+        </div>
+        ${pct>=100?'<div style="font-size:20px">🏆</div>':''}
+      </div>
+      <div class="obj-body">
+        <div>
+          <div class="obj-current" style="color:${clr}">${fmt(o.currentAmount||0)}</div>
+          <div style="font-size:10px;color:var(--text3);margin-top:2px">de ${fmt(o.targetAmount)}</div>
+        </div>
+        <div class="obj-target">
+          ${months!==null?`<div class="obj-months">${months} meses</div>`:''}
+          ${o.monthlyAmount>0?`<div style="font-size:10px;color:var(--text3);">${fmt(o.monthlyAmount)}/mês</div>`:''}
+        </div>
+      </div>
+      <div class="progress-bar"><div class="progress-fill green" style="width:${pct}%;background:${clr}"></div></div>
+      <div style="display:flex;justify-content:space-between;margin-top:6px;font-size:11px;color:var(--text3)">
+        <span>${pct}% · falta ${fmt(falta)}</span>
+      </div>
+      ${deadlineAlert}
+    </div>`;
+  }).join('');
+}
 // ═══════════════════════════════════════════════════════════════
 // HOME
 // ═══════════════════════════════════════════════════════════════
@@ -2845,7 +3063,37 @@ function renderHome() {
         <div style="font-size:18px">›</div></div>`;
     });
   }
+// ── COBRANÇA DUPLICADA ───────────────────────────────────────
+const dupes=calcDuplicateAlert();
+if(dupes.length>0){
+  dupes.forEach(dupe=>{
+    aBox.innerHTML+=`<div class="alert-card warning">🔁 <div>
+      <strong>Cobrança duplicada?</strong><br>
+      <span style="font-size:11px">"${dupe.desc}" aparece 2x essa semana (${fmt(dupe.amount)})</span>
+    </div></div>`;
+  });
+}
 
+// ── GASTO ACIMA DA MÉDIA ─────────────────────────────────────
+const aboveAvg=calcAboveAverageAlerts();
+aboveAvg.forEach(a=>{
+  aBox.innerHTML+=`<div class="alert-card warning">${a.cat.emoji} <div>
+    <strong>${a.cat.name} ${a.pct}% acima da média</strong><br>
+    <span style="font-size:11px">Esse mês: ${fmt(a.curSpent)} · Média: ${fmt(a.avg)}</span>
+  </div></div>`;
+});
+
+// ── JANELA SEGURA ────────────────────────────────────────────
+const safe=calcSafeSpend();
+if(safe>0){
+  setEl('noIncomeAlertContainer',
+    (document.getElementById('noIncomeAlertContainer').innerHTML||'')+
+    `<div class="alert-card success">✅ <div>
+      <strong>Seguro gastar hoje: ${fmt(safe)}</strong><br>
+      <span style="font-size:11px">Cobre compromissos e divide o restante pelos dias do mês</span>
+    </div></div>`
+  );
+}
   // ── 4. ALERTAS DE ACORDOS (parcela do mês) ──────────────────
   const acBox = document.getElementById('acordoAlertContainer');
   acBox.innerHTML = '';
@@ -4707,5 +4955,26 @@ document.addEventListener('DOMContentLoaded', () => {
   initImpactCard();
 });
 </script>
+<div class="modal-overlay" id="objectiveModal"><div class="modal">
+  <div class="modal-handle"></div>
+  <div class="modal-title"><span id="objModalTitle">Nova meta</span><div class="modal-close" onclick="closeModal('objectiveModal')">✕</div></div>
+  <div class="form-group"><label class="form-label">Nome da meta</label><input class="form-input" id="objName" placeholder="Ex: Viagem, Casamento, iPhone..."></div>
+  <div class="form-row">
+    <div class="form-group"><label class="form-label">Emoji</label><input class="form-input" id="objEmoji" placeholder="✈️" maxlength="4"></div>
+    <div class="form-group"><label class="form-label">Cor</label><div class="color-picker" id="objColorPicker"></div></div>
+  </div>
+  <div class="form-row">
+    <div class="form-group"><label class="form-label">Meta (R$)</label><input class="form-input" id="objTarget" type="number" step="0.01" placeholder="3000" oninput="updateObjCalc()"></div>
+    <div class="form-group"><label class="form-label">Já guardei (R$)</label><input class="form-input" id="objCurrent" type="number" step="0.01" placeholder="0" oninput="updateObjCalc()"></div>
+  </div>
+  <div class="form-row">
+    <div class="form-group"><label class="form-label">Guardar/mês (R$)</label><input class="form-input" id="objMonthly" type="number" step="0.01" placeholder="300" oninput="updateObjCalc()"></div>
+    <div class="form-group"><label class="form-label">Prazo (opcional)</label><input class="form-input" id="objDeadline" type="date"></div>
+  </div>
+  <div id="objCalcPreview" style="display:none;padding:12px;background:var(--surface2);border-radius:10px;margin-bottom:10px;font-size:12px;color:var(--text2);line-height:1.8"></div>
+  <input type="hidden" id="objEditId" value="">
+  <button class="btn-primary" onclick="saveObjective()">💾 Salvar meta</button>
+  <button class="btn-danger" id="objDeleteBtn" style="display:none" onclick="deleteObjective()">🗑️ Excluir meta</button>
+</div></div>
 </body>
 </html>
