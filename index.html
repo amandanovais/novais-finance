@@ -214,6 +214,15 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',-apple-system,sa
 .cut-suggestion-detail{font-size:12px;color:var(--text2);line-height:1.5}
 .cut-suggestion-gain{font-family:'Space Mono',monospace;font-size:14px;font-weight:700;color:var(--green);margin-top:6px}
 
+/* Modo aperto */
+.aperto-card{margin:0 20px 10px;padding:16px;background:linear-gradient(135deg,rgba(255,82,82,.15),rgba(255,145,0,.1));border:1px solid rgba(255,82,82,.3);border-radius:16px}
+.aperto-title{font-size:15px;font-weight:800;color:var(--red);margin-bottom:4px;display:flex;align-items:center;justify-content:space-between}
+.aperto-sub{font-size:12px;color:var(--text2);margin-bottom:12px;line-height:1.5}
+.aperto-item{display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(255,82,82,.15);font-size:12px}
+.aperto-item:last-child{border-bottom:none}
+.aperto-item-desc{color:var(--text2)}
+.aperto-item-val{font-family:'Space Mono',monospace;font-weight:700;color:var(--red)}
+.aperto-safe{font-size:13px;font-weight:700;color:var(--green);margin-top:10px;padding:10px;background:var(--green-bg);border-radius:10px;text-align:center}
 /* ══════════════════════════════════════════
    RECURRING DETECTION
 ══════════════════════════════════════════ */
@@ -649,6 +658,9 @@ textarea.form-input{resize:none;min-height:60px;font-size:13px}
   <!-- Sugestões de corte -->
   <div id="cutSuggestContainer"></div>
 
+    <!-- Modo aperto -->
+  <div id="apetoContainer"></div>
+
   <!-- Resumo casal -->
   <div id="coupleSummaryContainer"></div>
 
@@ -808,6 +820,15 @@ textarea.form-input{resize:none;min-height:60px;font-size:13px}
 <div class="page" id="pageSettings">
   <div class="section-title">💰 Finanças</div>
   <div class="settings-section">
+    <div class="settings-section" style="margin-top:10px">
+  <div class="toggle-row">
+    <div>
+      <div style="font-size:14px;font-weight:700">😰 Modo aperto</div>
+      <div style="font-size:11px;color:var(--text3);margin-top:2px">Ativa sugestões agressivas de corte para fechar o mês no azul</div>
+    </div>
+    <div class="toggle-switch" id="apetoToggle" onclick="toggleModoAperto()"></div>
+  </div>
+</div>
     <div class="settings-title">Saldo inicial</div>
     <input class="form-input" id="setInitBal" type="number" placeholder="0,00" inputmode="decimal" step="0.01">
     <button class="btn-primary" style="margin-top:10px" onclick="saveInitBal()">Salvar</button>
@@ -1359,6 +1380,8 @@ let S = {
   // { [catId]: limiteMensal }
   budgets: {},
 
+  modoAperto: false,
+
   // ── Cartões ────────────────────────────────────────────────────
   cards:             [],   // [{id,name,emoji,limit,closingDay,dueDay,owner,color,archived,createdAt}]
   cardPurchases:     [],   // [{id,cardId,desc,amount,date,installments,category,notes,owner,splitMe,splitPartner,createdAt}]
@@ -1499,7 +1522,8 @@ function listenData() {
 
       // ── Migração: owner em transações antigas ──
       S.transactions.forEach(t => { if (!t.owner) t.owner = 'me'; });
-
+      // Modo aperto
+      S.modoAperto = d.modoAperto || false;
       // ── Migração confirmed ──
       if (!S.migrated) {
         let needs = false;
@@ -1555,6 +1579,7 @@ function sync() {
     streakRecordDate: S.streakRecordDate,
     migrated:         S.migrated,
     updatedAt:        Date.now(),
+    modoAperto: S.modoAperto,
   });
 }
 // ═══════════════════════════════════════════════════════════════
@@ -2718,6 +2743,54 @@ function renderSalaryInfo() {
   const diff = Math.round((new Date(ny,nm-1,nd)-new Date())/86400000);
   el.textContent = `Próximo: ${dateLabel(nextDate)} (em ${diff} dias) · ${fmt(S.salary.amount)}`;
 }
+function toggleModoAperto(){
+  S.modoAperto=!S.modoAperto;
+  const el=document.getElementById('apetoToggle');
+  if(el) el.className='toggle-switch'+(S.modoAperto?' on':'');
+  sync();renderAll();
+  showToast(S.modoAperto?'😰 Modo aperto ativado!':'Modo aperto desativado');
+}
+
+function calcModoAperto(){
+  if(!S.modoAperto) return null;
+  const today=td();
+  const [y,m,d]=today.split('-').map(Number);
+  const diasRestantes=new Date(y,m,0).getDate()-d;
+  const p=pfx(y,m-1);
+
+  // Quanto já gastei esse mês
+  const gastoAtual=S.transactions
+    .filter(t=>t.date.startsWith(p)&&t.amount<0)
+    .reduce((s,t)=>s+Math.abs(getSplit(t).me),0);
+
+  // Receita confirmada + projetada do mês
+  const receitaMes=S.transactions
+    .filter(t=>t.date.startsWith(p)&&t.amount>0)
+    .reduce((s,t)=>s+(t.confirmed?getSplit(t).me:0),0);
+
+  // Faturas e acordos ainda a pagar no mês
+  const compromissos=getVirtualFaturas()
+    .filter(v=>v.date.startsWith(p)&&v.owner==='me')
+    .reduce((s,v)=>s+Math.abs(v.amount),0)
+    + S.acordos.filter(a=>a.paidInstallments<a.totalInstallments)
+      .reduce((s,a)=>s+a.installmentAmount,0);
+
+  const saldoAtual=curBal();
+  const projecaoFim=receitaMes-gastoAtual-compromissos;
+  const deficit=projecaoFim<0?Math.abs(projecaoFim):0;
+
+  // Gastos não-essenciais do mês atual (candidatos a cortar)
+  const naoEssenciais=S.transactions
+    .filter(t=>t.date.startsWith(p)&&t.amount<0&&STREAK_CATS.includes(t.category))
+    .sort((a,b)=>a.amount-b.amount)
+    .slice(0,5);
+
+  // Limite seguro diário para os dias restantes
+  const disponivelHoje=Math.max(0,saldoAtual-compromissos);
+  const limiteDiario=diasRestantes>0?disponivelHoje/diasRestantes:0;
+
+  return{deficit,gastoAtual,receitaMes,compromissos,naoEssenciais,limiteDiario,diasRestantes,saldoAtual};
+}
 // ═══════════════════════════════════════════════════════════════
 // HOME
 // ═══════════════════════════════════════════════════════════════
@@ -2878,6 +2951,42 @@ function renderHome() {
         <div class="cut-suggestion-gain">+ ${fmt(c.totalSaved)} economizados</div>
       </div>`).join('');
   } else { cutBox.innerHTML=''; }
+
+  // ── MODO APERTO ──────────────────────────────────────────────
+const apetoBox=document.getElementById('apetoContainer');
+if(apetoBox){
+  const ap=calcModoAperto();
+  if(ap){
+    const itens=ap.naoEssenciais.length>0
+      ?ap.naoEssenciais.map(t=>`<div class="aperto-item">
+          <span class="aperto-item-desc">✂️ ${t.desc}</span>
+          <span class="aperto-item-val">${fmt(Math.abs(t.amount))}</span>
+        </div>`).join('')
+      :'<div style="font-size:12px;color:var(--text3);padding:8px 0">Nenhum gasto não-essencial encontrado este mês</div>';
+
+    const deficitHtml=ap.deficit>0
+      ?`<div style="font-size:12px;color:var(--red);margin-bottom:8px">⚠️ Projeção: <strong>-${fmt(ap.deficit)}</strong> no fim do mês</div>`
+      :'';
+
+    apetoBox.innerHTML=`<div class="aperto-card">
+      <div class="aperto-title">
+        😰 Modo Aperto ativo
+        <span style="font-size:11px;font-weight:600;color:var(--text3)">${ap.diasRestantes} dias restantes</span>
+      </div>
+      <div class="aperto-sub">
+        Receita: ${fmt(ap.receitaMes)} · Comprometido: ${fmt(ap.compromissos)}<br>
+        ${deficitHtml}
+        Gastos não-essenciais que podem ser cortados:
+      </div>
+      ${itens}
+      <div class="aperto-safe">
+        💡 Limite seguro hoje: ${fmt(ap.limiteDiario)}/dia
+      </div>
+    </div>`;
+  } else {
+    apetoBox.innerHTML='';
+  }
+}
 
   // ── 9. RESUMO CASAL ─────────────────────────────────────────
   const csBox = document.getElementById('coupleSummaryContainer');
@@ -4272,6 +4381,8 @@ function renderSettings() {
   document.getElementById('setPartnerName').value=S.partner.name||'';
   document.getElementById('setPartnerEmoji').value=S.partner.emoji||'💜';
   document.getElementById('setPartnerInitBal').value=S.partner.initialBalance||'';
+  const at=document.getElementById('apetoToggle');
+if(at) at.className='toggle-switch'+(S.modoAperto?' on':'');
 }
 
 function renderBudgetList() {
