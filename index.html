@@ -279,7 +279,7 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',-apple-system,sa
 .day-balance{font-family:'Space Mono',monospace;font-size:10px;color:var(--text3);margin-top:1px}
 .day-group-today{background:rgba(0,200,83,.05);border:1px solid rgba(0,200,83,.15);border-radius:14px;padding:0 10px;margin-bottom:8px}
 .day-label-today{font-size:13px;font-weight:800;color:var(--green)!important}
-.today-jump{position:sticky;top:0;z-index:50;margin:0 20px 8px;padding:8px 14px;background:var(--green);color:#000;font-size:12px;font-weight:800;border-radius:10px;text-align:center;cursor:pointer;display:none;border:none;width:calc(100% - 40px);font-family:'Inter',sans-serif}
+.today-jump{display:none;border:none;background:none;padding:0;cursor:pointer;font-family:'Inter',sans-serif}
 .month-summary-bar{display:flex;gap:8px;padding:0 20px 10px;overflow-x:auto;scrollbar-width:none}
 .month-summary-bar::-webkit-scrollbar{display:none}
 .month-sum-chip{flex-shrink:0;padding:6px 12px;border-radius:20px;font-size:11px;font-weight:700;background:var(--surface);border:1px solid var(--border)}
@@ -720,7 +720,7 @@ textarea.form-input{resize:none;min-height:60px;font-size:13px}
   </div>
   <div class="view-toggle">
     <div class="month-summary-bar" id="monthSummaryBar"></div>
-<button class="today-jump" id="todayJumpBtn" onclick="jumpToToday()">📍 Ir para hoje</button>
+    <button class="today-jump" id="todayJumpBtn" onclick="jumpToToday()"></button>
     <button class="view-toggle-btn active" id="vtList" onclick="setTxMode('list')">📋 Lista</button>
     <button class="view-toggle-btn" id="vtCal" onclick="setTxMode('calendar')">📅 Calendário</button>
   </div>
@@ -3428,7 +3428,11 @@ function renderMonthSummaryBar(){
   bar.innerHTML=chips.map(c=>`<div class="month-sum-chip" style="color:${c.color};border-color:${c.color}20">${c.label}</div>`).join('');
   // Mostra botão "ir para hoje" só se mês atual e hoje não estiver visível
   const btn=document.getElementById('todayJumpBtn');
-  if(btn) btn.style.display=isCurrentMonth?'block':'none';
+  if(btn){
+  btn.style.display = isCurrentMonth ? 'inline-flex' : 'none';
+  btn.style.cssText = 'align-items:center;gap:4px;padding:6px 12px;border-radius:20px;font-size:11px;font-weight:700;background:var(--green);color:#000;border:none;cursor:pointer;font-family:Inter,sans-serif;flex-shrink:0';
+  btn.textContent = '📍 Hoje';
+}
 }
 
 function jumpToToday(){
