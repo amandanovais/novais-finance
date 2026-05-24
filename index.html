@@ -2462,7 +2462,8 @@ function saveTx() {
     else{const last=new Date(yr,mo,0).getDate();fd=`${yr}-${String(mo).padStart(2,'0')}-${String(Math.min(nominal,last)).padStart(2,'0')}`;}
     if(endDate&&fd>endDate) break;  // ← para aqui
     pushTx({id:i===0?id:genId(),date:fd,nominalDay:isPayDay(nominal)?nominal:null,confirmed:isIncome?fd<=today:true});
-  } else {
+  }
+   } else {
     base.nominalDay=isPayDay(nominal)?nominal:null;
     S.transactions.push(base);
   }
