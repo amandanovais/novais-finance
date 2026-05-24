@@ -2627,14 +2627,37 @@ function confirmReceipt(id) {
 // ═══════════════════════════════════════════════════════════════
 // DELETE / TRASH / UNDO
 // ═══════════════════════════════════════════════════════════════
-function deleteTx(id) {
+function deleteTx(id){
   const tx=S.transactions.find(t=>t.id===id);
-  if (!tx) return;
+  if(!tx)return;
+
+  // Se tem groupId (parcelado ou mensal), pergunta o que apagar
+  if(tx.groupId){
+    const today=td();
+    const future=S.transactions.filter(t=>t.groupId===tx.groupId&&t.date>=tx.date&&t.id!==tx.id);
+    if(future.length>0){
+      const opt=confirm(
+        `Essa transação faz parte de um grupo.\n\nOK = apagar esta e as ${future.length} futuras\nCancelar = apagar só esta`
+      );
+      if(opt){
+        // Apaga esta + futuras
+        const toDelete=S.transactions.filter(t=>t.groupId===tx.groupId&&t.date>=tx.date);
+        toDelete.forEach(t=>{t.deletedAt=Date.now();S.trash.push(t);});
+        lastDel={items:toDelete};
+        S.transactions=S.transactions.filter(t=>!toDelete.find(d=>d.id===t.id));
+        sync();renderAll();
+        showToast(`${toDelete.length} transações na lixeira`);
+        return;
+      }
+    }
+  }
+
+  // Apaga só esta
   tx.deletedAt=Date.now();
   S.trash.push(tx);
   lastDel={items:[tx]};
   S.transactions=S.transactions.filter(t=>t.id!==id);
-  sync(); renderAll();
+  sync();renderAll();
   showToast(`"${tx.desc}" na lixeira`);
 }
 function deleteGroup(gid) {
@@ -3786,7 +3809,14 @@ function renderCardList() {
         </div>
       </div>`;
     }).join('')+
-    `<div style="padding:0 20px 20px"><button class="btn-secondary" onclick="openCardModal()">+ Adicionar cartão</button></div>`;
+    `<div style="padding:0 20px 10px;display:flex;gap:8px">
+  <button class="btn-primary" style="margin:0;flex:1" onclick="openPurchaseModal()">⚡ Compra rápida</button>
+  <button class="btn-secondary" style="margin:0;flex:1" onclick="openCardModal()">+ Novo cartão</button>
+</div>`
+    `<div style="padding:0 20px 20px;display:flex;gap:8px">
+  <button class="btn-primary" style="margin:0;flex:1" onclick="openPurchaseModal()">⚡ Compra rápida</button>
+  <button class="btn-secondary" style="margin:0;flex:1" onclick="openCardModal()">+ Cartão</button>
+</div>`;
 }
 
 function renderCardDetail() {
@@ -3901,7 +3931,9 @@ function renderCardDetail() {
     <div class="section-title">📅 Faturas</div>${invoicesHtml}
     <div class="section-title">🧾 Compras (${purchases.length})</div>
     <div style="padding:0 20px 20px">${purchasesHtml}</div>
-    <div style="padding:0 20px 20px"><button class="btn-secondary" onclick="openPurchaseModal()">+ Nova compra</button></div>`;
+    <div style="padding:0 20px 20px;display:flex;gap:8px">
+  <button class="btn-primary" style="margin:0;flex:1" onclick="openPurchaseModal()">⚡ Compra rápida</button>
+</div>`;
 }
 
 function selectCard(id){S.selectedCardId=id;renderCardsPage();}
@@ -3983,7 +4015,13 @@ function renderPurchaseCardPicker(){
 function onPurchaseCardChange(){
   const card=S.cards.find(c=>c.id===purchaseSelectedCardId);if(!card)return;
   if(card.owner==='me'||card.owner==='partner'){document.getElementById('purchaseOwnerGroup').style.display='none';setPurchaseOwner(card.owner);}
-  else{document.getElementById('purchaseOwnerGroup').style.display=S.partner.enabled?'block':'none';}
+  // troque o bloco do else por:
+  else {
+    if(S.partner.enabled){
+      document.getElementById('purchaseOwnerGroup').style.display='block';
+      setPurchaseOwner('shared'); // ← força shared como padrão para cartão compartilhado
+    }
+  }
   // Atualiza simulador de parcelamento
   updateInstallSimulator();
 }
@@ -4287,12 +4325,23 @@ function deleteAcordo(){
   closeModal('acordoModal');sync();renderAcordosPage();showToast('Acordo excluído');
 }
 function markAcordoPaid(id){
-  const a=S.acordos.find(x=>x.id===id);if(!a)return;
+  const a=S.acordos.find(x=>x.id===id);
+  if(!a)return;
   if(a.paidInstallments>=a.totalInstallments){showToast('Acordo já quitado! 🎉');return;}
+  // Abre modal de data
+  const date=prompt(`Data do desconto (AAAA-MM-DD):`, td());
+  if(!date)return;
   a.paidInstallments++;
-  // Lança transação automaticamente
-  S.transactions.push({id:genId(),desc:`Parcela ${a.name} (${a.paidInstallments}/${a.totalInstallments})`,amount:-a.installmentAmount,date:td(),type:'expense',category:'outros',recurrence:'none',notes:'',confirmed:true,owner:'me',createdAt:Date.now()});
-  sync();renderAll();showToast(`Parcela ${a.paidInstallments}/${a.totalInstallments} registrada!`);
+  S.transactions.push({
+    id:genId(),
+    desc:`Parcela ${a.name} (${a.paidInstallments}/${a.totalInstallments})`,
+    amount:-a.installmentAmount,
+    date,
+    type:'expense',category:'outros',recurrence:'none',
+    notes:'',confirmed:true,owner:'me',createdAt:Date.now()
+  });
+  sync();renderAll();
+  showToast(`Parcela ${a.paidInstallments}/${a.totalInstallments} em ${date}!`);
 }
 function openAcordoAnticipate(id){
   anticipateAcordoId=id;
