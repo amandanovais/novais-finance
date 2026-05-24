@@ -720,7 +720,6 @@ textarea.form-input{resize:none;min-height:60px;font-size:13px}
   </div>
   <div class="view-toggle">
     <div class="month-summary-bar" id="monthSummaryBar"></div>
-    <button class="today-jump" id="todayJumpBtn" onclick="jumpToToday()"></button>
     <button class="view-toggle-btn active" id="vtList" onclick="setTxMode('list')">📋 Lista</button>
     <button class="view-toggle-btn" id="vtCal" onclick="setTxMode('calendar')">📅 Calendário</button>
   </div>
@@ -736,6 +735,7 @@ textarea.form-input{resize:none;min-height:60px;font-size:13px}
       <div class="tab-pill" onclick="setTxView('fixed',this)">Fixos</div>
       <div class="tab-pill" onclick="setTxView('future',this)">Futuro</div>
       <div class="tab-pill" onclick="setTxView('shared',this)">💑 Casal</div>
+      <div class="tab-pill" id="todayJumpBtn" style="display:none;background:var(--green-bg);border-color:var(--green);color:var(--green)" onclick="jumpToToday()">📍 Hoje</div>
     </div>
     <div class="tx-list" id="txList"></div>
   </div>
@@ -912,6 +912,13 @@ textarea.form-input{resize:none;min-height:60px;font-size:13px}
         <label class="form-label">Saldo inicial dela</label>
         <input class="form-input" id="setPartnerInitBal" type="number" step="0.01" placeholder="0,00">
       </div>
+      <div class="form-group">
+  <label class="form-label">Salário fixo dela (R$)</label>
+  <input class="form-input" id="setPartnerSalary" type="number" step="0.01" placeholder="0,00">
+</div>
+<div style="font-size:11px;color:var(--text3);margin-top:4px">
+  Cai todo 5º dia útil do mês automaticamente
+</div>
       <button class="btn-primary" onclick="savePartner()">Salvar</button>
     </div>
   </div>
@@ -3428,12 +3435,8 @@ function renderMonthSummaryBar(){
   bar.innerHTML=chips.map(c=>`<div class="month-sum-chip" style="color:${c.color};border-color:${c.color}20">${c.label}</div>`).join('');
   // Mostra botão "ir para hoje" só se mês atual e hoje não estiver visível
   const btn=document.getElementById('todayJumpBtn');
-  if(btn){
-  btn.style.display = isCurrentMonth ? 'inline-flex' : 'none';
-  btn.style.cssText = 'align-items:center;gap:4px;padding:6px 12px;border-radius:20px;font-size:11px;font-weight:700;background:var(--green);color:#000;border:none;cursor:pointer;font-family:Inter,sans-serif;flex-shrink:0';
-  btn.textContent = '📍 Hoje';
-}
-}
+    if(btn) btn.style.display=isCurrentMonth?'flex':'none';
+    }
 
 function jumpToToday(){
   const todayGroup=document.querySelector('.day-group-today');
@@ -4014,12 +4017,34 @@ function openPayInvoice(cardId,invoiceKey){
     <div style="font-size:11px;color:var(--text3);font-weight:700;letter-spacing:1px;text-transform:uppercase">Fatura ${lbl} — ${inv.card.name}</div>
     <div style="font-family:'Space Mono',monospace;font-size:24px;font-weight:700;margin-top:4px">${fmt(inv.total)}</div>
     <div style="font-size:11px;color:var(--text3);margin-top:4px">Vence ${dateLabel(inv.dueDate)}</div>`;
-  if(S.partner.enabled&&split.partner>0)
-    html+=`<div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border);font-size:12px">
-      <div style="display:flex;justify-content:space-between;margin-bottom:4px"><span>Sua parte:</span><strong>${fmt(split.me)}</strong></div>
-      <div style="display:flex;justify-content:space-between"><span>${getPartnerName()} paga:</span><strong>${fmt(split.partner)}</strong></div>
-    </div>`;
-  html+=`</div>`;
+  if(S.partner.enabled&&split.partner>0){
+  // Projeta saldo dela na data de vencimento
+  const pBalAtDue = inv.dueDate ? partnerBalAtDate(inv.dueDate) : partnerBal();
+  const falta     = split.partner - pBalAtDue;
+  const temSaldo  = falta<=0;
+  payInvoiceData.partnerShortage = temSaldo?0:falta;
+  payInvoiceData.partnerActual   = temSaldo?split.partner:Math.max(0,pBalAtDue);
+
+  const [iy,im]=invoiceKey.split('-').map(Number);
+  const fifthDay=getFifthBusinessDay(iy,im);
+
+  html+=`<div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border);font-size:12px">
+    <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+      <span>Sua parte:</span><strong>${fmt(split.me + (temSaldo?0:falta))}</strong>
+    </div>
+    <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+      <span>${getPartnerName()} paga:</span>
+      <strong>${fmt(payInvoiceData.partnerActual)}</strong>
+    </div>
+    ${S.partner.salaryAmount>0?`<div style="font-size:11px;color:var(--text3);margin-top:4px">
+      💰 Salário dela cai em: ${fifthDay?dateLabel(fifthDay):'—'}
+    </div>`:''}
+    ${!temSaldo?`<div style="margin-top:8px;padding:8px 10px;background:var(--orange-bg);border-radius:8px;color:var(--orange);font-weight:600">
+      ⚠️ ${getPartnerName()} terá ${fmt(Math.max(0,pBalAtDue))} mas deve ${fmt(split.partner)}<br>
+      <span style="font-size:11px">Você cobre os <strong>${fmt(falta)}</strong> que faltam</span>
+    </div>`:''}
+  </div>`;
+}
   document.getElementById('payInvoiceContent').innerHTML=html;
   document.getElementById('payDate').value=td();
   openModal('payInvoiceModal');
@@ -4030,13 +4055,16 @@ function confirmPayInvoice(){
   const paidDate=document.getElementById('payDate').value;
   if(!paidDate){alert('Informe a data!');return;}
   const split=getInvoiceSplit(cardId,invoiceKey);
+  const shortage    = payInvoiceData.partnerShortage||0;
+  const splitMe     = split.me + shortage;
+  const splitPartner= split.partner - shortage;
   const card=S.cards.find(c=>c.id===cardId);
   const[y,m]=invoiceKey.split('-').map(Number);
   const lbl=`${MS[m-1]}/${y}`;
   let txIdMe=null,txIdPartner=null;
-  if(split.me>0){txIdMe=genId();S.transactions.push({id:txIdMe,desc:`Fatura ${card.name} (${lbl})`,amount:-split.me,date:paidDate,type:'expense',category:'fatura',recurrence:'none',notes:`Pagamento ${lbl}`,confirmed:true,owner:'me',invoiceRef:{cardId,invoiceKey},createdAt:Date.now()});}
-  if(split.partner>0&&S.partner.enabled){txIdPartner=genId();S.transactions.push({id:txIdPartner,desc:`Fatura ${card.name} (${lbl})`,amount:-split.partner,date:paidDate,type:'expense',category:'fatura',recurrence:'none',notes:`Parte de ${getPartnerName()}`,confirmed:true,owner:'partner',invoiceRef:{cardId,invoiceKey},createdAt:Date.now()});}
-  S.cardInvoicesPaid.push({invoiceKey,cardId,paidAt:Date.now(),paidDate,txIdMe,txIdPartner,amountMe:split.me,amountPartner:split.partner});
+  if(splitMe>0){txIdMe=genId();S.transactions.push({id:txIdMe,desc:`Fatura ${card.name} (${lbl})`,amount:-splitMe,date:paidDate,type:'expense',category:'fatura',recurrence:'none',notes:`Pagamento ${lbl}`,confirmed:true,owner:'me',invoiceRef:{cardId,invoiceKey},createdAt:Date.now()});}
+  if(splitPartner>0&&S.partner.enabled){txIdPartner=genId();S.transactions.push({id:txIdPartner,desc:`Fatura ${card.name} (${lbl})`,amount:-splitPartner,date:paidDate,type:'expense',category:'fatura',recurrence:'none',notes:`Parte de ${getPartnerName()}`,confirmed:true,owner:'partner',invoiceRef:{cardId,invoiceKey},createdAt:Date.now()});}
+  S.cardInvoicesPaid.push({invoiceKey,cardId,paidAt:Date.now(),paidDate,txIdMe,txIdPartner,amountMe:splitMe,amountPartner:splitPartner});
   closeModal('payInvoiceModal');sync();renderCardsPage();showToast(`Fatura ${lbl} paga! ✅`);payInvoiceData=null;
 }
 function unpayInvoice(cardId,invoiceKey){
@@ -4693,6 +4721,7 @@ function renderSettings() {
   document.getElementById('setSavDate').value   = S.savingsDate||'';
   document.getElementById('setSalaryDay').value = S.salary.day||'';
   document.getElementById('setSalaryAmount').value=S.salary.amount||'';
+  document.getElementById('setPartnerSalary').value = S.partner.salaryAmount||'';
   renderSalaryInfo();
   renderBudgetList();
   renderCatManager();
@@ -4707,7 +4736,50 @@ function renderSettings() {
   const at=document.getElementById('apetoToggle');
 if(at) at.className='toggle-switch'+(S.modoAperto?' on':'');
 }
+function getFifthBusinessDay(year, month) {
+  // month é 1-based
+  let count=0;
+  for(let d=1;d<=31;d++){
+    const dt=new Date(year,month-1,d);
+    if(dt.getMonth()!==month-1) break;
+    const dow=dt.getDay();
+    if(dow!==0&&dow!==6) count++; // não é fim de semana
+    if(count===5) return `${year}-${String(month).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+  }
+  return null;
+}
 
+// Projeta saldo da parceira numa data futura
+function partnerBalAtDate(untilDate) {
+  if(!S.partner.enabled) return 0;
+  let b = S.partner.initialBalance||0;
+  // Transações dela até a data
+  allSorted().forEach(t => {
+    if(t.date>untilDate) return;
+    const {partner}=getSplit(t);
+    if(partner===0) return;
+    if(partner>0){if(t.confirmed||t.date<=untilDate) b+=partner;}
+    else b+=partner;
+  });
+  // Salários dela que caem até a data
+  if(S.partner.salaryAmount>0){
+    const [uy,um]=untilDate.split('-').map(Number);
+    const today=td();
+    const [ty,tm]=today.split('-').map(Number);
+    // percorre meses desde o início até untilDate
+    for(let y=ty;y<=uy;y++){
+      const mStart=y===ty?tm:1;
+      const mEnd=y===uy?um:12;
+      for(let m=mStart;m<=mEnd;m++){
+        const payDate=getFifthBusinessDay(y,m);
+        if(payDate&&payDate<=untilDate&&payDate>=today){
+          b+=S.partner.salaryAmount;
+        }
+      }
+    }
+  }
+  return b;
+}
 function renderBudgetList() {
   const el=document.getElementById('budgetList');
   if(!el)return;
@@ -4803,6 +4875,7 @@ function savePartner(){
   const ini=parseFloat(document.getElementById('setPartnerInitBal').value)||0;
   if(!name){alert('Digite o nome!');return;}
   S.partner.name=name;S.partner.emoji=emoji;S.partner.initialBalance=ini;
+  S.partner.salaryAmount = parseFloat(document.getElementById('setPartnerSalary').value)||0;
   sync();renderAll();showToast(`${name} salva! ${emoji}`);
 }
 
