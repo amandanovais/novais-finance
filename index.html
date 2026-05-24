@@ -1827,8 +1827,30 @@ function getVirtualFaturas() {
         amount:-split.partner, date:inv.dueDate, category:'fatura',
         confirmed:false, owner:'partner', isVirtual:true, cardId:card.id, invoiceKey:k
       });
-    });
-  });
+
+      // ← ADICIONA AQUI
+      if(split.partner>0&&S.partner.salaryAmount>0){
+        const pBalAtDue=inv.dueDate?partnerBalAtDate(inv.dueDate):partnerBal();
+        const shortage=split.partner-pBalAtDue;
+        if(shortage>0){
+          entries.push({
+            id:`vf_${card.id}_${k}_coverage`,
+            desc:`Cobertura fatura ${card.name} (${label})`,
+            amount:-shortage,
+            date:inv.dueDate,
+            category:'fatura',
+            confirmed:false,
+            owner:'me',
+            isVirtual:true,
+            cardId:card.id,
+            invoiceKey:k,
+            isCoverage:true
+          });
+        }
+      }
+
+    });  // ← fecha o forEach de invoiceKeys
+  });    // ← fecha o forEach de cards
   return entries;
 }
 
@@ -3463,6 +3485,36 @@ function toggleCatF(id){S.catFilter=S.catFilter===id?null:id;renderTxList();rend
 function toggleFilters(){document.getElementById('filterPanel').classList.toggle('open');document.getElementById('filterToggle').classList.toggle('active');}
 function setTxView(v,el){S.txView=v;document.querySelectorAll('.tab-pill').forEach(t=>t.classList.remove('active'));el.classList.add('active');renderTxList();}
 
+function getVirtualAcordos(){
+  const entries=[];
+  S.acordos.forEach(a=>{
+    if(!a.startDate) return;
+    const remaining=a.totalInstallments-a.paidInstallments;
+    if(remaining<=0) return;
+    const [sy,sm,sd]=a.startDate.split('-').map(Number);
+    for(let i=0;i<remaining;i++){
+      const num=a.paidInstallments+1+i;
+      let m=sm+(num-1), y=sy+Math.floor((m-1)/12);
+      m=((m-1)%12)+1;
+      const last=new Date(y,m,0).getDate();
+      const d=Math.min(sd,last);
+      const date=`${y}-${String(m).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+      entries.push({
+        id:`vacordo_${a.id}_${num}`,
+        desc:`${a.emoji||'🤝'} ${a.name} (${num}/${a.totalInstallments})`,
+        amount:-a.installmentAmount,
+        date,
+        category:'outros',
+        confirmed:false,
+        owner:'me',
+        isVirtualAcordo:true,
+        acordoId:a.id
+      });
+    }
+  });
+  return entries;
+}
+
 function renderTxList() {
   const p      = pfx(S.currentYear,S.currentMonth);
   const search = document.getElementById('searchInput').value.toLowerCase().trim();
@@ -3477,6 +3529,11 @@ function renderTxList() {
   if (S.catFilter)           txs=txs.filter(t=>t.category===S.catFilter);
   if (search)                txs=txs.filter(t=>t.desc.toLowerCase().includes(search)||(t.notes||'').toLowerCase().includes(search));
 
+  // Injeta acordos virtuais
+  const virtualAcordos=getVirtualAcordos().filter(v=>v.date.startsWith(p));
+  if(S.txView==='all'||S.txView==='future'||S.txView==='expenses'){
+    virtualAcordos.forEach(v=>{if(!txs.find(t=>t.id===v.id)) txs.push(v);});
+  }
   // Injeta faturas virtuais
   const virts = getVirtualFaturas().filter(v=>v.date.startsWith(p));
   if (S.txView==='all'||S.txView==='future'||S.txView==='expenses') {
@@ -3521,15 +3578,18 @@ function renderTxList() {
         const owner   = t.owner||'me';
         const ownerL  = getOwnerLabel(owner);
         const {me}    = getSplit(t);
-        const isVirt  = !!t.isVirtual;
+        const isVirt        = !!t.isVirtual;
+        const isVirtAcordo  = !!t.isVirtualAcordo;
         const cls     = isVirt ? 'tx-card'
           : `tx-card${owner==='shared'?' shared-tx':''}${owner==='partner'?' partner-tx':''}`;
 
         // Valor + saldo na linha
         let valHtml;
-        if (isVirt) {
+        if(isVirt){
           valHtml=`<div class="tx-val neg">${fmt(t.amount)}</div>
-                   <div class="tx-val-sub" style="color:var(--orange)">💳 a pagar</div>`;
+                  <div class="tx-val-sub" style="color:${isCoverage?'var(--orange)':'var(--orange)'}">
+                    ${isCoverage?'🫵 sua cobertura':'💳 a pagar'}
+                  </div>`;
         } else if (owner==='shared'||owner==='partner') {
           valHtml=`<div class="tx-val ${isIn?'pos':'neg'}">${isIn?'+':''}${fmt(t.amount)}</div>
                    <div class="tx-val-sub">Você: ${fmt(me)}</div>`;
@@ -3572,6 +3632,14 @@ function renderTxList() {
                 ?`<button class="tx-confirm-btn" onclick="event.stopPropagation();confirmReceipt('${t.id}')">✓</button>`
                 :`<div class="tx-edit-btn" onclick="event.stopPropagation();openEditModal('${t.id}')" title="Editar">✏️</div>`
             }
+                ${isVirtAcordo
+                ?`<div class="tx-edit-btn" onclick="event.stopPropagation();goPage('Acordos',document.querySelectorAll('.nav-item')[3])" title="Ver acordo">🤝</div>`
+                :isVirt
+                  ?`<div class="tx-edit-btn" onclick="event.stopPropagation();selectCard('${t.cardId}');goPage('Cards',document.querySelectorAll('.nav-item')[2])" title="Ver fatura">💳</div>`
+                  :showAwt
+                    ?`<button class="tx-confirm-btn" onclick="event.stopPropagation();confirmReceipt('${t.id}')">✓</button>`
+                    :`<div class="tx-edit-btn" onclick="event.stopPropagation();openEditModal('${t.id}')" title="Editar">✏️</div>`
+              }
           </div>
         </div>`;
       }).join('')}
