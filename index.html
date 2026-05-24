@@ -3529,11 +3529,11 @@ function renderTxList() {
           valHtml=`<div class="tx-val pos">+${fmt(t.amount)}</div>
                    <div class="tx-val-sub" style="color:var(--orange)">⏳ pendente</div>`;
         } else {
-          const rb = running[t.id];
-          valHtml=`<div class="tx-val ${isIn?'pos':'neg'}">${isIn?'+':''}${fmt(t.amount)}</div>
-                   ${rb!==undefined?`<div class="tx-val-sub" style="color:${rb>=0?'var(--cyan)':'var(--red)'}">→ ${fmt(rb)}</div>`:''}`;
-                  ${tx.amount<0&&S.salary.amount>0?`<div class="tx-val-sub" style="color:var(--text3);font-size:9px">${calcWorkTime(tx.amount)||''}</div>`:''}
-        }
+           const rb = running[t.id];
+           valHtml=`<div class="tx-val ${isIn?'pos':'neg'}">${isIn?'+':''}${fmt(t.amount)}</div>
+                    ${rb!==undefined?`<div class="tx-val-sub" style="color:${rb>=0?'var(--cyan)':'var(--red)'}">→ ${fmt(rb)}</div>`:''}
+                    ${tx.amount<0&&S.salary.amount>0?`<div class="tx-val-sub" style="color:var(--text3);font-size:9px">${calcWorkTime(tx.amount)||''}</div>`:''}`;
+         }
 
         const ownerBadge = S.partner.enabled&&owner!=='me'
           ? `<span class="owner-badge ${owner}">${ownerL.emoji} ${owner==='shared'?'Casal':getPartnerName()}</span>`
