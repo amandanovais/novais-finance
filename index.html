@@ -3570,26 +3570,30 @@ function renderTxList() {
         </div>
       </div>
       ${items.map(t=>{
-        const c       = getCat(t.category);
-        const isIn    = t.amount>0;
-        const isFut   = t.date>today;
-        const showAwt = isIn&&!t.confirmed;
-        const bg      = c.bg||hexToBg(c.color);
-        const owner   = t.owner||'me';
-        const ownerL  = getOwnerLabel(owner);
-        const {me}    = getSplit(t);
-        const isVirt        = !!t.isVirtual;
-        const isVirtAcordo  = !!t.isVirtualAcordo;
-        const cls     = isVirt ? 'tx-card'
+        const c            = getCat(t.category);
+        const isIn         = t.amount>0;
+        const isFut        = t.date>today;
+        const showAwt      = isIn&&!t.confirmed;
+        const bg           = c.bg||hexToBg(c.color);
+        const owner        = t.owner||'me';
+        const ownerL       = getOwnerLabel(owner);
+        const {me}         = getSplit(t);
+        const isVirt       = !!t.isVirtual;
+        const isVirtAcordo = !!t.isVirtualAcordo;
+        const isCoverage   = !!t.isCoverage;
+        const cls          = isVirt||isVirtAcordo ? 'tx-card'
           : `tx-card${owner==='shared'?' shared-tx':''}${owner==='partner'?' partner-tx':''}`;
 
-        // Valor + saldo na linha
+        // ── Valor + sub-linha ──────────────────────────────────
         let valHtml;
-        if(isVirt){
+        if (isVirtAcordo) {
           valHtml=`<div class="tx-val neg">${fmt(t.amount)}</div>
-                  <div class="tx-val-sub" style="color:${isCoverage?'var(--orange)':'var(--orange)'}">
-                    ${isCoverage?'🫵 sua cobertura':'💳 a pagar'}
-                  </div>`;
+                   <div class="tx-val-sub" style="color:var(--teal)">🤝 parcela</div>`;
+        } else if (isVirt) {
+          valHtml=`<div class="tx-val neg">${fmt(t.amount)}</div>
+                   <div class="tx-val-sub" style="color:${isCoverage?'var(--orange)':'var(--orange)'}">
+                     ${isCoverage?'🫵 sua cobertura':'💳 a pagar'}
+                   </div>`;
         } else if (owner==='shared'||owner==='partner') {
           valHtml=`<div class="tx-val ${isIn?'pos':'neg'}">${isIn?'+':''}${fmt(t.amount)}</div>
                    <div class="tx-val-sub">Você: ${fmt(me)}</div>`;
@@ -3597,54 +3601,54 @@ function renderTxList() {
           valHtml=`<div class="tx-val pos">+${fmt(t.amount)}</div>
                    <div class="tx-val-sub" style="color:var(--orange)">⏳ pendente</div>`;
         } else {
-           const rb = running[t.id];
-           valHtml=`<div class="tx-val ${isIn?'pos':'neg'}">${isIn?'+':''}${fmt(t.amount)}</div>
-                    ${rb!==undefined?`<div class="tx-val-sub" style="color:${rb>=0?'var(--cyan)':'var(--red)'}">→ ${fmt(rb)}</div>`:''}
-                    ${t.amount<0&&S.salary.amount>0?'<div class="tx-val-sub" style="color:var(--text3);font-size:9px">'+(calcWorkTime(t.amount)||'')+'</div>':''}`;
-         }
+          const rb = running[t.id];
+          valHtml=`<div class="tx-val ${isIn?'pos':'neg'}">${isIn?'+':''}${fmt(t.amount)}</div>
+                   ${rb!==undefined?`<div class="tx-val-sub" style="color:${rb>=0?'var(--cyan)':'var(--red)'}">→ ${fmt(rb)}</div>`:''}
+                   ${t.amount<0&&S.salary.amount>0?'<div class="tx-val-sub" style="color:var(--text3);font-size:9px">'+(calcWorkTime(t.amount)||'')+'</div>':''}`;
+        }
 
+        // ── Badge do owner ─────────────────────────────────────
         const ownerBadge = S.partner.enabled&&owner!=='me'
           ? `<span class="owner-badge ${owner}">${ownerL.emoji} ${owner==='shared'?'Casal':getPartnerName()}</span>`
           : '';
 
+        // ── Botão direito ──────────────────────────────────────
+        let actionBtn;
+        if (isVirtAcordo) {
+          actionBtn=`<div class="tx-edit-btn" onclick="event.stopPropagation();goPage('Acordos',document.querySelectorAll('.nav-item')[3])" title="Ver acordo">🤝</div>`;
+        } else if (isVirt) {
+          actionBtn=`<div class="tx-edit-btn" onclick="event.stopPropagation();selectCard('${t.cardId}');goPage('Cards',document.querySelectorAll('.nav-item')[2])" title="Ver fatura">💳</div>`;
+        } else if (showAwt) {
+          actionBtn=`<button class="tx-confirm-btn" onclick="event.stopPropagation();confirmReceipt('${t.id}')">✓</button>`;
+        } else {
+          actionBtn=`<div class="tx-edit-btn" onclick="event.stopPropagation();openEditModal('${t.id}')" title="Editar">✏️</div>`;
+        }
+
         return `<div class="${cls}">
-          <div onclick="openDetail('${t.id}')" style="display:flex;align-items:center;gap:12px;flex:1;min-width:0">
+          <div onclick="${isVirt||isVirtAcordo?'':'openDetail(\''+t.id+'\')'}" style="display:flex;align-items:center;gap:12px;flex:1;min-width:0;cursor:${isVirt||isVirtAcordo?'default':'pointer'}">
             <div class="tx-cat-dot" style="background:${bg}">${c.emoji}</div>
             <div class="tx-mid">
               <div class="tx-desc">${t.desc}</div>
               <div class="tx-meta">
                 <span class="tx-cat-tag" style="color:${c.color};background:${bg}">${c.name}</span>
-                ${isVirt?'<span class="tx-badge-future" style="background:var(--purple-bg);color:var(--purple)">FATURA</span>':''}
+                ${isVirt&&!isCoverage?'<span class="tx-badge-future" style="background:var(--purple-bg);color:var(--purple)">FATURA</span>':''}
+                ${isCoverage?'<span class="tx-badge-future" style="background:var(--orange-bg);color:var(--orange)">COBERTURA</span>':''}
+                ${isVirtAcordo?'<span class="tx-badge-future" style="background:var(--teal-bg);color:var(--teal)">ACORDO</span>':''}
                 ${ownerBadge}
                 ${t.recurrence==='installment'?`<span class="tx-cat-tag" style="color:var(--purple);background:var(--purple-bg)">${t.instCurrent}/${t.instTotal}</span>`:''}
                 ${t.recurrence==='monthly'?`<span class="tx-cat-tag" style="color:var(--purple);background:var(--purple-bg)">🔄</span>`:''}
                 ${t.notes?'<span class="tx-note-indicator">📝</span>':''}
-                ${isFut&&!showAwt?'<span class="tx-badge-future">FUTURO</span>':''}
+                ${isFut&&!showAwt&&!isVirt&&!isVirtAcordo?'<span class="tx-badge-future">FUTURO</span>':''}
                 ${t.lastEdit?'<span class="tx-note-indicator">✏️</span>':''}
               </div>
             </div>
           </div>
           <div class="tx-right">
             ${valHtml}
-            ${isVirt
-              ?`<div class="tx-edit-btn" onclick="event.stopPropagation();selectCard('${t.cardId}');goPage('Cards',document.querySelectorAll('.nav-item')[2])" title="Ver fatura">💳</div>`
-              :showAwt
-                ?`<button class="tx-confirm-btn" onclick="event.stopPropagation();confirmReceipt('${t.id}')">✓</button>`
-                :`<div class="tx-edit-btn" onclick="event.stopPropagation();openEditModal('${t.id}')" title="Editar">✏️</div>`
-            }
-                ${isVirtAcordo
-                ?`<div class="tx-edit-btn" onclick="event.stopPropagation();goPage('Acordos',document.querySelectorAll('.nav-item')[3])" title="Ver acordo">🤝</div>`
-                :isVirt
-                  ?`<div class="tx-edit-btn" onclick="event.stopPropagation();selectCard('${t.cardId}');goPage('Cards',document.querySelectorAll('.nav-item')[2])" title="Ver fatura">💳</div>`
-                  :showAwt
-                    ?`<button class="tx-confirm-btn" onclick="event.stopPropagation();confirmReceipt('${t.id}')">✓</button>`
-                    :`<div class="tx-edit-btn" onclick="event.stopPropagation();openEditModal('${t.id}')" title="Editar">✏️</div>`
-              }
+            ${actionBtn}
           </div>
         </div>`;
       }).join('')}
-    </div>`;
-  }).join('');
 }
 
 // ═══════════════════════════════════════════════════════════════
