@@ -2553,6 +2553,10 @@ function saveEdit() {
   tx.type      = editModalType;
   tx.category  = editModalCat;
   tx.recurrence= editModalRec;
+   if(editModalRec==='monthly'){
+     tx.endDate=document.getElementById('eEndDate').value||null;
+   }
+
 
   tx.notes     = notes;
   tx.owner     = S.partner.enabled ? editModalOwner : 'me';
@@ -2696,9 +2700,6 @@ function openDetail(id) {
   }
   if (tx.recurrence==='installment') h+=`<div style="padding:12px;background:var(--purple-bg);border-radius:10px;margin-bottom:12px;font-size:13px"><strong>🗓️ Parcela ${tx.instCurrent}/${tx.instTotal}</strong></div>`;
   if (tx.recurrence==='monthly')     h+=`<div style="padding:12px;background:var(--purple-bg);border-radius:10px;margin-bottom:12px;font-size:13px"><strong>🔄 Mensal</strong></div>`;
-  if(editModalRec==='monthly'){
-  tx.endDate=document.getElementById('eEndDate').value||null;
-}
   if (tx.notes) h+=`<div style="padding:12px;background:var(--surface2);border-radius:10px;margin-bottom:12px"><div style="font-size:10px;color:var(--text3);font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px">Notas</div><div style="font-size:13px;line-height:1.5">${tx.notes}</div></div>`;
   if (tx.lastEdit) h+=`<div style="padding:12px;background:var(--surface2);border-radius:10px;margin-bottom:12px;font-size:11px;color:var(--text3)">📝 Editado em ${new Date(tx.lastEdit.editedAt).toLocaleString('pt-BR')}</div>`;
 
