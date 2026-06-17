@@ -294,7 +294,8 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',-apple-system,sa
 .tx-right{text-align:right;flex-shrink:0;display:flex;align-items:center;gap:8px}
 .tx-val{font-family:'Space Mono',monospace;font-size:14px;font-weight:700}
 .tx-val.pos{color:var(--green)}.tx-val.neg{color:var(--red)}
-.tx-val-sub{font-size:11px;color:var(--text2);font-family:'Space Mono',monospace;margin-top:2px;font-weight:600}
+// troque calcWorkTime por uma versão curta só na lista:
+${t.amount<0&&S.salary.amount>0?'<div class="tx-val-sub" style="color:var(--text3);font-size:9px">⏱️'+(calcWorkTime(t.amount)||'').replace(' de trabalho','')+'</div>':''}
 .tx-edit-btn{width:30px;height:30px;border-radius:8px;background:var(--surface2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:14px;cursor:pointer;flex-shrink:0;transition:all .15s}
 .tx-edit-btn:active{transform:scale(.9);background:var(--blue-bg);border-color:var(--blue)}
 .tx-badge-future{font-size:10px;font-weight:700;padding:2px 8px;border-radius:6px;background:var(--orange-bg);color:var(--orange);border:1px solid rgba(255,145,0,.3)}
@@ -3538,6 +3539,20 @@ function getVirtualAcordos(){
   return entries;
 }
 
+function acordoVirtualAction(id){
+  const a=S.acordos.find(x=>x.id===id);
+  if(!a)return;
+  const opt=confirm(`Acordo: ${a.name}\nRestante: ${fmt(getAcordoRemainingAmount(a))}\n\nOK = ir para Acordos\nCancelar = excluir este acordo`);
+  if(opt){
+    goPage('Acordos',document.querySelectorAll('.nav-item')[3]);
+  } else {
+    if(confirm(`Excluir "${a.name}" e todas as parcelas futuras?`)){
+      S.acordos=S.acordos.filter(x=>x.id!==id);
+      sync();renderAll();showToast('Acordo excluído');
+    }
+  }
+}
+
 function renderTxList() {
   const p      = pfx(S.currentYear,S.currentMonth);
   const search = document.getElementById('searchInput').value.toLowerCase().trim();
@@ -3610,9 +3625,8 @@ function renderTxList() {
         // ── Valor + sub-linha ──────────────────────────────────
         let valHtml;
         if (isVirtAcordo) {
-          valHtml=`<div class="tx-val neg">${fmt(t.amount)}</div>
-                   <div class="tx-val-sub" style="color:var(--teal)">🤝 parcela</div>`;
-        } else if (isVirt) {
+           actionBtn=`<div class="tx-edit-btn" onclick="event.stopPropagation();acordoVirtualAction('${t.acordoId}')" title="Opções">🤝</div>`;
+         }else if (isVirt) {
           valHtml=`<div class="tx-val neg">${fmt(t.amount)}</div>
                    <div class="tx-val-sub" style="color:${isCoverage?'var(--orange)':'var(--orange)'}">
                      ${isCoverage?'🫵 sua cobertura':'💳 a pagar'}
