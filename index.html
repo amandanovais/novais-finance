@@ -294,8 +294,7 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',-apple-system,sa
 .tx-right{text-align:right;flex-shrink:0;display:flex;align-items:center;gap:8px}
 .tx-val{font-family:'Space Mono',monospace;font-size:14px;font-weight:700}
 .tx-val.pos{color:var(--green)}.tx-val.neg{color:var(--red)}
-// troque calcWorkTime por uma versão curta só na lista:
-${t.amount<0&&S.salary.amount>0?'<div class="tx-val-sub" style="color:var(--text3);font-size:9px">⏱️'+(calcWorkTime(t.amount)||'').replace(' de trabalho','')+'</div>':''}
+.tx-val-sub{font-size:11px;color:var(--text2);font-family:'Space Mono',monospace;margin-top:2px;font-weight:600;white-space:nowrap}
 .tx-edit-btn{width:30px;height:30px;border-radius:8px;background:var(--surface2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:14px;cursor:pointer;flex-shrink:0;transition:all .15s}
 .tx-edit-btn:active{transform:scale(.9);background:var(--blue-bg);border-color:var(--blue)}
 .tx-badge-future{font-size:10px;font-weight:700;padding:2px 8px;border-radius:6px;background:var(--orange-bg);color:var(--orange);border:1px solid rgba(255,145,0,.3)}
@@ -3638,11 +3637,11 @@ function renderTxList() {
           valHtml=`<div class="tx-val pos">+${fmt(t.amount)}</div>
                    <div class="tx-val-sub" style="color:var(--orange)">⏳ pendente</div>`;
         } else {
-          const rb = running[t.id];
-          valHtml=`<div class="tx-val ${isIn?'pos':'neg'}">${isIn?'+':''}${fmt(t.amount)}</div>
-                   ${rb!==undefined?`<div class="tx-val-sub" style="color:${rb>=0?'var(--cyan)':'var(--red)'}">→ ${fmt(rb)}</div>`:''}
-                   ${t.amount<0&&S.salary.amount>0?'<div class="tx-val-sub" style="color:var(--text3);font-size:9px">'+(calcWorkTime(t.amount)||'')+'</div>':''}`;
-        }
+  const rb = running[t.id];
+  valHtml=`<div class="tx-val ${isIn?'pos':'neg'}">${isIn?'+':''}${fmt(t.amount)}</div>
+           ${rb!==undefined?`<div class="tx-val-sub" style="color:${rb>=0?'var(--cyan)':'var(--red)'}">→ ${fmt(rb)}</div>`:''}
+           ${t.amount<0&&S.salary.amount>0?'<div class="tx-val-sub" style="color:var(--text3);font-size:9px">⏱️'+(calcWorkTime(t.amount)||'').replace(' de trabalho','')+'</div>':''}`;
+}
 
         // ── Badge do owner ─────────────────────────────────────
         const ownerBadge = S.partner.enabled&&owner!=='me'
@@ -3651,15 +3650,17 @@ function renderTxList() {
 
         // ── Botão direito ──────────────────────────────────────
         let actionBtn;
-        if (isVirtAcordo) {
-          actionBtn=`<div class="tx-edit-btn" onclick="event.stopPropagation();goPage('Acordos',document.querySelectorAll('.nav-item')[3])" title="Ver acordo">🤝</div>`;
-        } else if (isVirt) {
-          actionBtn=`<div class="tx-edit-btn" onclick="event.stopPropagation();selectCard('${t.cardId}');goPage('Cards',document.querySelectorAll('.nav-item')[2])" title="Ver fatura">💳</div>`;
-        } else if (showAwt) {
-          actionBtn=`<button class="tx-confirm-btn" onclick="event.stopPropagation();confirmReceipt('${t.id}')">✓</button>`;
-        } else {
-          actionBtn=`<div class="tx-edit-btn" onclick="event.stopPropagation();openEditModal('${t.id}')" title="Editar">✏️</div>`;
-        }
+if (isVirtAcordo) {
+  // ← SÓ O BOTÃO aqui, valHtml já está acima
+  actionBtn=`<div class="tx-edit-btn" onclick="event.stopPropagation();acordoVirtualAction('${t.acordoId}')">🤝</div>`;
+} else if (isVirt) {
+  actionBtn=`<div class="tx-edit-btn" onclick="event.stopPropagation();selectCard('${t.cardId}');goPage('Cards',document.querySelectorAll('.nav-item')[2])">💳</div>`;
+} else if (showAwt) {
+  actionBtn=`<button class="tx-confirm-btn" onclick="event.stopPropagation();confirmReceipt('${t.id}')">✓</button>`;
+} else {
+  actionBtn=`<div class="tx-edit-btn" onclick="event.stopPropagation();openEditModal('${t.id}')">✏️</div>`;
+}
+
 
         return `<div class="${cls}">
           <div onclick="${isVirt||isVirtAcordo?'':'openDetail(\''+t.id+'\')'}" style="display:flex;align-items:center;gap:12px;flex:1;min-width:0;cursor:${isVirt||isVirtAcordo?'default':'pointer'}">
