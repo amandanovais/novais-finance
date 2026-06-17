@@ -3621,13 +3621,14 @@ function renderTxList() {
         const cls          = isVirt||isVirtAcordo ? 'tx-card'
           : `tx-card${owner==='shared'?' shared-tx':''}${owner==='partner'?' partner-tx':''}`;
 
-        // ── Valor + sub-linha ──────────────────────────────────
+                // ── Valor + sub-linha ──────────────────────────────────
         let valHtml;
         if (isVirtAcordo) {
-           actionBtn=`<div class="tx-edit-btn" onclick="event.stopPropagation();acordoVirtualAction('${t.acordoId}')" title="Opções">🤝</div>`;
-         }else if (isVirt) {
           valHtml=`<div class="tx-val neg">${fmt(t.amount)}</div>
-                   <div class="tx-val-sub" style="color:${isCoverage?'var(--orange)':'var(--orange)'}">
+                   <div class="tx-val-sub" style="color:var(--teal)">🤝 parcela</div>`;
+        } else if (isVirt) {
+          valHtml=`<div class="tx-val neg">${fmt(t.amount)}</div>
+                   <div class="tx-val-sub" style="color:var(--orange)">
                      ${isCoverage?'🫵 sua cobertura':'💳 a pagar'}
                    </div>`;
         } else if (owner==='shared'||owner==='partner') {
@@ -3637,29 +3638,28 @@ function renderTxList() {
           valHtml=`<div class="tx-val pos">+${fmt(t.amount)}</div>
                    <div class="tx-val-sub" style="color:var(--orange)">⏳ pendente</div>`;
         } else {
-  const rb = running[t.id];
-  valHtml=`<div class="tx-val ${isIn?'pos':'neg'}">${isIn?'+':''}${fmt(t.amount)}</div>
-           ${rb!==undefined?`<div class="tx-val-sub" style="color:${rb>=0?'var(--cyan)':'var(--red)'}">→ ${fmt(rb)}</div>`:''}
-           ${t.amount<0&&S.salary.amount>0?'<div class="tx-val-sub" style="color:var(--text3);font-size:9px">⏱️'+(calcWorkTime(t.amount)||'').replace(' de trabalho','')+'</div>':''}`;
-}
+          const rb=running[t.id];
+          valHtml=`<div class="tx-val ${isIn?'pos':'neg'}">${isIn?'+':''}${fmt(t.amount)}</div>
+                   ${rb!==undefined?`<div class="tx-val-sub" style="color:${rb>=0?'var(--cyan)':'var(--red)'}">→ ${fmt(rb)}</div>`:''}
+                   ${t.amount<0&&S.salary.amount>0?'<div class="tx-val-sub" style="color:var(--text3);font-size:9px">⏱️'+(calcWorkTime(t.amount)||'').replace(' de trabalho','')+'</div>':''}`;
+        }
 
         // ── Badge do owner ─────────────────────────────────────
-        const ownerBadge = S.partner.enabled&&owner!=='me'
-          ? `<span class="owner-badge ${owner}">${ownerL.emoji} ${owner==='shared'?'Casal':getPartnerName()}</span>`
-          : '';
+        const ownerBadge=S.partner.enabled&&owner!=='me'
+          ?`<span class="owner-badge ${owner}">${ownerL.emoji} ${owner==='shared'?'Casal':getPartnerName()}</span>`
+          :'';
 
         // ── Botão direito ──────────────────────────────────────
         let actionBtn;
-if (isVirtAcordo) {
-  // ← SÓ O BOTÃO aqui, valHtml já está acima
-  actionBtn=`<div class="tx-edit-btn" onclick="event.stopPropagation();acordoVirtualAction('${t.acordoId}')">🤝</div>`;
-} else if (isVirt) {
-  actionBtn=`<div class="tx-edit-btn" onclick="event.stopPropagation();selectCard('${t.cardId}');goPage('Cards',document.querySelectorAll('.nav-item')[2])">💳</div>`;
-} else if (showAwt) {
-  actionBtn=`<button class="tx-confirm-btn" onclick="event.stopPropagation();confirmReceipt('${t.id}')">✓</button>`;
-} else {
-  actionBtn=`<div class="tx-edit-btn" onclick="event.stopPropagation();openEditModal('${t.id}')">✏️</div>`;
-}
+        if (isVirtAcordo) {
+          actionBtn=`<div class="tx-edit-btn" onclick="event.stopPropagation();acordoVirtualAction('${t.acordoId}')">🤝</div>`;
+        } else if (isVirt) {
+          actionBtn=`<div class="tx-edit-btn" onclick="event.stopPropagation();selectCard('${t.cardId}');goPage('Cards',document.querySelectorAll('.nav-item')[2])">💳</div>`;
+        } else if (showAwt) {
+          actionBtn=`<button class="tx-confirm-btn" onclick="event.stopPropagation();confirmReceipt('${t.id}')">✓</button>`;
+        } else {
+          actionBtn=`<div class="tx-edit-btn" onclick="event.stopPropagation();openEditModal('${t.id}')">✏️</div>`;
+        }
 
 
         return `<div class="${cls}">
