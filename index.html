@@ -3649,11 +3649,28 @@ function renderTxList() {
         } else if (showAwt) {
           valHtml=`<div class="tx-val pos">+${fmt(t.amount)}</div>
                    <div class="tx-val-sub" style="color:var(--orange)">⏳ pendente</div>`;
+        // ═══════════════════════════════════════════════════════════════
+// PARTE 2B — substitua o bloco } else { do valHtml (transação normal)
+// Ache: "} else {" seguido de "const rb = running[t.id]"
+// ═══════════════════════════════════════════════════════════════
+
         } else {
-          const rb=running[t.id];
+          const rb         = running[t.id];
+          const isFutureTx = t.date > today;
+          const rbColor    = rb===undefined
+            ? 'var(--text3)'
+            : rb>=0
+              ? (isFutureTx ? 'var(--blue)' : 'var(--text3)')
+              : 'var(--red)';
           valHtml=`<div class="tx-val ${isIn?'pos':'neg'}">${isIn?'+':''}${fmt(t.amount)}</div>
-                   ${rb!==undefined?`<div class="tx-val-sub" style="color:${rb>=0?'var(--cyan)':'var(--red)'}">→ ${fmt(rb)}</div>`:''}
-                   ${t.amount<0&&S.salary.amount>0?'<div class="tx-val-sub" style="color:var(--text3);font-size:9px">⏱️'+(calcWorkTime(t.amount)||'').replace(' de trabalho','')+'</div>':''}`;
+                   ${rb!==undefined
+                     ? isFutureTx
+                       ? `<div class="tx-val-proj">📊 ${fmtShort(rb)}</div>`
+                       : `<div class="tx-val-sub" style="color:${rbColor}">→ ${fmtShort(rb)}</div>`
+                     : ''}
+                   ${t.amount<0&&S.salary.amount>0
+                     ? `<div class="tx-val-sub" style="color:var(--text3);font-size:9px">⏱️ ${(calcWorkTime(t.amount)||'').replace(' de trabalho','')}</div>`
+                     : ''}`;
         }
 
         // ── Badge do owner ─────────────────────────────────────
