@@ -3665,8 +3665,8 @@ function renderTxList() {
           valHtml=`<div class="tx-val ${isIn?'pos':'neg'}">${isIn?'+':''}${fmt(t.amount)}</div>
                    ${rb!==undefined
                      ? isFutureTx
-                       ? `<div class="tx-val-proj">📊 ${fmtShort(rb)}</div>`
-                       : `<div class="tx-val-sub" style="color:${rbColor}">→ ${fmtShort(rb)}</div>`
+                       ? `<div class="tx-val-proj">📊 ${fmt(rb)}</div>`
+                       : `<div class="tx-val-sub" style="color:${rbColor}">→ ${fmt(rb)}</div>`
                      : ''}
                    ${t.amount<0&&S.salary.amount>0
                      ? `<div class="tx-val-sub" style="color:var(--text3);font-size:9px">⏱️ ${(calcWorkTime(t.amount)||'').replace(' de trabalho','')}</div>`
