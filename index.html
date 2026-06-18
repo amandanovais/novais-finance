@@ -3592,11 +3592,21 @@ function renderTxList() {
   txs.forEach(t=>{ (days[t.date]=days[t.date]||[]).push(t); });
 
   list.innerHTML=Object.entries(days).map(([d,items])=>{
-    // Total do dia (parte do user) e saldo naquele dia
-    const dayTotal  = items.reduce((s,t)=>s+getSplit(t).me,0);
-    // Saldo do último item do dia no running map
-    const lastReal  = items.filter(t=>!t.isVirtual&&running[t.id]!==undefined);
-    const dayBal    = lastReal.length>0 ? running[lastReal[lastReal.length-1].id] : null;
+    // ═══════════════════════════════════════════════════════════════
+// PARTE 2A — substitua o bloco do day header (dentro do days.map)
+// Ache: "const dayTotal = items.reduce..." e substitua até o "const isToday"
+// ═══════════════════════════════════════════════════════════════
+
+    const dayTotal   = items.reduce((s,t)=>s+getSplit(t).me,0);
+    const lastReal   = items.filter(t=>!t.isVirtual&&!t.isVirtualAcordo&&running[t.id]!==undefined);
+    const dayBal     = lastReal.length>0 ? running[lastReal[lastReal.length-1].id] : null;
+    const isFutureDay= d > today;
+    const balLabel   = isFutureDay ? '📊' : '→';
+    const balColor   = dayBal===null
+      ? 'var(--text3)'
+      : dayBal>=0
+        ? (isFutureDay ? 'var(--blue)' : 'var(--text3)')
+        : 'var(--red)';
 
     const isToday=d===today;
     return `<div class="day-group${isToday?' day-group-today':''}">
@@ -3604,9 +3614,10 @@ function renderTxList() {
         <div class="day-label${isToday?' day-label-today':''}">${dateLabel(d)}${isToday?'<span class="today-badge">HOJE</span>':''}</div>
         <div class="day-totals">
           <div class="day-total" style="color:${dayTotal>=0?'var(--green)':'var(--red)'}">${dayTotal>=0?'+':''}${fmt(dayTotal)}</div>
-          ${dayBal!==null?`<div class="day-balance" style="color:${dayBal>=0?'var(--text3)':'var(--red)'}">saldo: ${fmtShort(dayBal)}</div>`:''}
+          ${dayBal!==null?`<div class="day-balance" style="color:${balColor}">${balLabel} ${fmtShort(dayBal)}</div>`:''}
         </div>
       </div>
+    
       ${items.map(t=>{
         const c            = getCat(t.category);
         const isIn         = t.amount>0;
