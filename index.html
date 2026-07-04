@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -92,7 +92,7 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',-apple-system,sa
 .nav-item{flex:0 0 auto;min-width:52px;display:flex;flex-direction:column;align-items:center;gap:1px;padding:6px 4px;cursor:pointer;color:var(--text3);font-size:8px;font-weight:600;transition:color .2s}
 .nav-item .nav-icon{font-size:19px;height:23px;line-height:23px}
 .nav-item.active{color:var(--green)}
-.page{display:none;padding-bottom:85px;animation:fadeIn .25s ease}
+.page{display:none;max-width:640px;margin:0 auto;padding-bottom:85px;animation:fadeIn .25s ease}
 .page.active{display:block}
 @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 .section-title{font-size:13px;font-weight:700;color:var(--text3);letter-spacing:1.5px;text-transform:uppercase;padding:20px 20px 10px}
@@ -114,7 +114,7 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',-apple-system,sa
 .hero-stat{flex:1;background:rgba(255,255,255,.06);border-radius:14px;padding:12px;border:1px solid rgba(255,255,255,.05)}
 [data-theme="light"] .hero-stat{background:rgba(0,0,0,.04);border:1px solid rgba(0,0,0,.06)}
 .hero-stat-label{font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text3);margin-bottom:4px}
-.hero-stat-val{font-family:'Space Mono',monospace;font-size:14px;font-weight:700}
+.hero-stat-val{font-variant-numeric:tabular-nums;letter-spacing:-.01em;font-size:14px;font-weight:700}
 .hero-stat-val.in{color:var(--green)}.hero-stat-val.out{color:var(--red)}.hero-stat-val.proj{color:var(--purple)}
 
 /* ══════════════════════════════════════════
@@ -126,7 +126,7 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',-apple-system,sa
 .health-ring-wrap svg{transform:rotate(-90deg)}
 .health-ring-bg{fill:none;stroke:var(--surface3);stroke-width:8}
 .health-ring-fill{fill:none;stroke-width:8;stroke-linecap:round;transition:stroke-dashoffset .8s ease}
-.health-score-num{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'Space Mono',monospace;font-size:22px;font-weight:700}
+.health-score-num{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-variant-numeric:tabular-nums;letter-spacing:-.01em;font-size:22px;font-weight:700}
 .health-right{flex:1}
 .health-title{font-size:16px;font-weight:800;margin-bottom:2px}
 .health-subtitle{font-size:12px;color:var(--text3)}
@@ -162,7 +162,7 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',-apple-system,sa
 .impact-month-box.neg{background:var(--red-bg);border-color:rgba(255,82,82,.25)}
 .impact-month-box.pos{background:var(--green-bg);border-color:rgba(0,200,83,.25)}
 .impact-month-name{font-size:9px;color:var(--text3);font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px}
-.impact-month-val{font-family:'Space Mono',monospace;font-size:11px;font-weight:700}
+.impact-month-val{font-variant-numeric:tabular-nums;letter-spacing:-.01em;font-size:11px;font-weight:700}
 .impact-month-diff{font-size:9px;margin-top:2px;font-weight:600}
 
 /* ══════════════════════════════════════════
@@ -171,7 +171,7 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',-apple-system,sa
 .goal-card{margin:0 20px 10px;padding:16px;background:var(--surface);border:1px solid var(--border);border-radius:16px}
 .goal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
 .goal-title{font-size:14px;font-weight:700}
-.goal-value{font-family:'Space Mono',monospace;font-size:12px;font-weight:700}
+.goal-value{font-variant-numeric:tabular-nums;letter-spacing:-.01em;font-size:12px;font-weight:700}
 .progress-bar{height:8px;border-radius:4px;background:var(--surface3);overflow:hidden}
 .progress-fill{height:100%;border-radius:4px;transition:width .5s ease}
 .progress-fill.green{background:linear-gradient(90deg,var(--green),var(--green2))}
@@ -198,7 +198,7 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',-apple-system,sa
 .quick-btn:active{transform:scale(.95);background:var(--surface2)}
 .quick-btn .qicon{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:16px}
 .quick-btn .qlabel{font-size:12px;font-weight:600;white-space:nowrap}
-.quick-btn .qamount{font-family:'Space Mono',monospace;font-size:11px;color:var(--text3)}
+.quick-btn .qamount{font-variant-numeric:tabular-nums;letter-spacing:-.01em;font-size:11px;color:var(--text3)}
 
 /* ══════════════════════════════════════════
    MINI CHART
@@ -212,7 +212,7 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',-apple-system,sa
 .cut-suggestion{margin:0 20px 8px;padding:14px 16px;background:var(--yellow-bg);border:1px solid rgba(255,215,64,.2);border-radius:14px}
 .cut-suggestion-title{font-size:13px;font-weight:700;color:var(--yellow);margin-bottom:4px;display:flex;align-items:center;gap:6px}
 .cut-suggestion-detail{font-size:12px;color:var(--text2);line-height:1.5}
-.cut-suggestion-gain{font-family:'Space Mono',monospace;font-size:14px;font-weight:700;color:var(--green);margin-top:6px}
+.cut-suggestion-gain{font-variant-numeric:tabular-nums;letter-spacing:-.01em;font-size:14px;font-weight:700;color:var(--green);margin-top:6px}
 
 /* Modo aperto */
 .aperto-card{margin:0 20px 10px;padding:16px;background:linear-gradient(135deg,rgba(255,82,82,.15),rgba(255,145,0,.1));border:1px solid rgba(255,82,82,.3);border-radius:16px}
@@ -221,7 +221,7 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',-apple-system,sa
 .aperto-item{display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(255,82,82,.15);font-size:12px}
 .aperto-item:last-child{border-bottom:none}
 .aperto-item-desc{color:var(--text2)}
-.aperto-item-val{font-family:'Space Mono',monospace;font-weight:700;color:var(--red)}
+.aperto-item-val{font-variant-numeric:tabular-nums;letter-spacing:-.01em;font-weight:700;color:var(--red)}
 .aperto-safe{font-size:13px;font-weight:700;color:var(--green);margin-top:10px;padding:10px;background:var(--green-bg);border-radius:10px;text-align:center}
 .obj-card{margin:0 20px 10px;padding:16px;background:var(--surface);border:1px solid var(--border);border-radius:16px;cursor:pointer;transition:all .15s}
 .obj-card:active{transform:scale(.98)}
@@ -230,9 +230,9 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',-apple-system,sa
 .obj-name{font-size:15px;font-weight:700}
 .obj-deadline{font-size:11px;color:var(--text3);margin-top:2px}
 .obj-body{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:10px}
-.obj-current{font-family:'Space Mono',monospace;font-size:18px;font-weight:700}
+.obj-current{font-variant-numeric:tabular-nums;letter-spacing:-.01em;font-size:18px;font-weight:700}
 .obj-target{font-size:11px;color:var(--text3);text-align:right}
-.obj-months{font-family:'Space Mono',monospace;font-size:12px;font-weight:700;color:var(--purple)}
+.obj-months{font-variant-numeric:tabular-nums;letter-spacing:-.01em;font-size:12px;font-weight:700;color:var(--purple)}
 .obj-add-btn{margin:0 20px 10px;padding:14px;border-radius:14px;background:var(--surface2);border:2px dashed var(--border);color:var(--text3);font-size:13px;font-weight:600;cursor:pointer;text-align:center;transition:all .15s}
 .obj-add-btn:active{transform:scale(.97)}
 /* ══════════════════════════════════════════
@@ -270,33 +270,37 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',-apple-system,sa
 .tab-pill{flex-shrink:0;padding:7px 14px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;background:var(--surface2);border:1px solid var(--border);color:var(--text3);transition:all .15s}
 .tab-pill.active{background:var(--green);border-color:var(--green);color:#000}
 .tx-list{padding:0 20px 20px}
-.day-group{margin-bottom:8px}
-.day-header{display:flex;align-items:flex-start;justify-content:space-between;padding:16px 0 8px}
+.day-group{background:var(--surface);border:1px solid var(--border);border-radius:16px;margin-bottom:10px;overflow:hidden}
+.day-header{display:flex;align-items:center;justify-content:space-between;padding:9px 14px;background:var(--surface2)}
 .day-label{font-size:12px;color:var(--text3);font-weight:700}
 .today-badge{background:var(--green);color:#000;padding:2px 8px;border-radius:10px;font-size:9px;font-weight:700;margin-left:6px}
 .day-label-today{font-size:13px;font-weight:800;color:var(--green)!important}
 .day-totals{text-align:right}
-.day-total{font-family:'Space Mono',monospace;font-size:12px;font-weight:700}
-.day-balance{font-family:'Space Mono',monospace;font-size:10px;margin-top:2px}
-.day-group-today{background:rgba(0,200,83,.05);border:1px solid rgba(0,200,83,.15);border-radius:14px;padding:0 10px;margin-bottom:8px}
+.day-total{font-variant-numeric:tabular-nums;letter-spacing:-.01em;font-size:12px;font-weight:700}
+.day-balance{font-variant-numeric:tabular-nums;letter-spacing:-.01em;font-size:10px;margin-top:2px}
+.day-group-today{border-color:rgba(0,200,83,.4)}
+.day-group-today .day-header{background:rgba(0,200,83,.08)}
 .today-jump{display:none;border:none;background:none;padding:0;cursor:pointer;font-family:'Inter',sans-serif}
 .month-summary-bar{display:flex;gap:8px;padding:0 20px 10px;overflow-x:auto;scrollbar-width:none}
 .month-summary-bar::-webkit-scrollbar{display:none}
 .month-sum-chip{flex-shrink:0;padding:6px 12px;border-radius:20px;font-size:11px;font-weight:700;background:var(--surface);border:1px solid var(--border)}
-.tx-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:16px;margin-bottom:8px;display:flex;align-items:center;gap:14px;cursor:pointer;transition:all .15s;position:relative}
-.tx-card:active{transform:scale(.98)}
-.tx-cat-dot{width:44px;height:44px;border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.tx-card{background:transparent;border:none;border-top:1px solid var(--border);border-radius:0;padding:10px 14px;margin:0;display:flex;align-items:center;gap:12px;cursor:pointer;transition:background .15s;position:relative}
+.tx-card:active{background:var(--surface2)}
+@media(hover:hover){.tx-card:hover{background:var(--surface2)}}
+.tx-cat-dot{width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
 .tx-mid{flex:1;min-width:0}
-.tx-desc{font-size:15px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:5px}
+.tx-desc{font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:3px}
 .tx-meta{display:flex;align-items:center;gap:5px;flex-wrap:wrap}
 .tx-cat-tag{font-size:10px;font-weight:600;padding:2px 8px;border-radius:6px}
 .tx-note-indicator{font-size:10px;color:var(--text3)}
-.tx-right{display:flex;flex-direction:column;align-items:flex-end;gap:3px;flex-shrink:0;min-width:110px}
-.tx-val{font-family:'Space Mono',monospace;font-size:15px;font-weight:700;white-space:nowrap}
+.tx-right{display:flex;flex-direction:column;align-items:flex-end;gap:2px;flex-shrink:0}
+.tx-val{font-variant-numeric:tabular-nums;letter-spacing:-.01em;font-size:14px;font-weight:700;white-space:nowrap}
 .tx-val.pos{color:var(--green)}.tx-val.neg{color:var(--red)}
-.tx-val-sub{font-size:10px;font-family:'Space Mono',monospace;white-space:nowrap;font-weight:500}
-.tx-val-proj{font-size:10px;font-family:'Space Mono',monospace;color:var(--blue);white-space:nowrap;font-weight:600}
-.tx-edit-btn{width:32px;height:32px;border-radius:9px;background:var(--surface2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:15px;cursor:pointer;flex-shrink:0;transition:all .15s}
+.tx-val-sub{font-size:10px;font-variant-numeric:tabular-nums;letter-spacing:-.01em;white-space:nowrap;font-weight:500}
+.tx-val-proj{font-size:10px;font-variant-numeric:tabular-nums;letter-spacing:-.01em;color:var(--blue);white-space:nowrap;font-weight:600}
+.tx-edit-btn{width:28px;height:28px;border-radius:8px;background:var(--surface2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:13px;cursor:pointer;flex-shrink:0;transition:all .15s}
+@media(hover:hover){.tx-edit-hover{opacity:0;transition:opacity .15s}.tx-card:hover .tx-edit-hover{opacity:1}}
+@media(hover:none){.tx-edit-hover{display:none}}
 .tx-edit-btn:active{transform:scale(.9);background:var(--blue-bg);border-color:var(--blue)}
 .tx-badge-future{font-size:10px;font-weight:700;padding:2px 8px;border-radius:6px;background:var(--orange-bg);color:var(--orange);border:1px solid rgba(255,145,0,.3)}
 .tx-confirm-btn{padding:4px 10px;border-radius:8px;background:var(--green-bg);color:var(--green);border:1px solid rgba(0,200,83,.3);font-size:10px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif}
@@ -310,16 +314,20 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',-apple-system,sa
 ══════════════════════════════════════════ */
 .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;padding:0 16px}
 .cal-weekday{text-align:center;font-size:10px;font-weight:700;color:var(--text3);padding:8px 0;letter-spacing:1px}
-.cal-day{aspect-ratio:1;border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:13px;font-weight:600;cursor:pointer;border:1px solid transparent;transition:all .15s;position:relative}
-.cal-day:active{transform:scale(.9)}
+.cal-day{height:54px;border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:13px;font-weight:600;cursor:pointer;border:1px solid transparent;transition:all .15s;position:relative}
+.cal-day:active{transform:scale(.95)}
 .cal-day.today{border-color:var(--green)!important}
-.cal-day.positive{background:var(--green-bg);color:var(--green)}
-.cal-day.positive-strong{background:rgba(0,200,83,.25);color:var(--green2)}
-.cal-day.negative{background:var(--red-bg);color:var(--red)}
-.cal-day.negative-strong{background:rgba(255,82,82,.25);color:var(--red2)}
-.cal-day.future-proj{background:var(--purple-bg);color:var(--purple);border-style:dashed;border-color:var(--purple)}
+.cal-day.p1{background:rgba(0,200,83,.10);color:var(--green)}
+.cal-day.p2{background:rgba(0,200,83,.18);color:var(--green)}
+.cal-day.p3{background:rgba(0,200,83,.28);color:var(--green2)}
+.cal-day.p4{background:rgba(0,200,83,.40);color:var(--green2)}
+.cal-day.n1{background:rgba(255,82,82,.10);color:var(--red)}
+.cal-day.n2{background:rgba(255,82,82,.18);color:var(--red)}
+.cal-day.n3{background:rgba(255,82,82,.28);color:var(--red2)}
+.cal-day.n4{background:rgba(255,82,82,.40);color:var(--red2)}
+.cal-day.future-proj{opacity:.55}
 .cal-day.selected{outline:2px solid var(--purple);outline-offset:1px}
-.cal-day-amount{font-family:'Space Mono',monospace;font-size:7px;font-weight:700;margin-top:1px}
+.cal-day-amount{font-variant-numeric:tabular-nums;letter-spacing:-.01em;font-size:10px;font-weight:700;margin-top:1px}
 .cal-day-dot{width:4px;height:4px;border-radius:50%;position:absolute;bottom:3px}
 .cal-day-detail{margin:12px 16px;padding:16px;background:var(--surface);border:1px solid var(--border);border-radius:16px}
 .cal-day-detail-tx{padding:8px 0;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;font-size:13px}
@@ -339,7 +347,7 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',-apple-system,sa
 .sim-input:focus{border-color:var(--green)}
 .sim-result{margin-top:14px;padding:16px;background:var(--green-bg);border-radius:14px;text-align:center}
 .sim-result.neg-r{background:var(--red-bg)}
-.sim-result-val{font-family:'Space Mono',monospace;font-size:28px;font-weight:700;color:var(--green)}
+.sim-result-val{font-variant-numeric:tabular-nums;letter-spacing:-.01em;font-size:28px;font-weight:700;color:var(--green)}
 .sim-result.neg-r .sim-result-val{color:var(--red)}
 .sim-result-label{font-size:12px;color:var(--text3);margin-top:4px}
 
@@ -350,7 +358,7 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',-apple-system,sa
 .report-week-bar-fill{width:100%;background:linear-gradient(180deg,var(--red),var(--red2));border-radius:6px;transition:height .6s ease;min-height:2px}
 .report-week-bar-fill.highlight{background:linear-gradient(180deg,var(--orange),var(--yellow))}
 .report-week-day{font-size:9px;color:var(--text3);font-weight:700;text-transform:uppercase}
-.report-week-amt{font-size:8px;font-family:'Space Mono',monospace;color:var(--text3);text-align:center}
+.report-week-amt{font-size:8px;font-variant-numeric:tabular-nums;letter-spacing:-.01em;color:var(--text3);text-align:center}
 
 /* Monthly comparison */
 .report-month-row{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)}
@@ -358,12 +366,12 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',-apple-system,sa
 .report-month-label{font-size:12px;font-weight:600;min-width:50px;color:var(--text2)}
 .report-month-bar-bg{flex:1;height:8px;background:var(--surface3);border-radius:4px;overflow:hidden}
 .report-month-bar-fill{height:100%;border-radius:4px;transition:width .6s ease}
-.report-month-val{font-family:'Space Mono',monospace;font-size:11px;font-weight:700;min-width:70px;text-align:right}
+.report-month-val{font-variant-numeric:tabular-nums;letter-spacing:-.01em;font-size:11px;font-weight:700;min-width:70px;text-align:right}
 
 /* Annual retro */
 .retro-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:0 20px 20px}
 .retro-stat{padding:14px;background:var(--surface);border:1px solid var(--border);border-radius:14px;text-align:center}
-.retro-stat-val{font-family:'Space Mono',monospace;font-size:14px;font-weight:700;margin-bottom:4px}
+.retro-stat-val{font-variant-numeric:tabular-nums;letter-spacing:-.01em;font-size:14px;font-weight:700;margin-bottom:4px}
 .retro-stat-label{font-size:9px;color:var(--text3);font-weight:600;line-height:1.3;text-transform:uppercase;letter-spacing:.5px}
 
 /* ══════════════════════════════════════════
@@ -379,7 +387,7 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',-apple-system,sa
 .acordo-name{font-size:15px;font-weight:700}
 .acordo-bank{font-size:11px;color:var(--text3);margin-top:2px}
 .acordo-values{text-align:right}
-.acordo-remaining{font-family:'Space Mono',monospace;font-size:16px;font-weight:700;color:var(--red)}
+.acordo-remaining{font-variant-numeric:tabular-nums;letter-spacing:-.01em;font-size:16px;font-weight:700;color:var(--red)}
 .acordo-installment{font-size:10px;color:var(--text3);margin-top:2px}
 .acordo-progress-bar{height:8px;background:var(--surface3);border-radius:4px;overflow:hidden;margin:8px 0 6px}
 .acordo-progress-fill{height:100%;border-radius:4px;background:linear-gradient(90deg,var(--green),var(--green2));transition:width .5s}
@@ -394,7 +402,7 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',-apple-system,sa
 .acordo-comp-row{display:flex;justify-content:space-between;font-size:12px;padding:4px 0;border-bottom:1px solid var(--border)}
 .acordo-comp-row:last-child{border-bottom:none}
 .acordo-comp-label{color:var(--text3)}
-.acordo-comp-val{font-family:'Space Mono',monospace;font-weight:700}
+.acordo-comp-val{font-variant-numeric:tabular-nums;letter-spacing:-.01em;font-weight:700}
 .acordo-summary{margin:0 20px 10px;padding:16px;background:linear-gradient(135deg,rgba(255,82,82,.08),var(--surface));border:1px solid rgba(255,82,82,.2);border-radius:16px}
 
 /* ══════════════════════════════════════════
@@ -402,13 +410,13 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',-apple-system,sa
 ══════════════════════════════════════════ */
 .invest-summary-card{margin:16px 20px;padding:20px;background:linear-gradient(135deg,rgba(0,200,83,.12),rgba(29,233,182,.08));border:1px solid rgba(0,200,83,.2);border-radius:20px}
 .invest-summary-label{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text2);margin-bottom:6px}
-.invest-summary-total{font-family:'Space Mono',monospace;font-size:32px;font-weight:700;color:var(--green2);margin-bottom:4px}
+.invest-summary-total{font-variant-numeric:tabular-nums;letter-spacing:-.01em;font-size:32px;font-weight:700;color:var(--green2);margin-bottom:4px}
 .invest-summary-yield{font-size:13px;color:var(--green);margin-bottom:16px}
 .invest-summary-row{display:flex;gap:10px}
 .invest-summary-box{flex:1;background:rgba(0,0,0,.15);border-radius:12px;padding:12px;border:1px solid rgba(255,255,255,.05)}
 [data-theme="light"] .invest-summary-box{background:rgba(0,0,0,.04)}
 .invest-summary-box-label{font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text3);margin-bottom:4px}
-.invest-summary-box-val{font-family:'Space Mono',monospace;font-size:13px;font-weight:700}
+.invest-summary-box-val{font-variant-numeric:tabular-nums;letter-spacing:-.01em;font-size:13px;font-weight:700}
 .invest-card{margin:0 20px 10px;padding:16px;background:var(--surface);border:1px solid var(--border);border-radius:16px;cursor:pointer;transition:all .15s}
 .invest-card:active{transform:scale(.98)}
 .invest-header{display:flex;align-items:center;gap:12px;margin-bottom:12px}
@@ -416,9 +424,9 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',-apple-system,sa
 .invest-name{font-size:15px;font-weight:700}
 .invest-type-badge{display:inline-block;font-size:9px;font-weight:700;padding:2px 7px;border-radius:6px;margin-top:2px;text-transform:uppercase;letter-spacing:.5px}
 .invest-body{display:flex;justify-content:space-between;align-items:flex-end}
-.invest-amount{font-family:'Space Mono',monospace;font-size:20px;font-weight:700}
+.invest-amount{font-variant-numeric:tabular-nums;letter-spacing:-.01em;font-size:20px;font-weight:700}
 .invest-yield-block{text-align:right}
-.invest-yield-val{font-family:'Space Mono',monospace;font-size:14px;font-weight:700;color:var(--green)}
+.invest-yield-val{font-variant-numeric:tabular-nums;letter-spacing:-.01em;font-size:14px;font-weight:700;color:var(--green)}
 .invest-yield-label{font-size:10px;color:var(--text3);margin-top:2px}
 .invest-emergency{margin:0 20px 10px;padding:14px 16px;background:var(--surface);border:1px solid var(--border);border-radius:14px}
 .invest-emergency-label{font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text3);margin-bottom:6px}
@@ -426,7 +434,7 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',-apple-system,sa
 .invest-emergency-fill{height:100%;border-radius:4px;background:linear-gradient(90deg,var(--cyan),var(--teal));transition:width .5s}
 .invest-suggest{margin:0 20px 10px;padding:14px 16px;background:var(--teal-bg);border:1px solid rgba(29,233,182,.2);border-radius:14px}
 .invest-suggest-label{font-size:11px;font-weight:700;color:var(--teal);margin-bottom:4px}
-.invest-suggest-val{font-family:'Space Mono',monospace;font-size:20px;font-weight:700;color:var(--teal)}
+.invest-suggest-val{font-variant-numeric:tabular-nums;letter-spacing:-.01em;font-size:20px;font-weight:700;color:var(--teal)}
 .invest-suggest-detail{font-size:11px;color:var(--text3);margin-top:4px;line-height:1.4}
 
 /* ══════════════════════════════════════════
@@ -439,7 +447,7 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',-apple-system,sa
 .budget-name{font-size:13px;font-weight:600}
 .budget-bar-bg{height:5px;background:var(--surface3);border-radius:3px;overflow:hidden;margin-top:5px}
 .budget-bar-fill{height:100%;border-radius:3px;transition:width .5s}
-.budget-amounts{text-align:right;font-size:10px;font-family:'Space Mono',monospace}
+.budget-amounts{text-align:right;font-size:10px;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
 .budget-amounts .spent{font-weight:700}
 .budget-amounts .limit{color:var(--text3)}
 .budget-add-row{display:flex;gap:8px;margin-top:10px;align-items:center}
@@ -532,10 +540,10 @@ textarea.form-input{resize:none;min-height:60px;font-size:13px}
 .card-visual-owner{font-size:10px;font-weight:700;padding:3px 8px;border-radius:6px;background:rgba(0,0,0,.3);color:#fff;backdrop-filter:blur(8px)}
 .card-visual-body{position:relative;z-index:1}
 .card-visual-limit{font-size:10px;color:rgba(255,255,255,.7);text-transform:uppercase;letter-spacing:1px;font-weight:700;margin-bottom:4px}
-.card-visual-amount{font-family:'Space Mono',monospace;font-size:22px;font-weight:700;color:#fff;margin-bottom:8px}
+.card-visual-amount{font-variant-numeric:tabular-nums;letter-spacing:-.01em;font-size:22px;font-weight:700;color:#fff;margin-bottom:8px}
 .card-visual-bar{height:6px;border-radius:3px;background:rgba(0,0,0,.3);overflow:hidden;margin-bottom:6px}
 .card-visual-bar-fill{height:100%;background:#fff;border-radius:3px;transition:width .5s ease}
-.card-visual-meta{display:flex;justify-content:space-between;font-size:11px;color:rgba(255,255,255,.85);font-family:'Space Mono',monospace;font-weight:700}
+.card-visual-meta{display:flex;justify-content:space-between;font-size:11px;color:rgba(255,255,255,.85);font-variant-numeric:tabular-nums;letter-spacing:-.01em;font-weight:700}
 .card-detail-back{padding:12px 20px 0;display:flex;align-items:center;gap:8px;cursor:pointer;color:var(--text2);font-size:14px;font-weight:600}
 .card-best-day{margin:0 20px 10px;padding:12px 16px;background:var(--green-bg);border:1px solid rgba(0,200,83,.2);border-radius:12px;font-size:12px;color:var(--green);font-weight:600}
 .card-install-sim{margin:10px 20px;padding:16px;background:var(--surface);border:1px solid var(--border);border-radius:16px}
@@ -547,7 +555,7 @@ textarea.form-input{resize:none;min-height:60px;font-size:13px}
 .invoice-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
 .invoice-month{font-size:14px;font-weight:700}
 .invoice-due{font-size:11px;color:var(--text3)}
-.invoice-amount{font-family:'Space Mono',monospace;font-size:20px;font-weight:700;color:var(--text);margin-bottom:8px}
+.invoice-amount{font-variant-numeric:tabular-nums;letter-spacing:-.01em;font-size:20px;font-weight:700;color:var(--text);margin-bottom:8px}
 .invoice-paid-badge{font-size:10px;font-weight:700;padding:3px 8px;border-radius:6px;background:var(--green-bg);color:var(--green)}
 .invoice-actions{display:flex;gap:6px;margin-top:10px}
 .invoice-actions button{flex:1;padding:8px;border-radius:10px;border:1px solid var(--border);background:var(--surface2);color:var(--text);font-size:12px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif}
@@ -562,7 +570,7 @@ textarea.form-input{resize:none;min-height:60px;font-size:13px}
 .purchase-info{flex:1;min-width:0}
 .purchase-desc{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .purchase-meta{font-size:10px;color:var(--text3);margin-top:2px}
-.purchase-amount{font-family:'Space Mono',monospace;font-size:13px;font-weight:700;color:var(--red)}
+.purchase-amount{font-variant-numeric:tabular-nums;letter-spacing:-.01em;font-size:13px;font-weight:700;color:var(--red)}
 .purchase-installment-badge{display:inline-block;font-size:9px;padding:1px 6px;border-radius:4px;background:var(--purple-bg);color:var(--purple);font-weight:700;margin-left:4px}
 
 /* Pickers */
@@ -581,11 +589,11 @@ textarea.form-input{resize:none;min-height:60px;font-size:13px}
 .couple-bal-box{flex:1;background:rgba(255,255,255,.04);padding:14px;border-radius:14px;border:1px solid rgba(255,255,255,.05)}
 [data-theme="light"] .couple-bal-box{background:rgba(0,0,0,.03)}
 .couple-bal-label{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text3);margin-bottom:4px}
-.couple-bal-val{font-family:'Space Mono',monospace;font-size:18px;font-weight:700}
+.couple-bal-val{font-variant-numeric:tabular-nums;letter-spacing:-.01em;font-size:18px;font-weight:700}
 .couple-stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 20px}
 .couple-stat{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:14px}
 .couple-stat-label{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text3);margin-bottom:4px}
-.couple-stat-val{font-family:'Space Mono',monospace;font-size:16px;font-weight:700}
+.couple-stat-val{font-variant-numeric:tabular-nums;letter-spacing:-.01em;font-size:16px;font-weight:700}
 .couple-onboard{margin:24px 20px;padding:32px 20px;background:var(--surface);border:1px solid var(--border);border-radius:20px;text-align:center}
 .couple-onboard-emoji{font-size:56px;margin-bottom:12px}
 .couple-onboard-title{font-size:18px;font-weight:800;margin-bottom:6px}
@@ -598,6 +606,20 @@ textarea.form-input{resize:none;min-height:60px;font-size:13px}
 .view-toggle{display:flex;gap:6px;padding:0 20px 8px}
 .view-toggle-btn{flex:1;padding:8px;border-radius:10px;border:1px solid var(--border);background:var(--surface);color:var(--text3);font-size:12px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif}
 .view-toggle-btn.active{background:var(--green-bg);border-color:var(--green);color:var(--green)}
+
+/* ══════════════════════════════════════════
+   MELHORIAS — badges neutros, hero-safe, alertas, desktop
+══════════════════════════════════════════ */
+.tx-status-tag{font-size:10px;font-weight:600;padding:2px 8px;border-radius:6px;background:var(--surface3);color:var(--text2)}
+.hero-safe{position:relative;z-index:1;margin-top:14px;padding:12px 14px;border-radius:14px;background:rgba(0,200,83,.12);border:1px solid rgba(0,200,83,.25);display:flex;align-items:baseline;justify-content:space-between;gap:8px}
+.hero-safe-label{font-size:11px;font-weight:700;color:var(--text2);letter-spacing:.5px;text-transform:uppercase}
+.hero-safe-val{font-variant-numeric:tabular-nums;font-size:18px;font-weight:800;color:var(--green)}
+.alert-more-btn{margin:0 20px 8px;padding:10px;border-radius:12px;background:var(--surface);border:1px dashed var(--border2);color:var(--text3);font-size:12px;font-weight:600;text-align:center;cursor:pointer}
+@media(min-width:700px){
+  .fab{right:calc(50vw - 320px + 20px)}
+  .bottom-nav{justify-content:center}
+  .modal{max-width:640px;margin:0 auto}
+}
 </style>
 </head>
 <body data-theme="dark">
@@ -653,6 +675,7 @@ textarea.form-input{resize:none;min-height:60px;font-size:13px}
         <div class="hero-stat-val proj" id="heroProj">R$ 0</div>
       </div>
     </div>
+    <div class="hero-safe" id="heroSafe" style="display:none"></div>
   </div>
 
   <!-- Alertas (saldo negativo, sem receita, etc.) -->
@@ -719,8 +742,8 @@ textarea.form-input{resize:none;min-height:60px;font-size:13px}
       <div class="filter-btn" id="filterToggle" onclick="toggleFilters()">🔍</div>
     </div>
   </div>
+  <div class="month-summary-bar" id="monthSummaryBar"></div>
   <div class="view-toggle">
-    <div class="month-summary-bar" id="monthSummaryBar"></div>
     <button class="view-toggle-btn active" id="vtList" onclick="setTxMode('list')">📋 Lista</button>
     <button class="view-toggle-btn" id="vtCal" onclick="setTxMode('calendar')">📅 Calendário</button>
   </div>
@@ -851,6 +874,13 @@ textarea.form-input{resize:none;min-height:60px;font-size:13px}
       <div style="font-size:11px;color:var(--text3);margin-top:2px">Ativa sugestões agressivas de corte para fechar o mês no azul</div>
     </div>
     <div class="toggle-switch" id="apetoToggle" onclick="toggleModoAperto()"></div>
+  </div>
+  <div class="toggle-row">
+    <div>
+      <div style="font-size:14px;font-weight:700">📜 Modo extrato</div>
+      <div style="font-size:11px;color:var(--text3);margin-top:2px">Mostra o saldo corrente após cada transação na lista</div>
+    </div>
+    <div class="toggle-switch" id="extratoToggle" onclick="toggleExtrato()"></div>
   </div>
 </div>
     <div class="settings-title">Saldo inicial</div>
@@ -1424,6 +1454,7 @@ let S = {
   budgets: {},
 
   modoAperto: false,
+  extrato:    false,
 
   // ── Cartões ────────────────────────────────────────────────────
   cards:             [],   // [{id,name,emoji,limit,closingDay,dueDay,owner,color,archived,createdAt}]
@@ -1568,6 +1599,7 @@ function listenData() {
       S.transactions.forEach(t => { if (!t.owner) t.owner = 'me'; });
       // Modo aperto
       S.modoAperto = d.modoAperto || false;
+      S.extrato    = d.extrato    || false;
       // ── Migração confirmed ──
       if (!S.migrated) {
         let needs = false;
@@ -1625,6 +1657,7 @@ S.objectives.forEach(o=>{obj[String(o.id).replace(/\./g,'_')]=o;});
     migrated:         S.migrated,
     updatedAt:        Date.now(),
     modoAperto: S.modoAperto,
+    extrato:    S.extrato,
     objectives: obj,
   });
 }
@@ -2712,7 +2745,7 @@ function openDetail(id) {
   let h=`<div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;padding:16px;background:${bg};border-radius:14px">
     <div style="font-size:32px">${cat.emoji}</div>
     <div style="flex:1"><div style="font-size:18px;font-weight:700">${tx.desc}</div><div style="font-size:12px;color:var(--text3);margin-top:2px">${cat.name}</div></div>
-    <div style="font-family:'Space Mono',monospace;font-size:20px;font-weight:700;color:${isIn?'var(--green)':'var(--red)'}">${isIn?'+':''}${fmt(tx.amount)}
+    <div style="font-variant-numeric:tabular-nums;letter-spacing:-.01em;font-size:20px;font-weight:700;color:${isIn?'var(--green)':'var(--red)'}">${isIn?'+':''}${fmt(tx.amount)}
    ${tx.amount<0&&S.salary.amount>0?`
   <div style="font-size:11px;color:var(--text3);margin-top:4px;font-style:italic">
     ${calcWorkTime(tx.amount)||''}
@@ -2730,8 +2763,8 @@ function openDetail(id) {
       h+=`<div style="padding:12px;background:var(--purple-bg);border-radius:10px;margin-bottom:12px">
         <div style="font-size:11px;font-weight:700;color:var(--purple2);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">💑 Compartilhado (${tx.splitMe}/${tx.splitPartner})</div>
         <div style="display:flex;gap:8px;font-size:12px">
-          <div style="flex:1"><div style="color:var(--text3)">Você</div><div style="font-family:'Space Mono',monospace;font-weight:700">${fmt(me)}</div></div>
-          <div style="flex:1"><div style="color:var(--text3)">${getPartnerName()}</div><div style="font-family:'Space Mono',monospace;font-weight:700">${fmt(partner)}</div></div>
+          <div style="flex:1"><div style="color:var(--text3)">Você</div><div style="font-variant-numeric:tabular-nums;letter-spacing:-.01em;font-weight:700">${fmt(me)}</div></div>
+          <div style="flex:1"><div style="color:var(--text3)">${getPartnerName()}</div><div style="font-variant-numeric:tabular-nums;letter-spacing:-.01em;font-weight:700">${fmt(partner)}</div></div>
         </div></div>`;
     } else if (owner==='partner') {
       h+=`<div style="padding:12px;background:var(--pink-bg);border-radius:10px;margin-bottom:12px;font-size:13px;color:var(--pink)">${getPartnerEmoji()} Transação de <strong>${getPartnerName()}</strong></div>`;
@@ -2936,16 +2969,18 @@ function calcAboveAverageAlerts(){
       .filter(t=>t.date.startsWith(curP)&&t.amount<0&&t.category===cat.id)
       .reduce((s,t)=>s+Math.abs(getSplit(t).me),0);
     if(curSpent===0) return;
-    let total=0,months=0;
-    for(let i=1;i<=3;i++){
+    const spends=[];
+    for(let i=1;i<=6;i++){
       let mm=m-1-i,yy=y; if(mm<0){mm+=12;yy--;}
       const spent=S.transactions
         .filter(t=>t.date.startsWith(pfx(yy,mm))&&t.amount<0&&t.category===cat.id)
         .reduce((s,t)=>s+Math.abs(getSplit(t).me),0);
-      if(spent>0){total+=spent;months++;}
+      if(spent>0) spends.push(spent);
     }
-    if(months===0) return;
-    const avg=total/months;
+    if(spends.length<2) return; // precisa de histórico pra comparar
+    spends.sort((a,b)=>a-b);
+    const mid=Math.floor(spends.length/2);
+    const avg=spends.length%2?spends[mid]:(spends[mid-1]+spends[mid])/2;
     const pct=((curSpent-avg)/avg)*100;
     if(pct>=40) alerts.push({cat,curSpent,avg,pct:Math.round(pct)});
   });
@@ -3108,6 +3143,18 @@ function renderObjectives(){
 // ═══════════════════════════════════════════════════════════════
 // HOME
 // ═══════════════════════════════════════════════════════════════
+function capAlerts(box,max){
+  const cards=[...box.children];
+  if(cards.length<=max+1) return;
+  const hidden=document.createElement('div');
+  hidden.style.display='none';
+  cards.slice(max).forEach(c=>hidden.appendChild(c));
+  const btn=document.createElement('div');
+  btn.className='alert-more-btn';
+  btn.textContent=`Ver mais ${cards.length-max} alerta(s)`;
+  btn.onclick=()=>{hidden.style.display='block';btn.remove();};
+  box.appendChild(btn);box.appendChild(hidden);
+}
 function renderHome() {
   const bal  = curBal();
   const hero = document.getElementById('heroBalance');
@@ -3161,34 +3208,39 @@ function renderHome() {
   }
 // ── COBRANÇA DUPLICADA ───────────────────────────────────────
 const dupes=calcDuplicateAlert();
-if(dupes.length>0){
-  dupes.forEach(dupe=>{
-    aBox.innerHTML+=`<div class="alert-card warning">🔁 <div>
-      <strong>Cobrança duplicada?</strong><br>
-      <span style="font-size:11px">"${dupe.desc}" aparece 2x essa semana (${fmt(dupe.amount)})</span>
-    </div></div>`;
-  });
+if(dupes.length===1){
+  aBox.innerHTML+=`<div class="alert-card warning">🔁 <div>
+    <strong>Cobrança duplicada?</strong><br>
+    <span style="font-size:11px">"${dupes[0].desc}" aparece 2x essa semana (${fmt(dupes[0].amount)})</span>
+  </div></div>`;
+}else if(dupes.length>1){
+  const totalDup=dupes.reduce((s,x)=>s+x.amount,0);
+  aBox.innerHTML+=`<div class="alert-card warning" style="cursor:pointer" onclick="const b=document.getElementById('dupeList');b.style.display=b.style.display==='none'?'block':'none'">🔁 <div style="flex:1">
+    <strong>${dupes.length} possíveis cobranças duplicadas · ${fmt(totalDup)}</strong>
+    <div id="dupeList" style="display:none;margin-top:6px">${dupes.map(x=>`<div style="font-size:11px;padding:2px 0">"${x.desc}" — ${fmt(x.amount)}</div>`).join('')}</div>
+  </div><div style="font-size:18px">›</div></div>`;
 }
 
 // ── GASTO ACIMA DA MÉDIA ─────────────────────────────────────
 const aboveAvg=calcAboveAverageAlerts();
 aboveAvg.forEach(a=>{
   aBox.innerHTML+=`<div class="alert-card warning">${a.cat.emoji} <div>
-    <strong>${a.cat.name} ${a.pct}% acima da média</strong><br>
-    <span style="font-size:11px">Esse mês: ${fmt(a.curSpent)} · Média: ${fmt(a.avg)}</span>
+    <strong>${a.cat.name} ${a.pct}% acima do normal</strong><br>
+    <span style="font-size:11px">Esse mês: ${fmt(a.curSpent)} · Mediana (6m): ${fmt(a.avg)}</span>
   </div></div>`;
 });
+capAlerts(aBox,4);
 
-// ── JANELA SEGURA ────────────────────────────────────────────
+// ── JANELA SEGURA — no hero ──────────────────────────────────
 const safe=calcSafeSpend();
-if(safe>0){
-  setEl('noIncomeAlertContainer',
-    (document.getElementById('noIncomeAlertContainer').innerHTML||'')+
-    `<div class="alert-card success">✅ <div>
-      <strong>Seguro gastar hoje: ${fmt(safe)}</strong><br>
-      <span style="font-size:11px">Cobre compromissos e divide o restante pelos dias do mês</span>
-    </div></div>`
-  );
+const safeEl=document.getElementById('heroSafe');
+if(safeEl){
+  if(safe>0){
+    safeEl.style.display='flex';
+    safeEl.innerHTML=`<span class="hero-safe-label">✅ Seguro gastar hoje</span><span class="hero-safe-val">${fmt(safe)}</span>`;
+  } else {
+    safeEl.style.display='none';
+  }
 }
   // ── 4. ALERTAS DE ACORDOS (parcela do mês) ──────────────────
   const acBox = document.getElementById('acordoAlertContainer');
@@ -3477,8 +3529,8 @@ function renderMonthSummaryBar(){
     {label:'📤 '+fmt(Math.abs(st.exp)), color:'var(--red)'},
     {label:'📋 '+txCount+' transações', color:'var(--text2)'},
   ];
-  if(st.proj>0) chips.push({label:'⏳ '+fmt(st.proj)+' esperado',color:'var(--orange)'});
-  bar.innerHTML=chips.map(c=>`<div class="month-sum-chip" style="color:${c.color};border-color:${c.color}20">${c.label}</div>`).join('');
+  if(st.proj>0) chips.push({label:'⏳ '+fmt(st.proj)+' esperado',color:'var(--purple)'});
+  bar.innerHTML=chips.map(c=>`<div class="month-sum-chip" style="color:${c.color}">${c.label}</div>`).join('');
   // Mostra botão "ir para hoje" só se mês atual e hoje não estiver visível
   const btn=document.getElementById('todayJumpBtn');
     if(btn) btn.style.display=isCurrentMonth?'flex':'none';
@@ -3591,33 +3643,23 @@ function renderTxList() {
   const days={};
   txs.forEach(t=>{ (days[t.date]=days[t.date]||[]).push(t); });
 
-  list.innerHTML=Object.entries(days).map(([d,items])=>{
-    // ═══════════════════════════════════════════════════════════════
-// PARTE 2A — substitua o bloco do day header (dentro do days.map)
-// Ache: "const dayTotal = items.reduce..." e substitua até o "const isToday"
-// ═══════════════════════════════════════════════════════════════
+  const showRun = !!S.extrato; // modo extrato (Config): saldo corrente por linha
 
+  list.innerHTML=Object.entries(days).map(([d,items])=>{
     const dayTotal   = items.reduce((s,t)=>s+getSplit(t).me,0);
     const lastReal   = items.filter(t=>!t.isVirtual&&!t.isVirtualAcordo&&running[t.id]!==undefined);
     const dayBal     = lastReal.length>0 ? running[lastReal[lastReal.length-1].id] : null;
-    const isFutureDay= d > today;
-    const balLabel   = isFutureDay ? '📊' : '→';
-    const balColor   = dayBal===null
-      ? 'var(--text3)'
-      : dayBal>=0
-        ? (isFutureDay ? 'var(--blue)' : 'var(--text3)')
-        : 'var(--red)';
+    const isToday    = d===today;
+    const balColor   = dayBal===null ? 'var(--text3)' : dayBal<0 ? 'var(--red)' : 'var(--text3)';
 
-    const isToday=d===today;
     return `<div class="day-group${isToday?' day-group-today':''}">
       <div class="day-header">
         <div class="day-label${isToday?' day-label-today':''}">${dateLabel(d)}${isToday?'<span class="today-badge">HOJE</span>':''}</div>
         <div class="day-totals">
           <div class="day-total" style="color:${dayTotal>=0?'var(--green)':'var(--red)'}">${dayTotal>=0?'+':''}${fmt(dayTotal)}</div>
-          ${dayBal!==null?`<div class="day-balance" style="color:${balColor}">${balLabel} ${fmtShort(dayBal)}</div>`:''}
+          ${dayBal!==null?`<div class="day-balance" style="color:${balColor}">saldo ${fmtShort(dayBal)}</div>`:''}
         </div>
       </div>
-    
       ${items.map(t=>{
         const c            = getCat(t.category);
         const isIn         = t.amount>0;
@@ -3625,7 +3667,6 @@ function renderTxList() {
         const showAwt      = isIn&&!t.confirmed;
         const bg           = c.bg||hexToBg(c.color);
         const owner        = t.owner||'me';
-        const ownerL       = getOwnerLabel(owner);
         const {me}         = getSplit(t);
         const isVirt       = !!t.isVirtual;
         const isVirtAcordo = !!t.isVirtualAcordo;
@@ -3633,52 +3674,27 @@ function renderTxList() {
         const cls          = isVirt||isVirtAcordo ? 'tx-card'
           : `tx-card${owner==='shared'?' shared-tx':''}${owner==='partner'?' partner-tx':''}`;
 
-                // ── Valor + sub-linha ──────────────────────────────────
-        let valHtml;
-        if (isVirtAcordo) {
-          valHtml=`<div class="tx-val neg">${fmt(t.amount)}</div>
-                   <div class="tx-val-sub" style="color:var(--teal)">🤝 parcela</div>`;
-        } else if (isVirt) {
-          valHtml=`<div class="tx-val neg">${fmt(t.amount)}</div>
-                   <div class="tx-val-sub" style="color:var(--orange)">
-                     ${isCoverage?'🫵 sua cobertura':'💳 a pagar'}
-                   </div>`;
-        } else if (owner==='shared'||owner==='partner') {
-          valHtml=`<div class="tx-val ${isIn?'pos':'neg'}">${isIn?'+':''}${fmt(t.amount)}</div>
-                   <div class="tx-val-sub">Você: ${fmt(me)}</div>`;
+        // ── Valor: no máximo 1 sub-linha ───────────────────────
+        let valHtml=`<div class="tx-val ${isIn?'pos':'neg'}">${isIn?'+':''}${fmt(t.amount)}</div>`;
+        if (owner==='shared'||owner==='partner') {
+          valHtml+=`<div class="tx-val-sub" style="color:var(--text3)">Você: ${fmt(me)}</div>`;
         } else if (showAwt) {
-          valHtml=`<div class="tx-val pos">+${fmt(t.amount)}</div>
-                   <div class="tx-val-sub" style="color:var(--orange)">⏳ pendente</div>`;
-        // ═══════════════════════════════════════════════════════════════
-// PARTE 2B — substitua o bloco } else { do valHtml (transação normal)
-// Ache: "} else {" seguido de "const rb = running[t.id]"
-// ═══════════════════════════════════════════════════════════════
-
-        } else {
-          const rb         = running[t.id];
-          const isFutureTx = t.date > today;
-          const rbColor    = rb===undefined
-            ? 'var(--text3)'
-            : rb>=0
-              ? (isFutureTx ? 'var(--blue)' : 'var(--text3)')
-              : 'var(--red)';
-          valHtml=`<div class="tx-val ${isIn?'pos':'neg'}">${isIn?'+':''}${fmt(t.amount)}</div>
-                   ${rb!==undefined
-                     ? isFutureTx
-                       ? `<div class="tx-val-proj">📊 ${fmt(rb)}</div>`
-                       : `<div class="tx-val-sub" style="color:${rbColor}">→ ${fmt(rb)}</div>`
-                     : ''}
-                   ${t.amount<0&&S.salary.amount>0
-                     ? `<div class="tx-val-sub" style="color:var(--text3);font-size:9px">⏱️ ${(calcWorkTime(t.amount)||'').replace(' de trabalho','')}</div>`
-                     : ''}`;
+          valHtml+=`<div class="tx-val-sub" style="color:var(--orange)">pendente</div>`;
+        } else if (showRun&&running[t.id]!==undefined) {
+          valHtml+=`<div class="tx-val-sub" style="color:${running[t.id]<0?'var(--red)':'var(--text3)'}">→ ${fmtShort(running[t.id])}</div>`;
         }
 
-        // ── Badge do owner ─────────────────────────────────────
-        const ownerBadge=S.partner.enabled&&owner!=='me'
-          ?`<span class="owner-badge ${owner}">${ownerL.emoji} ${owner==='shared'?'Casal':getPartnerName()}</span>`
-          :'';
+        // ── Badge secundário: no máximo 1 (o resto fica no detalhe)
+        let extra='';
+        if (isVirt&&!isCoverage)                 extra=`<span class="tx-status-tag">Fatura</span>`;
+        else if (isCoverage)                     extra=`<span class="tx-status-tag">Cobertura</span>`;
+        else if (isVirtAcordo)                   extra=`<span class="tx-status-tag">Acordo</span>`;
+        else if (t.recurrence==='installment')   extra=`<span class="tx-status-tag">${t.instCurrent}/${t.instTotal}</span>`;
+        else if (S.partner.enabled&&owner!=='me')extra=`<span class="owner-badge ${owner}">${owner==='shared'?'Casal':getPartnerName()}</span>`;
+        else if (t.recurrence==='monthly')       extra=`<span class="tx-status-tag">Fixo</span>`;
+        else if (isFut&&!showAwt)                extra=`<span class="tx-status-tag">Futuro</span>`;
 
-        // ── Botão direito ──────────────────────────────────────
+        // ── Botão de ação ──────────────────────────────────────
         let actionBtn;
         if (isVirtAcordo) {
           actionBtn=`<div class="tx-edit-btn" onclick="event.stopPropagation();acordoVirtualAction('${t.acordoId}')">🤝</div>`;
@@ -3687,124 +3703,30 @@ function renderTxList() {
         } else if (showAwt) {
           actionBtn=`<button class="tx-confirm-btn" onclick="event.stopPropagation();confirmReceipt('${t.id}')">✓</button>`;
         } else {
-          actionBtn=`<div class="tx-edit-btn" onclick="event.stopPropagation();openEditModal('${t.id}')">✏️</div>`;
+          actionBtn=`<div class="tx-edit-btn tx-edit-hover" onclick="event.stopPropagation();openEditModal('${t.id}')">✏️</div>`;
         }
 
-
-        return `<div class="${cls}">
-          <div onclick="${isVirt||isVirtAcordo?'':'openDetail(\''+t.id+'\')'}" style="display:flex;align-items:center;gap:12px;flex:1;min-width:0;cursor:${isVirt||isVirtAcordo?'default':'pointer'}">
-            <div class="tx-cat-dot" style="background:${bg}">${c.emoji}</div>
-            <div class="tx-mid">
-              <div class="tx-desc">${t.desc}</div>
-              <div class="tx-meta">
-                <span class="tx-cat-tag" style="color:${c.color};background:${bg}">${c.name}</span>
-                ${isVirt&&!isCoverage?'<span class="tx-badge-future" style="background:var(--purple-bg);color:var(--purple)">FATURA</span>':''}
-                ${isCoverage?'<span class="tx-badge-future" style="background:var(--orange-bg);color:var(--orange)">COBERTURA</span>':''}
-                ${isVirtAcordo?'<span class="tx-badge-future" style="background:var(--teal-bg);color:var(--teal)">ACORDO</span>':''}
-                ${ownerBadge}
-                ${t.recurrence==='installment'?`<span class="tx-cat-tag" style="color:var(--purple);background:var(--purple-bg)">${t.instCurrent}/${t.instTotal}</span>`:''}
-                ${t.recurrence==='monthly'?`<span class="tx-cat-tag" style="color:var(--purple);background:var(--purple-bg)">🔄</span>`:''}
-                ${t.notes?'<span class="tx-note-indicator">📝</span>':''}
-                ${isFut&&!showAwt&&!isVirt&&!isVirtAcordo?'<span class="tx-badge-future">FUTURO</span>':''}
-                ${t.lastEdit?'<span class="tx-note-indicator">✏️</span>':''}
-              </div>
+        return `<div class="${cls}" onclick="${isVirt||isVirtAcordo?'':`openDetail('${t.id}')`}" style="cursor:${isVirt||isVirtAcordo?'default':'pointer'}">
+          <div class="tx-cat-dot" style="background:${bg}">${c.emoji}</div>
+          <div class="tx-mid">
+            <div class="tx-desc">${t.desc}</div>
+            <div class="tx-meta">
+              <span class="tx-cat-tag" style="color:${c.color};background:${bg}">${c.name}</span>
+              ${extra}
             </div>
           </div>
-          <div class="tx-right">
-            ${valHtml}
-            ${actionBtn}
-          </div>
+          <div class="tx-right">${valHtml}</div>
+          ${actionBtn}
         </div>`;
       }).join('')}
-    </div>`;            // ← fecha o day-group
-  }).join('');          // ← fecha o days.map
-}                       // ← fecha a função
+    </div>`;
+  }).join('');
+}
 
 // ═══════════════════════════════════════════════════════════════
 // CALENDÁRIO (melhorado)
 // ═══════════════════════════════════════════════════════════════
-function renderCal() {
-  const y=S.currentYear, m=S.currentMonth;
-  const first=new Date(y,m,1).getDay();
-  const last =new Date(y,m+1,0).getDate();
-  const today=td();
-  const projEnd=projBal(y,m);
-
-  // Projeção do mês no topo
-  const projBar = document.getElementById('calProjBar');
-  if (projBar) {
-    projBar.innerHTML=`
-      <div>
-        <div style="font-size:10px;font-weight:700;color:var(--text3);letter-spacing:1px;text-transform:uppercase">Projeção fim do mês</div>
-        <div style="font-family:'Space Mono',monospace;font-size:18px;font-weight:700;color:${projEnd<0?'var(--red)':'var(--purple)'};margin-top:2px">${(projEnd<0?'-':'')+fmt(projEnd)}</div>
-      </div>
-      <div style="font-size:11px;color:var(--text3)">${MO[m]} ${y}</div>`;
-  }
-
-  // Calcular range de valores do mês para intensidade de cor
-  const dayNets={};
-  for (let d=1;d<=last;d++) {
-    const ds=`${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-    const dayTxs=S.transactions.filter(t=>t.date===ds);
-    let net=0;
-    dayTxs.forEach(t=>{ const {me}=getSplit(t); if (me<0||(me>0&&t.confirmed)) net+=me; });
-    dayNets[ds]=net;
-  }
-  const maxAbs = Math.max(1,...Object.values(dayNets).map(Math.abs));
-
-  let html=['DOM','SEG','TER','QUA','QUI','SEX','SÁB'].map(d=>`<div class="cal-weekday">${d}</div>`).join('');
-  for (let i=0;i<first;i++) html+='<div></div>';
-
-  for (let d=1;d<=last;d++) {
-    const ds=`${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-    const net=dayNets[ds]||0;
-    const intensity=Math.min(1,Math.abs(net)/maxAbs);
-    const isFut=ds>today;
-
-    let cls='cal-day';
-    if (ds===today) cls+=' today';
-    if (net>0)  cls+=intensity>0.5?' positive-strong':' positive';
-    else if (net<0) cls+=intensity>0.5?' negative-strong':' negative';
-    if (isFut&&net!==0) cls+=' future-proj';
-    if (calSel===ds) cls+=' selected';
-
-    const absK=Math.abs(net)>=1000?(Math.abs(net)/1000).toFixed(1)+'k':Math.abs(net).toFixed(0);
-    html+=`<div class="${cls}" onclick="selCalDay('${ds}')">
-      ${d}
-      ${net!==0?`<div class="cal-day-amount">${net>=0?'+':'-'}${absK}</div>`:''}
-    </div>`;
-  }
-  document.getElementById('calGrid').innerHTML=html;
-
-  // Detalhe do dia selecionado
-  const detBox=document.getElementById('calDayDetail');
-  if (calSel) {
-    const dayItems=S.transactions.filter(t=>t.date===calSel).sort((a,b)=>a.createdAt-b.createdAt);
-    if (dayItems.length>0) {
-      const txRows=dayItems.map(t=>{
-        const c=getCat(t.category);
-        const {me}=getSplit(t);
-        return `<div class="cal-day-detail-tx">
-          <span>${c.emoji} ${t.desc}</span>
-          <span style="font-family:'Space Mono',monospace;font-size:12px;font-weight:700;color:${t.amount>0?'var(--green)':'var(--red)'}">${t.amount>0?'+':''}${fmt(me)}</span>
-        </div>`;
-      }).join('');
-      detBox.innerHTML=`<div class="cal-day-detail">
-        <div style="font-size:12px;font-weight:700;color:var(--text3);margin-bottom:8px">${dateLabel(calSel)}</div>
-        ${txRows}
-        <div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border);display:flex;justify-content:space-between;font-size:12px">
-          <span style="color:var(--text3)">Saldo do dia</span>
-          <span style="font-family:'Space Mono',monospace;font-weight:700;color:${(dayNets[calSel]||0)>=0?'var(--green)':'var(--red)'}">${(dayNets[calSel]||0)>=0?'+':''}${fmt(dayNets[calSel]||0)}</span>
-        </div>
-      </div>`;
-    } else {
-      detBox.innerHTML=`<div class="cal-day-detail" style="text-align:center;color:var(--text3);font-size:13px">${dateLabel(calSel)} — sem transações</div>`;
-    }
-  } else {
-    detBox.innerHTML='';
-  }
-}
-
+// (renderCal foi consolidada — a versão ativa está mais abaixo, junto de renderCalProjBar)
 function selCalDay(ds){ calSel=calSel===ds?null:ds; renderCal(); }
 // ═══════════════════════════════════════════════════════════════
 // CARTÕES
@@ -3899,7 +3821,7 @@ function renderCardDetail() {
               const cat=getCat(catId);
               return `<div class="invoice-cat-row">
                 <span>${cat.emoji} ${cat.name}</span>
-                <span style="font-family:'Space Mono',monospace;font-size:11px;font-weight:700;color:var(--red)">${fmt(val)}</span>
+                <span style="font-variant-numeric:tabular-nums;letter-spacing:-.01em;font-size:11px;font-weight:700;color:var(--red)">${fmt(val)}</span>
               </div>`;
             }).join('')}
           </div>`;
@@ -4167,7 +4089,7 @@ function openPayInvoice(cardId,invoiceKey){
   const lbl=`${MS[m-1]}/${y}`;
   let html=`<div style="padding:14px;background:var(--surface2);border-radius:12px;margin-bottom:14px">
     <div style="font-size:11px;color:var(--text3);font-weight:700;letter-spacing:1px;text-transform:uppercase">Fatura ${lbl} — ${inv.card.name}</div>
-    <div style="font-family:'Space Mono',monospace;font-size:24px;font-weight:700;margin-top:4px">${fmt(inv.total)}</div>
+    <div style="font-variant-numeric:tabular-nums;letter-spacing:-.01em;font-size:24px;font-weight:700;margin-top:4px">${fmt(inv.total)}</div>
     <div style="font-size:11px;color:var(--text3);margin-top:4px">Vence ${dateLabel(inv.dueDate)}</div>`;
   if(S.partner.enabled&&split.partner>0){
   // Projeta saldo dela na data de vencimento
@@ -4248,8 +4170,8 @@ function renderAcordosPage() {
   let html=`<div class="acordo-summary">
     <div style="font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text3);margin-bottom:8px">📊 Resumo dos acordos</div>
     <div style="display:flex;gap:12px">
-      <div style="flex:1"><div style="font-size:10px;color:var(--text3)">Total restante</div><div style="font-family:'Space Mono',monospace;font-size:18px;font-weight:700;color:var(--red)">${fmt(totalRestante)}</div></div>
-      <div style="flex:1"><div style="font-size:10px;color:var(--text3)">Mensal (soma)</div><div style="font-family:'Space Mono',monospace;font-size:18px;font-weight:700;color:var(--orange)">${fmt(totalMensal)}</div></div>
+      <div style="flex:1"><div style="font-size:10px;color:var(--text3)">Total restante</div><div style="font-variant-numeric:tabular-nums;letter-spacing:-.01em;font-size:18px;font-weight:700;color:var(--red)">${fmt(totalRestante)}</div></div>
+      <div style="flex:1"><div style="font-size:10px;color:var(--text3)">Mensal (soma)</div><div style="font-variant-numeric:tabular-nums;letter-spacing:-.01em;font-size:18px;font-weight:700;color:var(--orange)">${fmt(totalMensal)}</div></div>
     </div>
   </div>`;
 
@@ -4877,6 +4799,14 @@ function renderCouplePage() {
 // ═══════════════════════════════════════════════════════════════
 // SETTINGS
 // ═══════════════════════════════════════════════════════════════
+function toggleExtrato(){
+  S.extrato=!S.extrato;
+  const el=document.getElementById('extratoToggle');
+  if(el) el.className='toggle-switch'+(S.extrato?' on':'');
+  sync();
+  renderTxList();
+  showToast(S.extrato?'📜 Modo extrato ativado':'Modo extrato desativado');
+}
 function renderSettings() {
   document.getElementById('setInitBal').value   = S.initialBalance||'';
   document.getElementById('setGoal').value      = S.monthlyGoal||'';
@@ -4898,6 +4828,8 @@ function renderSettings() {
   document.getElementById('setPartnerInitBal').value=S.partner.initialBalance||'';
   const at=document.getElementById('apetoToggle');
 if(at) at.className='toggle-switch'+(S.modoAperto?' on':'');
+  const et=document.getElementById('extratoToggle');
+  if(et) et.className='toggle-switch'+(S.extrato?' on':'');
 }
 function getFifthBusinessDay(year, month) {
   // month é 1-based
@@ -5164,14 +5096,11 @@ function renderCalProjBar(projEnd, y, m) {
   projBar.innerHTML = `
     <div>
       <div style="font-size:10px;font-weight:700;color:var(--text3);letter-spacing:1px;text-transform:uppercase">Projeção fim do mês</div>
-      <div style="font-family:'Space Mono',monospace;font-size:18px;font-weight:700;color:${clr};margin-top:2px">${(projEnd<0?'-':'')+fmt(projEnd)}</div>
+      <div style="font-variant-numeric:tabular-nums;letter-spacing:-.01em;font-size:18px;font-weight:700;color:${clr};margin-top:2px">${(projEnd<0?'-':'')+fmt(projEnd)}</div>
     </div>
     <div style="font-size:11px;color:var(--text3)">${MO[m]} ${y}</div>`;
 }
 
-// Patch: sobrescreve o renderCal da Part 6 com versão sem bug no template literal
-const _renderCalOrig = renderCal;
-// Redefine renderCal usando a correção
 function renderCal() {
   const y=S.currentYear, m=S.currentMonth;
   const first=new Date(y,m,1).getDay();
@@ -5202,8 +5131,10 @@ function renderCal() {
     const isFut=ds>today;
     let cls='cal-day';
     if (ds===today)   cls+=' today';
-    if (net>0)        cls+=intensity>0.5?' positive-strong':' positive';
-    else if (net<0)   cls+=intensity>0.5?' negative-strong':' negative';
+    if (net!==0){
+      const lvl=Math.max(1,Math.min(4,Math.ceil(intensity*4)));
+      cls+=(net>0?' p':' n')+lvl;
+    }
     if (isFut&&net!==0) cls+=' future-proj';
     if (calSel===ds)  cls+=' selected';
     const absK=Math.abs(net)>=1000?(Math.abs(net)/1000).toFixed(1)+'k':Math.abs(net).toFixed(0);
@@ -5222,7 +5153,7 @@ function renderCal() {
         const {me}=getSplit(t);
         return `<div class="cal-day-detail-tx">
           <span>${c.emoji} ${t.desc}</span>
-          <span style="font-family:'Space Mono',monospace;font-size:12px;font-weight:700;color:${t.amount>0?'var(--green)':'var(--red)'}">${t.amount>0?'+':''}${fmt(me)}</span>
+          <span style="font-variant-numeric:tabular-nums;letter-spacing:-.01em;font-size:12px;font-weight:700;color:${t.amount>0?'var(--green)':'var(--red)'}">${t.amount>0?'+':''}${fmt(me)}</span>
         </div>`;
       }).join('');
       detBox.innerHTML=`<div class="cal-day-detail">
@@ -5230,7 +5161,7 @@ function renderCal() {
         ${txRows}
         <div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border);display:flex;justify-content:space-between;font-size:12px">
           <span style="color:var(--text3)">Saldo do dia</span>
-          <span style="font-family:'Space Mono',monospace;font-weight:700;color:${(dayNets[calSel]||0)>=0?'var(--green)':'var(--red)'}">${(dayNets[calSel]||0)>=0?'+':''}${fmt(dayNets[calSel]||0)}</span>
+          <span style="font-variant-numeric:tabular-nums;letter-spacing:-.01em;font-weight:700;color:${(dayNets[calSel]||0)>=0?'var(--green)':'var(--red)'}">${(dayNets[calSel]||0)>=0?'+':''}${fmt(dayNets[calSel]||0)}</span>
         </div>
       </div>`;
     } else {
