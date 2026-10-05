@@ -2287,7 +2287,7 @@ function renderClosingTotals(){
 function renderClosingPage(){
   const box=document.getElementById('closingContent'); if(!box)return;
   const c=getClosing(),partner=getPartnerName();
-  const month=document.getElementById('closingMonthName'); if(month) month.textContent=`${MONTHS_PT[S.currentMonth]} ${S.currentYear}`;
+  const month=document.getElementById('closingMonthName'); if(month) month.textContent=`${MO[S.currentMonth]} ${S.currentYear}`;
   const rows=(c.rows||[]).map(r=>`<div class="closing-row">
     <div class="closing-row-main">
       <input class="closing-input closing-desc" value="${closingEsc(r.desc)}" placeholder="Conta / descrição" oninput="updateClosingRow('${r.id}','desc',this.value)">
