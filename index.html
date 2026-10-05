@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -85,7 +86,7 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',-apple-system,sa
 .user-avatar{width:32px;height:32px;border-radius:50%;border:2px solid var(--green);cursor:pointer}
 
 /* ══════════════════════════════════════════
-   BOTTOM NAV — 8 itens scrollável
+   BOTTOM NAV — 9 itens scrollável
 ══════════════════════════════════════════ */
 .bottom-nav{position:fixed;bottom:0;left:0;right:0;padding-bottom:env(safe-area-inset-bottom);background:var(--nav-bg);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid var(--border);display:flex;z-index:100;overflow-x:auto;scrollbar-width:none}
 .bottom-nav::-webkit-scrollbar{display:none}
@@ -620,6 +621,40 @@ textarea.form-input{resize:none;min-height:60px;font-size:13px}
   .bottom-nav{justify-content:center}
   .modal{max-width:640px;margin:0 auto}
 }
+
+/* ══════════════════════════════════════════
+   FECHAMENTO MENSAL
+══════════════════════════════════════════ */
+.closing-wrap{padding:0 20px 24px}
+.closing-card{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:16px;margin-bottom:10px}
+.closing-title{font-size:12px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:var(--text3);margin-bottom:12px}
+.closing-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.closing-field{min-width:0}
+.closing-field.full{grid-column:1/-1}
+.closing-label{display:block;font-size:10px;font-weight:700;color:var(--text3);margin-bottom:5px}
+.closing-input,.closing-select{width:100%;background:var(--surface2);border:1px solid var(--border);color:var(--text);font:600 13px 'Inter',sans-serif;padding:10px;border-radius:10px;outline:none;-webkit-appearance:none}
+.closing-input:focus,.closing-select:focus{border-color:var(--green)}
+.closing-total{margin-top:12px;padding:12px 14px;border-radius:12px;background:var(--green-bg);display:flex;justify-content:space-between;align-items:center;gap:8px}
+.closing-total span:first-child{font-size:11px;font-weight:700;color:var(--text2)}
+.closing-total strong{font-variant-numeric:tabular-nums;font-size:18px;color:var(--green)}
+.closing-table{display:flex;flex-direction:column;gap:8px}
+.closing-row{background:var(--surface2);border:1px solid var(--border);border-radius:14px;padding:10px}
+.closing-row-main{display:grid;grid-template-columns:minmax(0,1fr) 118px 30px;gap:7px;align-items:center}
+.closing-row-sub{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;margin-top:7px}
+.closing-del{width:30px;height:38px;border-radius:9px;border:1px solid rgba(255,82,82,.25);background:var(--red-bg);color:var(--red);cursor:pointer;font-size:14px}
+.closing-add{width:100%;padding:12px;border-radius:12px;border:2px dashed var(--border2);background:transparent;color:var(--text2);font:700 12px 'Inter',sans-serif;cursor:pointer;margin-top:8px}
+.closing-summary{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.closing-stat{padding:12px;background:var(--surface2);border-radius:12px;border:1px solid var(--border)}
+.closing-stat-label{font-size:9px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.7px;margin-bottom:4px}
+.closing-stat-val{font-variant-numeric:tabular-nums;font-size:15px;font-weight:800}
+.closing-result{margin-top:10px;padding:14px;border-radius:14px;font-size:13px;font-weight:700;line-height:1.5}
+.closing-result.ok{background:var(--green-bg);border:1px solid rgba(0,200,83,.25);color:var(--green)}
+.closing-result.bad{background:var(--red-bg);border:1px solid rgba(255,82,82,.25);color:var(--red)}
+.closing-result.warn{background:var(--yellow-bg);border:1px solid rgba(255,215,64,.25);color:var(--yellow)}
+.closing-settle{margin-top:10px;padding:12px;border-radius:12px;background:var(--purple-bg);border:1px solid rgba(124,77,255,.25);color:var(--purple2);font-size:12px;font-weight:700;line-height:1.5}
+.closing-hint{font-size:10px;color:var(--text3);line-height:1.5;margin-top:8px}
+@media(max-width:390px){.closing-row-main{grid-template-columns:minmax(0,1fr) 105px 30px}.closing-row-sub{grid-template-columns:1fr 1fr}.closing-row-sub .closing-status{grid-column:1/-1}.closing-grid{grid-template-columns:1fr}}
+
 </style>
 </head>
 <body data-theme="dark">
@@ -797,6 +832,21 @@ textarea.form-input{resize:none;min-height:60px;font-size:13px}
 ════════════════════════════════════════ -->
 <div class="page" id="pageCouple">
   <div id="coupleContent"></div>
+</div>
+
+
+<!-- ════════════════════════════════════════
+     FECHAMENTO MENSAL
+════════════════════════════════════════ -->
+<div class="page" id="pageClosing">
+  <div class="tx-header">
+    <div class="month-nav">
+      <button class="month-btn" onclick="changeMonth(-1)">‹</button>
+      <div class="month-name" id="closingMonthName">Fechamento</div>
+      <button class="month-btn" onclick="changeMonth(1)">›</button>
+    </div>
+  </div>
+  <div class="closing-wrap" id="closingContent"></div>
 </div>
 
 <!-- ════════════════════════════════════════
@@ -989,7 +1039,7 @@ textarea.form-input{resize:none;min-height:60px;font-size:13px}
 </div><!-- /app-container -->
 
 <!-- ════════════════════════════════════════
-     BOTTOM NAV (8 itens) + FAB
+     BOTTOM NAV (9 itens) + FAB
 ════════════════════════════════════════ -->
 <div class="bottom-nav" id="bottomNav" style="display:none">
   <div class="nav-item active"  onclick="goPage('Home',this)">   <div class="nav-icon">🏠</div>Início</div>
@@ -998,6 +1048,7 @@ textarea.form-input{resize:none;min-height:60px;font-size:13px}
   <div class="nav-item"         onclick="goPage('Acordos',this)"> <div class="nav-icon">🤝</div>Acordos</div>
   <div class="nav-item"         onclick="goPage('Invest',this)">  <div class="nav-icon">📈</div>Invest</div>
   <div class="nav-item"         onclick="goPage('Couple',this)">  <div class="nav-icon">💑</div>Casal</div>
+  <div class="nav-item"         onclick="goPage('Closing',this)"> <div class="nav-icon">🧮</div>Fechar</div>
   <div class="nav-item"         onclick="goPage('Analytics',this)"><div class="nav-icon">📊</div>Stats</div>
   <div class="nav-item" style="position:relative" onclick="goPage('Settings',this)">
     <div class="nav-icon">⚙️</div>Config
@@ -1484,6 +1535,9 @@ let S = {
   selectedCardId: null,
   coupleView:    'overview',
   objectives: [], // [{id,name,emoji,targetAmount,currentAmount,monthlyAmount,deadline,color}]
+  // ── Fechamento mensal ──────────────────────────────────────────
+  // { 'YYYY-MM': {balanceNow,payDay1,payDay15,otherIncome,reserveBefore,reserveLimit,rows:[]} }
+  monthlyClosings: {},
 };
 
 // Vars de edição — fora do state pq não precisam ser persistidas
@@ -1594,6 +1648,7 @@ function listenData() {
 
       // Casal
       S.partner = d.partner || { enabled:false, name:'Parceira', emoji:'💜', initialBalance:0 };
+      S.monthlyClosings = d.monthlyClosings || {};
 
       // ── Migração: owner em transações antigas ──
       S.transactions.forEach(t => { if (!t.owner) t.owner = 'me'; });
@@ -1649,6 +1704,7 @@ S.objectives.forEach(o=>{obj[String(o.id).replace(/\./g,'_')]=o;});
     budgets:          bud,
     salary:           S.salary,
     partner:          S.partner,
+    monthlyClosings:  S.monthlyClosings,
     monthlyGoal:      S.monthlyGoal,
     savingsGoal:      S.savingsGoal,
     savingsDate:      S.savingsDate,
@@ -2123,6 +2179,7 @@ function goPage(n, el) {
   if (n==='Acordos')   renderAcordosPage();
   if (n==='Invest')    renderInvestPage();
   if (n==='Couple')    renderCouplePage();
+  if (n==='Closing')   renderClosingPage();
   if (n==='Settings')  renderSettings();
 }
 
@@ -2148,11 +2205,143 @@ function smartFab() {
   if (id==='pageCards')   { S.selectedCardId ? openPurchaseModal() : openCardModal(); return; }
   if (id==='pageAcordos') { openAcordoModal(); return; }
   if (id==='pageInvest')  { openInvestModal(); return; }
+  if (id==='pageClosing') { addClosingRow(); return; }
   if (id==='pageCouple')  {
     if (!S.partner.enabled){showToast('Ative o modo casal nas configurações');goPage('Settings',document.querySelectorAll('.nav-item')[7]);return;}
     openAddM('shared'); return;
   }
   openAddM();
+}
+
+
+// ═══════════════════════════════════════════════════════════════
+// FECHAMENTO MENSAL — planilha rápida integrada ao Firebase
+// ═══════════════════════════════════════════════════════════════
+let closingSyncTimer = null;
+function closingKey(){ return pfx(S.currentYear,S.currentMonth); }
+function defaultClosing(){
+  return {balanceNow:0,payDay1:0,payDay15:0,otherIncome:0,reserveBefore:0,reserveLimit:0,rows:[]};
+}
+function getClosing(){
+  const k=closingKey();
+  if(!S.monthlyClosings) S.monthlyClosings={};
+  if(!S.monthlyClosings[k]) S.monthlyClosings[k]=defaultClosing();
+  const c=S.monthlyClosings[k];
+  if(!Array.isArray(c.rows)) c.rows=[];
+  return c;
+}
+function closingNum(v){ const n=parseFloat(v); return Number.isFinite(n)?n:0; }
+function closingEsc(v){ return String(v??'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function scheduleClosingSync(){ clearTimeout(closingSyncTimer); closingSyncTimer=setTimeout(()=>sync(),450); }
+function updateClosingField(field,value){ const c=getClosing(); c[field]=closingNum(value); renderClosingTotals(); scheduleClosingSync(); }
+function addClosingRow(){
+  const c=getClosing();
+  c.rows.push({id:genId(),desc:'',amount:0,payer:'me',responsibility:'shared',status:'pending'});
+  renderClosingPage(); scheduleClosingSync();
+  setTimeout(()=>{ const els=document.querySelectorAll('.closing-desc'); if(els.length) els[els.length-1].focus(); },30);
+}
+function updateClosingRow(id,field,value){
+  const r=getClosing().rows.find(x=>String(x.id)===String(id)); if(!r)return;
+  r[field]=field==='amount'?closingNum(value):value;
+  renderClosingTotals(); scheduleClosingSync();
+}
+function deleteClosingRow(id){ const c=getClosing(); c.rows=c.rows.filter(x=>String(x.id)!==String(id)); renderClosingPage(); scheduleClosingSync(); }
+function closingCalc(){
+  const c=getClosing(), rows=c.rows||[];
+  const available=closingNum(c.balanceNow)+closingNum(c.payDay1)+closingNum(c.payDay15)+closingNum(c.otherIncome);
+  const expenses=rows.reduce((a,r)=>a+closingNum(r.amount),0);
+  const paid=rows.filter(r=>r.status==='paid').reduce((a,r)=>a+closingNum(r.amount),0);
+  const pending=Math.max(0,expenses-paid);
+  const result=available-expenses;
+  const reserveNeed=Math.max(0,-result);
+  const reserveAfter=Math.max(0,closingNum(c.reserveBefore)-reserveNeed);
+  const limit=closingNum(c.reserveLimit);
+  const uncovered=limit>0?Math.max(0,reserveNeed-limit):0;
+  let mePaid=0,partnerPaid=0,meResp=0,partnerResp=0;
+  rows.forEach(r=>{
+    const a=closingNum(r.amount);
+    if(r.payer==='partner') partnerPaid+=a; else mePaid+=a;
+    if(r.responsibility==='me') meResp+=a;
+    else if(r.responsibility==='partner') partnerResp+=a;
+    else {meResp+=a/2;partnerResp+=a/2;}
+  });
+  const partnerOwesMe=mePaid-meResp;
+  return {available,expenses,paid,pending,result,reserveNeed,reserveAfter,uncovered,mePaid,partnerPaid,meResp,partnerResp,partnerOwesMe};
+}
+function renderClosingTotals(){
+  if(!document.getElementById('closingTotals')) return;
+  const c=getClosing(),x=closingCalc(),partner=getPartnerName();
+  document.getElementById('closingAvailableTotal').textContent=fmt(x.available);
+  document.getElementById('closingExpenseTotal').textContent=fmt(x.expenses);
+  document.getElementById('closingPaidTotal').textContent=fmt(x.paid);
+  document.getElementById('closingPendingTotal').textContent=fmt(x.pending);
+  document.getElementById('closingReserveAfter').textContent=fmt(x.reserveAfter);
+  const result=document.getElementById('closingResult');
+  if(x.result>=0){ result.className='closing-result ok'; result.innerHTML=`🟢 O mês fecha sem usar a reserva.<br>Sobra livre: <strong>${fmt(x.result)}</strong>.`; }
+  else if(x.uncovered>0){ result.className='closing-result warn'; result.innerHTML=`🟡 Faltam <strong>${fmt(x.reserveNeed)}</strong> para fechar o mês. Seu limite de retirada cobre ${fmt(closingNum(c.reserveLimit))}; ainda faltariam <strong>${fmt(x.uncovered)}</strong>.`; }
+  else { result.className='closing-result bad'; result.innerHTML=`🔴 Faltam <strong>${fmt(x.reserveNeed)}</strong> para fechar o mês. Você precisaria retirar esse valor da reserva.`; }
+  const settle=document.getElementById('closingSettle');
+  if(Math.abs(x.partnerOwesMe)<0.01) settle.innerHTML=`💑 Divisão equilibrada: ninguém precisa reembolsar ninguém.`;
+  else if(x.partnerOwesMe>0) settle.innerHTML=`💑 ${closingEsc(partner)} te deve <strong>${fmt(x.partnerOwesMe)}</strong> pela divisão das contas.`;
+  else settle.innerHTML=`💑 Você deve <strong>${fmt(-x.partnerOwesMe)}</strong> para ${closingEsc(partner)} pela divisão das contas.`;
+}
+function renderClosingPage(){
+  const box=document.getElementById('closingContent'); if(!box)return;
+  const c=getClosing(),partner=getPartnerName();
+  const month=document.getElementById('closingMonthName'); if(month) month.textContent=`${MONTHS_PT[S.currentMonth]} ${S.currentYear}`;
+  const rows=(c.rows||[]).map(r=>`<div class="closing-row">
+    <div class="closing-row-main">
+      <input class="closing-input closing-desc" value="${closingEsc(r.desc)}" placeholder="Conta / descrição" oninput="updateClosingRow('${r.id}','desc',this.value)">
+      <input class="closing-input" type="number" step="0.01" inputmode="decimal" value="${closingNum(r.amount)||''}" placeholder="R$ 0,00" oninput="updateClosingRow('${r.id}','amount',this.value)">
+      <button class="closing-del" onclick="deleteClosingRow('${r.id}')">✕</button>
+    </div>
+    <div class="closing-row-sub">
+      <select class="closing-select" onchange="updateClosingRow('${r.id}','payer',this.value)">
+        <option value="me" ${r.payer==='me'?'selected':''}>Pago por mim</option><option value="partner" ${r.payer==='partner'?'selected':''}>Pago por ${closingEsc(partner)}</option>
+      </select>
+      <select class="closing-select" onchange="updateClosingRow('${r.id}','responsibility',this.value)">
+        <option value="shared" ${r.responsibility==='shared'?'selected':''}>50 / 50</option><option value="me" ${r.responsibility==='me'?'selected':''}>Minha</option><option value="partner" ${r.responsibility==='partner'?'selected':''}>De ${closingEsc(partner)}</option>
+      </select>
+      <select class="closing-select closing-status" onchange="updateClosingRow('${r.id}','status',this.value)">
+        <option value="pending" ${r.status!=='paid'?'selected':''}>⏳ A pagar</option><option value="paid" ${r.status==='paid'?'selected':''}>✓ Pago</option>
+      </select>
+    </div>
+  </div>`).join('');
+  box.innerHTML=`
+    <div class="closing-card">
+      <div class="closing-title">💰 Dinheiro disponível</div>
+      <div class="closing-grid">
+        <div class="closing-field"><label class="closing-label">Na conta hoje</label><input class="closing-input" type="number" step="0.01" inputmode="decimal" value="${closingNum(c.balanceNow)||''}" oninput="updateClosingField('balanceNow',this.value)"></div>
+        <div class="closing-field"><label class="closing-label">Pagamento dia 1</label><input class="closing-input" type="number" step="0.01" inputmode="decimal" value="${closingNum(c.payDay1)||''}" oninput="updateClosingField('payDay1',this.value)"></div>
+        <div class="closing-field"><label class="closing-label">Pagamento dia 15</label><input class="closing-input" type="number" step="0.01" inputmode="decimal" value="${closingNum(c.payDay15)||''}" oninput="updateClosingField('payDay15',this.value)"></div>
+        <div class="closing-field"><label class="closing-label">Outras entradas / ${closingEsc(partner)}</label><input class="closing-input" type="number" step="0.01" inputmode="decimal" value="${closingNum(c.otherIncome)||''}" oninput="updateClosingField('otherIncome',this.value)"></div>
+      </div>
+      <div class="closing-total"><span>Total disponível</span><strong id="closingAvailableTotal">R$ 0,00</strong></div>
+    </div>
+    <div class="closing-card">
+      <div class="closing-title">🧾 Contas do mês</div>
+      <div class="closing-table">${rows||'<div class="closing-hint">Nenhuma conta ainda. Adicione aluguel, energia, água, cartões ou qualquer valor que queira fechar neste mês.</div>'}</div>
+      <button class="closing-add" onclick="addClosingRow()">＋ Adicionar conta</button>
+    </div>
+    <div class="closing-card" id="closingTotals">
+      <div class="closing-title">📊 Fechamento</div>
+      <div class="closing-summary">
+        <div class="closing-stat"><div class="closing-stat-label">Total de contas</div><div class="closing-stat-val" id="closingExpenseTotal"></div></div>
+        <div class="closing-stat"><div class="closing-stat-label">Ainda a pagar</div><div class="closing-stat-val" id="closingPendingTotal"></div></div>
+        <div class="closing-stat"><div class="closing-stat-label">Já pago</div><div class="closing-stat-val" id="closingPaidTotal"></div></div>
+        <div class="closing-stat"><div class="closing-stat-label">Reserva depois</div><div class="closing-stat-val" id="closingReserveAfter"></div></div>
+      </div>
+      <div id="closingResult"></div><div class="closing-settle" id="closingSettle"></div>
+    </div>
+    <div class="closing-card">
+      <div class="closing-title">🛟 Impacto na reserva</div>
+      <div class="closing-grid">
+        <div class="closing-field"><label class="closing-label">Reserva antes</label><input class="closing-input" type="number" step="0.01" inputmode="decimal" value="${closingNum(c.reserveBefore)||''}" oninput="updateClosingField('reserveBefore',this.value)"></div>
+        <div class="closing-field"><label class="closing-label">Máximo que aceito tirar (0 = sem limite)</label><input class="closing-input" type="number" step="0.01" inputmode="decimal" value="${closingNum(c.reserveLimit)||''}" oninput="updateClosingField('reserveLimit',this.value)"></div>
+      </div>
+      <div class="closing-hint">Cada mês fica salvo separadamente no Firebase. “Quem paga” registra quem desembolsa; “50/50 / Minha / De ${closingEsc(partner)}” define de quem é a responsabilidade da conta.</div>
+    </div>`;
+  renderClosingTotals();
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -2168,6 +2357,7 @@ function renderAll() {
     if (active.id==='pageAcordos')  renderAcordosPage();
     if (active.id==='pageInvest')   renderInvestPage();
     if (active.id==='pageCouple')   renderCouplePage();
+    if (active.id==='pageClosing')  renderClosingPage();
     if (active.id==='pageAnalytics')renderAnalytics();
     if (active.id==='pageSettings') renderSettings();
   }
@@ -5042,7 +5232,7 @@ function exportBackup(){
     streakRecord:S.streakRecord,streakRecordDate:S.streakRecordDate,
     cards:S.cards,cardPurchases:S.cardPurchases,cardInvoicesPaid:S.cardInvoicesPaid,
     acordos:S.acordos,investments:S.investments,investMovements:S.investMovements,
-    budgets:S.budgets,salary:S.salary,partner:S.partner,
+    budgets:S.budgets,salary:S.salary,partner:S.partner,monthlyClosings:S.monthlyClosings,
   };
   const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
   const url=URL.createObjectURL(blob);
@@ -5064,6 +5254,7 @@ function importBackup(input){
       S.acordos=d.acordos||[];S.investments=d.investments||[];S.investMovements=d.investMovements||[];
       S.budgets=d.budgets||{};S.salary=d.salary||{day:0,amount:0};
       S.partner=d.partner||{enabled:false,name:'Parceira',emoji:'💜',initialBalance:0};
+      S.monthlyClosings=d.monthlyClosings||{};
       customCats=S.customCats;
       S.transactions.forEach(t=>{if(!t.owner)t.owner='me';});
       sync();renderAll();showToast('Backup importado!');
@@ -5080,6 +5271,7 @@ function clearAll(){
   S.acordos=[];S.investments=[];S.investMovements=[];
   S.budgets={};S.salary={day:0,amount:0};
   S.partner={enabled:false,name:'Parceira',emoji:'💜',initialBalance:0};
+  S.monthlyClosings={};
   S.initialBalance=0;S.monthlyGoal=0;S.savingsGoal=0;S.savingsDate='';S.streakRecord=0;
   customCats=[];sync();renderAll();showToast('Tudo apagado');
 }
